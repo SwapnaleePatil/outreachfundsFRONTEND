@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.loginp{
+  padding-top: .5%;
+  padding-bottom: 1%;
+  margin-top: 5%;
+  /*margin-bottom: 10%;*/
+  margin-left: 35%;
+  margin-right: 35%;
+  opacity: .9;
+  background-color: #EDEFF7;
+  /*background-image: url("D:/miniProject/outreachFunds/frontend/src/student1.jpg");*/
+  /*text-shadow: 4px 4px 8px #000000;*/
+
+  /*border-radius: 50%;*/
+}
+.outerlog{
+  background-image: url("./images/school.png");
+  background-color: darkgrey;
+  padding-bottom: 5%;
+  padding-top: 3%;
+
+}
+.lbtn{
+  width: 100px;
+}
+.role-class{
+  padding-top: 2%;
+  padding-bottom: 1%;
+  margin-top: 5%;
+  /*margin-bottom: 10%;*/
+  margin-left: 35%;
+  margin-right: 35%;
+  opacity: .9;
+  background-color: #EDEFF7;
+  /*background-image: url("D:/miniProject/outreachFunds/frontend/src/student1.jpg");*/
+  /*text-shadow: 4px 4px 8px #000000;*/
+
+}
+.home-class {
+  padding-bottom: 35%;
+
+  background-image: url("./images/school.png");
+
+}
+.gallary-class{
+  margin-left: 10%;
+  margin-right: 10%;
+ }
+.outer-gallary-class{
+  background-color: #F8F7F8;
+
+}
+.navclassa{
+  padding-top: 8%;
+}
+.navclassb{
+  padding-top: 5%;
+}
+.navclass-item{
+  padding-top: 1%;
+}
+.nav-btn {
+height: 43%;
+}
+.glyphi-icon{
+  padding-left: 5%;
+}
+.navclass-main{
+  padding-top: 5%;
+}
+.navclass-dropmenu {
+  padding-top: 0.5%;
+  padding-right: 3%;
+}
+.navclass-bs{
+  background-color: #FBFBF9;
+  height: 70px;
+}
+.imgnav{
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.schedulemodal{
+  padding-top:.5%;
+  padding-bottom: 1%;
+  margin-top: 10%;
+  /*margin-bottom: 10%;*/
+  margin-left: 35%;
+  margin-right: 35%;
+  opacity: .9;
+  background-color: #EDEFF7;
+
+}
