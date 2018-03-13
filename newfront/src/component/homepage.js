@@ -187,7 +187,7 @@ class HomePage extends React.Component {
                                                                      style={{width: 150, height:100}} alt=""/></a>
                         </Navbar.Header>
                         <Nav pullRight>
-                            <NavItem className="navclassa" eventKey={1} href="/main">
+                            <NavItem className="navclassa" eventKey={1} href="/main/studentSignup">
                               SignUp
                             </NavItem>
                             <NavItem eventKey={2} className="navclassa" href="#" onClick={this.toggleRole}>
