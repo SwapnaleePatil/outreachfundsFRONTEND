@@ -1,5 +1,7 @@
 let mongoose = require('mongoose');
 let validator = require('validator');
+let bcrypt=require('bcryptjs');
+let jwt=require('jsonwebtoken');
 let businessOwnerSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -23,7 +25,6 @@ let businessOwnerSchema = new mongoose.Schema({
         type: String,
         require: true,
         trim: true,
-        unique: true,
         validator: validator.isEmail,
         message: '{value} is not valid'
     },
@@ -72,7 +73,7 @@ let businessOwnerSchema = new mongoose.Schema({
             type: String,
             require: true,
             trim: true,
-            unique: true,
+
             validator: validator.isEmail,
             message: '{value} is not valid'
         },
@@ -114,8 +115,49 @@ let businessOwnerSchema = new mongoose.Schema({
                 type: String
             }
         }
-    }
-
+    },
+    tokens:[{
+        auth:String,
+        token:String
+    }]
 });
+businessOwnerSchema.pre('save',function (next) {
+    let businessOwner=this;
+   if(businessOwner.isModified('password'))
+    {
+        bcrypt.genSalt(10,(err,salt)=>{
+            bcrypt.hash(businessOwner.password,salt,(err,hash)=>{
+                if(err)
+                {
+                    console.log("Error:=",err);
+                }
+                if(hash)
+                {
+                    businessOwner.password=hash;
+                    next();
+                }
+            })
+        })
+    }
+    else {
+       next();
+   }
+})
+businessOwnerSchema.methods.generateAuthToken=function(){
+    var businessOwner=this;
+    var access='auth';
+    var token=jwt.sign(
+        {
+            _id:businessOwner._id.toHexString(),
+            access
+        },
+        'abc123'
+    ).toString();
+    businessOwner.tokens.push({access,token});
+    return businessOwner.save().then(()=>{
+        console.log("Token",token)
+        return token;
+    })
+}
 let businessOwner = mongoose.model('businessOwner', businessOwnerSchema);
-module.exports = {businessOwner};
+module.exports= {businessOwner};
