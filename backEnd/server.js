@@ -1,7 +1,7 @@
 var express=require('express');
 var bodyParser=require('body-parser');
 var mongoose=require('mongoose');
-//var cors=require('cors');
+var cors=require('cors');
 var fileUpload=require('express-fileupload');
 var passport=require('passport');
 var dbconfig=require('./app/config/dbconfig');
@@ -17,7 +17,7 @@ db.once('open',()=>{
 })
 var app=express();
 app.use(passport.initialize());
-//app.use(cors());
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(fileUpload());
@@ -31,6 +31,6 @@ app.use(express.static(__dirname + '/'))
 require('./app/config/passport')(passport);
 require('./app/routes/routes')(app,passport);
 
-app.listen(3000,()=>{
+app.listen(4000,()=>{
     console.log('server is started');
 })

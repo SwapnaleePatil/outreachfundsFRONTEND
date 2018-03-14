@@ -41,23 +41,31 @@ exports.fetchAllStudents=(req,res)=>{
     })
 }
 exports.fetchStudent=(req,res)=>{
-   // console.log(req.stud);
     Student.find().then((students)=>{
         res.status(200).send({"students":students});
     }).catch((err)=>{
-        res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
+        res.status(401).send({"message":"Error in Retrieving Student.","err":err})
     })
 }
 
+exports.fetchAllSchools=(req,res)=>{
+    SchoolOrganisation.find().then((schools)=>{
+        console.log("schools",schools);
+        res.status(200).send(schools);
+    }).catch((err)=>{
+        res.status(401).send({"message":"Error in Retrieving list of Schools.","err":err})
+    })
+}
 exports.authenticate=(req,res,next)=>{
     var token=req.header('x-auth');
     Student.findByToken(token).then((stud)=>{
         if(!stud)
             return Promise.reject();
+        console.log(token);
         req.stud=stud;
         req.token=token;
         next();
     }).catch((err)=>{
-        res.status(401).send({"message":"Please Login First."});
+        res.status(401).send({"message":"Please Login First.","error":err});
     })
 }

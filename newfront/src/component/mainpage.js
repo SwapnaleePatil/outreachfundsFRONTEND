@@ -4,15 +4,9 @@ import '../index.css'
 import {Route} from 'react-router-dom'
 import Schedule from './schedule'
 class MainPage extends React.Component {
-    // constructor(){
-    //     super();
-    // }
+
     render() {
-        const about=()=>(
-            <div>
-                Abouut
-            </div>
-        )
+
         const Navmenu=()=>(
             <div>
                 <Navbar fluid={true} staticTop={true}>

@@ -6,14 +6,12 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
-import StudentSignUp from "../students/components/signUpPage";
-
+// import Student from "../students/components/Student";
+ import Studentsignup from "../students/components/signUpPage";
 
 class Main extends React.Component {
     render() {
-
         const Private = ({...props}) => {
-
             return this.props.studentlogin.user?   <div>
                         <Route {...props}/></div> :
                     <Redirect to="/"/>
@@ -25,17 +23,12 @@ class Main extends React.Component {
                     <Redirect to="/home"/>
 
         };
-        const about=()=>(
-            <div>
-                new
-            </div>
-        )
 
         return (
             <BrowserRouter>
                 <Switch>
                     <Public exact path="/" component={HomePage}/>
-                    <Public exact path="/main/studentSignup" component={StudentSignUp}/>
+                    <Route exact path="/main/studentSignup" component={Studentsignup}/>
                     <Public exact path="/main/schedule" component={Schedule}/>
                     <Public exact path="/main/donation" component={Donation}/>
                     <Public exact path="/home" component={MainPage}/>

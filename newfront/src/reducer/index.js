@@ -3,9 +3,11 @@ import businesslogin from './businesslogin'
 import {combineReducers} from 'redux'
 import signupPageReducer from '../students/reducers/reducer-signUpPaging';
 import signupPageFieldsReducer from '../students/reducers/reducer-signup-fields';
+import schoolReducer from '../students/reducers/reducer-schools';
 const rootreducer=combineReducers({
     businesslogin,studentlogin,
     signupPage:signupPageReducer,
-    signupPageFields:signupPageFieldsReducer
+    signupPageFields:signupPageFieldsReducer,
+    schools:schoolReducer
 });
 export default rootreducer;

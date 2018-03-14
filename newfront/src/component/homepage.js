@@ -2,7 +2,8 @@ import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem} from 'react-bootstrap'
 // import {NavLink,Switch,Route,BrowserRouter} from 'react-router-dom'
 
-import {Table, FormControl, Button} from 'react-bootstrap'
+import
+{Table, FormControl, Button} from 'react-bootstrap'
 import galary from './galary'
 
 // import MainPage from './mainpage'
