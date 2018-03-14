@@ -4,7 +4,7 @@ var SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisatio
 exports.registerStudent=(req,res)=>{
     if(!req.files)
         return res.status(400).send('No files were uploaded.');
-
+    console.log("body",req.body);
 
     let sample=req.files.profileImage;
     sample.mv(__dirname + '../../../uploads/' + sample.name,(err)=>{

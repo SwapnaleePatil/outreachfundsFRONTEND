@@ -1,7 +1,7 @@
 let express=require('express');
 let bodyParser=require('body-parser');
 let mongoose=require('mongoose');
-//let cors=require('cors');
+let cors=require('cors');
 let fileUpload=require('express-fileupload');
 let passport=require('passport');
 let dbconfig=require('./app/config/dbconfig');
@@ -12,7 +12,7 @@ global.token='';
 let app=express();
 
 app.use(passport.initialize());
-//app.use(cors());
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(fileUpload());

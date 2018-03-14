@@ -7,7 +7,7 @@ import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
 import StudentSignUp from "../students/components/signUpPage";
-
+import BusinessFullPage from "../business/components/businessFullPage";
 
 class Main extends React.Component {
     render() {
@@ -36,6 +36,7 @@ class Main extends React.Component {
                 <Switch>
                     <Public exact path="/" component={HomePage}/>
                     <Public exact path="/main/studentSignup" component={StudentSignUp}/>
+                    <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/schedule" component={Schedule}/>
                     <Public exact path="/main/donation" component={Donation}/>
                     <Public exact path="/home" component={MainPage}/>

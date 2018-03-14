@@ -5,7 +5,6 @@ export const signupPageAction=(pg=1)=>{
         payload:pg
     }
 }
-
 export const setSignupPageFieldsAction=(obj=[])=>{
     return {
         type:"SIGNUP_PAGE_FIELDS",
