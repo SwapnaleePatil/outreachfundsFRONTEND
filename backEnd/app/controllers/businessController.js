@@ -1,15 +1,16 @@
 let BusinessOwner = require('../models/businessOwner').businessOwner;
 exports.addBusinessOwner = (req, res) => {
-    let body = req.body;
     if (!req.files)
         return res.status(400).send('No files were uploaded.');
-    let sample = req.files.img;
+    var body=JSON.parse(req.body.obj);
+    let sample = req.files.photo;
     sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
         if (err) {
+            console.log("Error",err);
         }
-        console.log(err);
     });
-    var newBusinessOwner = new BusinessOwner({body,img: sample.name});
+    var newBusinessOwner = new BusinessOwner(body);
+    newBusinessOwner.photo=sample.name;
     newBusinessOwner.save()
     .then(()=>{
        return newBusinessOwner.generateAuthToken();
@@ -45,7 +46,7 @@ exports.updateBusinessOwner = (req, res) => {
     BusinessOwner.findByIdAndUpdate(req.params.id, {
         $set: {
             body,
-            img: img
+            photo: img
         }},{new:true})
     .then((result) => {
         res.send({"message": 'Updated.', 'record': result});

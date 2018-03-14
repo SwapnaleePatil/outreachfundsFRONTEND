@@ -1,4 +1,4 @@
-var eventSchedule = require('../models/eventSchedule').eventSchedule;
+let eventSchedule = require('../models/eventSchedule').eventSchedule;
 exports.addeventSchedule = (req, res) => {
     let body = req.body;
     let neweventSchedule = new eventSchedule(body);

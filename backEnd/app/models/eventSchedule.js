@@ -1,7 +1,6 @@
 let mongoose = require('mongoose');
 let businessOwner=require('./businessOwner').businessOwner;
-let validator = require('validator');
-
+let schoolOrganisation=require('./schoolOrganisation').schoolOrganisation;
 let eventSchema = new mongoose.Schema({
     eventDate:{
         type:Date,
@@ -21,6 +20,11 @@ let eventSchema = new mongoose.Schema({
     businessSponsor:{
         type:mongoose.Schema.ObjectId,
         ref:businessOwner,
+        require:true
+    },
+    schoolOrganisation:{
+        type:mongoose.Schema.ObjectId,
+        ref:schoolOrganisation,
         require:true
     },
     status:{

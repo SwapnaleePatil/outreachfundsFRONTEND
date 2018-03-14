@@ -1,10 +1,11 @@
-import axios from 'axios'
+
+import axios from 'axios';
 export const  studentLogin=(data)=>{
     return (dispatch)=>{
         axios({method:'post',url:''}).then((response)=>{
             if(response){
                 dispatch({
-                    type:'studentlogin',
+                    type:'STUDENT_LOGIN',
                     payload:response.data
                 })
             }
@@ -19,7 +20,7 @@ export const  businessLogin=(data)=>{
         axios({method:'post',url:''}).then((response)=>{
         if(response){
             dispatch({
-                type:'businesslogin',
+                type:'BUSINESS_LOGIN',
                 payload:response.data
             })
         }

@@ -123,7 +123,7 @@ let businessOwnerSchema = new mongoose.Schema({
 });
 businessOwnerSchema.pre('save',function (next) {
     let businessOwner=this;
-   if(businessOwner.isModified('password'))
+    if(businessOwner.isModified('password'))
     {
         bcrypt.genSalt(10,(err,salt)=>{
             bcrypt.hash(businessOwner.password,salt,(err,hash)=>{
@@ -140,8 +140,8 @@ businessOwnerSchema.pre('save',function (next) {
         })
     }
     else {
-       next();
-   }
+        next();
+    }
 })
 businessOwnerSchema.methods.generateAuthToken=function(){
     var businessOwner=this;
