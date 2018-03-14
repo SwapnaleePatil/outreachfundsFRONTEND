@@ -6,19 +6,20 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
-
+import StudentSignUp from "../students/components/signUpPage";
+import BusinessFullPage from "../business/components/businessFullPage";
 
 class Main extends React.Component {
     render() {
-        debugger;
+
         const Private = ({...props}) => {
-            debugger;
+
             return this.props.studentlogin.user?   <div>
                         <Route {...props}/></div> :
                     <Redirect to="/"/>
         };
         const Public = ({...props}) => {
-            debugger;
+
             return !this.props.studentlogin.user ?
                 <div> <MainPage/>  <Route {...props}/></div>:
                     <Redirect to="/home"/>
@@ -34,6 +35,8 @@ class Main extends React.Component {
             <BrowserRouter>
                 <Switch>
                     <Public exact path="/" component={HomePage}/>
+                    <Public exact path="/main/studentSignup" component={StudentSignUp}/>
+                    <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/schedule" component={Schedule}/>
                     <Public exact path="/main/donation" component={Donation}/>
                     <Public exact path="/home" component={MainPage}/>

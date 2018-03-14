@@ -1,0 +1,14 @@
+.tablecss{
+    opacity:0.9;
+    width:100%;
+    padding-left: 30%;
+    padding-top: 5%;
+
+    padding-right: 30%;
+    font-family: Cambria;
+
+}
+
+body{
+    background-image: url("../../images/bicycle-1280x720.jpg");
+}
