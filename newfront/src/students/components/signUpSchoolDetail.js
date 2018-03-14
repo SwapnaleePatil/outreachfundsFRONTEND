@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails} from '../action';
+import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent} from '../action';
 
 
 class SignUpSchool extends React.Component{
@@ -26,10 +26,12 @@ class SignUpSchool extends React.Component{
         if(schoolData.length<=0)
             schoolData = signupPageFields;
 
-        if(name==='selectedSchool')
+        if(name==='selectedSchool') {
             this.handleSchoolNameChange(e);
-
-        schoolData[name]=value;
+            schoolData['schoolId']=(e.target.selectedOptions[0].id || null);
+        }
+        else
+            schoolData[name]=value;
         this.setState({
             schoolData
         })
@@ -37,8 +39,28 @@ class SignUpSchool extends React.Component{
 
     handleSubmit=(e)=>{
         e.preventDefault();
-        const {signupPageAction,setSignupPageFieldsAction,signupPageFields} =this.props;
-        console.log("Complete student data - ",signupPageFields);
+        const {signupPageAction,setSignupPageFieldsAction,signupPageFields,registerStudent} =this.props;
+        let obj={
+            firstName:signupPageFields.firstName,
+            lastName:signupPageFields.lastName,
+            gender:signupPageFields.gender,
+            email:signupPageFields.email,
+            dob:signupPageFields.dob,
+            password:signupPageFields.password,
+            phone:signupPageFields.phone,
+            role:signupPageFields.role,
+            roleStatus:true,
+            schoolId:signupPageFields.schoolId,
+            school:signupPageFields.school,
+            organisationName:signupPageFields.organisationName,
+            organisationAddress:signupPageFields.organisationAddress,
+            organisationEmail:signupPageFields.organisationEmail,
+            organisationContact:signupPageFields.organisationContact
+        }
+        var formData=new FormData();
+        formData.append('data',JSON.stringify(obj));
+        formData.append('photo',signupPageFields.photo);
+        registerStudent(formData);
         signupPageAction(1);
         setSignupPageFieldsAction();
     }
@@ -52,9 +74,13 @@ class SignUpSchool extends React.Component{
 
     handleSchoolNameChange=(e)=>{
         const {schoolData}=this.state;
-        if(e.target.selectedOptions[0].id==='other') {
+        if(e.target.selectedOptions[0].innerHTML==='Other') {
             this.setState({addSchool: true})
-            schoolData['orgName']='';
+            schoolData['organisationName']='';
+            schoolData['organisationAddress']='';
+            schoolData['organisationEmail']='';
+            schoolData['organisationContact']='';
+            schoolData['role']='Officer';
         }
         else{
             this.setState({addSchool:false})
@@ -63,6 +89,9 @@ class SignUpSchool extends React.Component{
             var arr=Schools.filter((school)=>school.schoolName===selectedSchool);
             schoolData['organisationName']=arr[0].organisationName;
             schoolData['organisationAddress']=arr[0].organisationAddress;
+            schoolData['organisationEmail']=arr[0].organisationEmail;
+            schoolData['organisationContact']=arr[0].organisationContact;
+            schoolData['role']='';
             this.setState({
                 schoolData
             })
@@ -84,10 +113,10 @@ class SignUpSchool extends React.Component{
                             <option>{'---Select School---'}</option>
                             {
                                Schools.map((school)=>{
-                                    return <option key={school._id}>{school.schoolName}</option>
+                                    return <option key={school._id} id={school._id}>{school.schoolName}</option>
                                 })
                             }
-                            <option id={'other'}>{'Other'}</option>
+                            <option>{'Other'}</option>
                         </select>
 
                     </div>
@@ -98,7 +127,7 @@ class SignUpSchool extends React.Component{
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Organization Name :</label>
-                        <input className={'form-control col-sm-9'} type={'text'} placeholder={'Organization Name'} name={'organisationName'} onChange={this.handleChange} value={schoolData.orgName}/>
+                        <input className={'form-control col-sm-9'} type={'text'} placeholder={'Organization Name'} name={'organisationName'} onChange={this.handleChange} value={schoolData.organisationName}/>
                     </div>
                     <div className="form-group radio form-inline">
                         <label className={'font-weight-bold col-sm-2'}>Role :</label>
@@ -107,15 +136,15 @@ class SignUpSchool extends React.Component{
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Address :</label>
-                        <textarea className={'form-control col-sm-10'} placeholder={'Address'} name={'organisationAddress'} onChange={this.handleChange}>{schoolData.orgAddress}</textarea>
+                        <textarea className={'form-control col-sm-10'} placeholder={'Address'} name={'organisationAddress'} onChange={this.handleChange} value={schoolData.organisationAddress}>{schoolData.organisationAddress}</textarea>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Email :</label>
-                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Email'} name={'orgEmail'} onChange={this.handleChange} value={schoolData.orgEmail}/>
+                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Email'} name={'organisationEmail'} onChange={this.handleChange} value={schoolData.organisationEmail}/>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Contact No. :</label>
-                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Contact No.'} name={'orgContact'} onChange={this.handleChange} value={schoolData.orgContact}/>
+                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Contact No.'} name={'organisationContact'} onChange={this.handleChange} value={schoolData.organisationContact}/>
                     </div>
                     <div className={'btn-group float-right'}>
                     <button onClick={this.previousPage} className={'btn btn-primary'}>Previous</button>
@@ -138,7 +167,8 @@ const mapStateToProps = (state) => {
 
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails
+        signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,
+        registerStudent
     },dispatch)
 };
 

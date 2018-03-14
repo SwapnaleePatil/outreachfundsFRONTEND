@@ -1,6 +1,6 @@
 export default (state=[],action)=>{
     switch(action.type){
-        case "STUDENT_SIGN_UP":
+        case "REGISTER_STUDENT":
             return state;
         default:
             return state;

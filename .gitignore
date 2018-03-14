@@ -1,0 +1,4 @@
+/.idea
+/newfront/node_modules
+/backEnd/node_modules
+package-lock.json

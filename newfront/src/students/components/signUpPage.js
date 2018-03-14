@@ -14,7 +14,6 @@ class signUpPage extends React.Component{
         }
 
     render(){
-        debugger;
         console.log("Page : ",this.props.signUpPage);
         return(
             <div>

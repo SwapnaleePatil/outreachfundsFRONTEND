@@ -14,7 +14,6 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        debugger;
         fetch("http://localhost:4000/api/school").then((response)=>{
             return response.json();
         }).then((schools)=>{
@@ -22,6 +21,29 @@ export const fetchAllSchoolDetails = () => {
             dispatch({
                 type:'FETCH_SCHOOLS',
                 payload:schools
+            })
+        }).catch = (error) =>{
+            console.log(error)
+        }
+    }
+}
+
+export const registerStudent = (obj) => {
+    console.log("formdata",obj);
+    var data={
+        mode:'cors',
+        body:obj,
+        method:'post'
+    }
+    return (dispatch)=>{
+        return fetch("http://localhost:4000/api/student/profile",data).then((response)=>{
+            console.log("Response - ",response);
+            return response.json();
+        }).then((response)=>{
+            console.log("response",response);
+            dispatch({
+                type:'REGISTER_STUDENT',
+                payload:response
             })
         }).catch = (error) =>{
             console.log(error)
