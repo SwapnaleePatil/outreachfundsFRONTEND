@@ -26,6 +26,7 @@ class FourthPage extends React.Component {
         this.setState({
             ownerData
         })
+
     }
     submitData = (e) => {
         console.log("props", this.props.Fields);
@@ -86,6 +87,7 @@ class FourthPage extends React.Component {
         if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
+
         return (
             <form onSubmit={this.submitData}>
                 <div className='tablecss'>
@@ -112,11 +114,11 @@ class FourthPage extends React.Component {
                             <tr>
                                 <td><label>Security Code:</label></td>
                                 <td><input value={ownerData.securityCode} onChange={this.handleChange}
-                                           name="securityCode" className="form-control" type="number"/></td>
+                                           name="securityCode" className="form-control" minLength="3" maxLength="3" type="number"/></td>
                             </tr>
                             <tr>
                                 <td><label>Postal Code:</label></td>
-                                <td><input value={ownerData.postalCode} onChange={this.handleChange} name="postalCode"
+                                <td><input value={ownerData.postalCode} onChange={this.handleChange} minLength="6" maxLength="6" name="postalCode"
                                            className="form-control" type="number"/></td>
                             </tr>
                             <tr>
@@ -126,6 +128,10 @@ class FourthPage extends React.Component {
                                         <option>==Select City==</option>
                                         <option value="India">India</option>
                                         <option value="London">London</option>
+                                        <option value="UK">India</option>
+                                        <option value="USA">USA</option>
+                                        <option value="China">China</option>
+                                        <option value="Japan">Japan</option>
                                     </select></td>
                             </tr>
                             <tr>
