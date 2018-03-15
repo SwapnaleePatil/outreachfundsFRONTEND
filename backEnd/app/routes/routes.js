@@ -1,6 +1,8 @@
 var studentController=require('../controllers/student-controller');
 let businesscontroller=require('../controllers/businessController');
 let eventcontroller=require('../controllers/eventController');
+let donationController= require('../controllers/donationController');
+
 module.exports=(app,passport)=>{
 
     //School Routes
@@ -45,5 +47,8 @@ module.exports=(app,passport)=>{
     app.post('/api/event', eventcontroller.addeventSchedule);
     app.delete('/api/event', eventcontroller.deleteeventSchedule);
     app.put('/api/event',eventcontroller.updateeventSchedule);
-    app.get('/api/event',eventcontroller.fetch)
+    app.get('/api/event',eventcontroller.fetch);
+
+    //Donation Routes
+    app.get('/addDonation',donationController.addDonation);
 }
