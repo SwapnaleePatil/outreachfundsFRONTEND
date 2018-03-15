@@ -26,6 +26,7 @@ export const addBusiness=(obj)=>{
     }
 };
 export const listBusiness=()=>{
+    debugger
     return(dispatch)=>{
         axios.get("http://localhost:3000/api/business/profile").then((result)=>{
             dispatch({

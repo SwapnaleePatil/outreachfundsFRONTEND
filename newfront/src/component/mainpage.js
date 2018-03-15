@@ -1,6 +1,7 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button} from 'react-bootstrap'
 import '../index.css'
+import BusinessProfile from '../business/components/businessProfile'
 
 class MainPage extends React.Component {
     render() {
@@ -8,10 +9,9 @@ class MainPage extends React.Component {
             window.location = "/logout"
         };
         const about = () => (
-            <div>
-                Abouut
-            </div>
+          window.location='/profile'
         )
+
         const Navmenu = () => (
             <div>
                 <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class-main">
@@ -45,7 +45,7 @@ class MainPage extends React.Component {
                                     <MenuItem eventKey={4.1}>Edit Profile</MenuItem>
                                     <MenuItem eventKey={4.2}>Availability</MenuItem>
                                     <MenuItem eventKey={4.3}>Payments</MenuItem>
-                                    <MenuItem eventKey={4.4}>View Profile</MenuItem>
+                                    <MenuItem eventKey={4.4} onClick={about}>View Profile</MenuItem>
                                     <MenuItem eventKey={4.5} onClick={logout}>Logout</MenuItem>
                                 </NavDropdown></Glyphicon></Button>
                     </Nav>
