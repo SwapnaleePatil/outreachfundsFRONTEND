@@ -27,13 +27,15 @@ body {
 .lbtn{
   width: 100px;
 }
+.rolebtn {
+width: 100%;
+  height: 100%;
+}
 .role-class{
-  padding-top: 2%;
-  padding-bottom: 1%;
-  margin-top: 5%;
+  margin-top: 15%;
   /*margin-bottom: 10%;*/
-  margin-left: 35%;
-  margin-right: 35%;
+  margin-left: 38%;
+  margin-right: 38%;
   opacity: .9;
   background-color: #EDEFF7;
   /*background-image: url("D:/miniProject/outreachFunds/frontend/src/student1.jpg");*/
@@ -42,16 +44,28 @@ body {
 }
 .home-class {
   padding-bottom: 35%;
-
   background-image: url("./images/school.png");
-
+  caption-side: top;
 }
 .gallary-class{
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 4%;
  }
+.gallary-class-row{
+  margin-bottom: 3%;
+  margin-top: 1%;
+}
 .outer-gallary-class{
   background-color: #F8F7F8;
+}
+.header-class{
+position: fixed;
+  }
+.navbar-class{
+  background-color: white;
+}
+.navbar-class-main{
+  background-color: #6B6B6B;
 
 }
 .navclassa{
@@ -80,18 +94,33 @@ height: 43%;
   background-color: #FBFBF9;
   height: 70px;
 }
+.carosel-class{
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
+  height: 10%;
+ }
+.error-message{
+  color: red;
+}
 .imgnav{
   padding-left: 5%;
   padding-right: 5%;
 }
+.font-p{
+  font-style: italic;
+  text-shadow: 4px 4px 12px #000000;
+}
 .schedulemodal{
-  padding-top:.5%;
-  padding-bottom: 1%;
-  margin-top: 10%;
+  margin-top: 5%;
   /*margin-bottom: 10%;*/
   margin-left: 35%;
   margin-right: 35%;
+  padding-left: 1.5%;
   opacity: .9;
   background-color: #EDEFF7;
-
+  overflow-y: scroll;
+}
+.schedule-class{
+  padding-bottom: 50%;
 }
