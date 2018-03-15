@@ -30,15 +30,16 @@ module.exports=(app,passport)=>{
             failureRedirect:'/loginFailure'
         }));
     app.get('/loginSuccess',(req,res)=>{
-        return res.header('x-auth',token).send('success');
-    })
+        res.send({"message":"login successful","token":token});
+    });
     app.get('/loginFailure',(req,res)=>{
         res.send("User Not Found");
-    })
+    });
     app.post('/api/business/profile', businesscontroller.addBusinessOwner);
     app.delete('/api/business/profile', businesscontroller.deleteBusinessOwner);
     app.put('/api/business/profile',businesscontroller.updateBusinessOwner);
-    app.get('/api/business/profile',businesscontroller.fetch)
+    app.get('/api/business/profile',businesscontroller.fetch);
+    app.post('/api/business/profile/fetchById',businesscontroller.fetchById);
 
 
     //Event Routes
