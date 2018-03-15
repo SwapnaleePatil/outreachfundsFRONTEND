@@ -73,7 +73,6 @@ let businessOwnerSchema = new mongoose.Schema({
             type: String,
             require: true,
             trim: true,
-
             validator: validator.isEmail,
             message: '{value} is not valid'
         },
