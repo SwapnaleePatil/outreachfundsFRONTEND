@@ -1,33 +1,70 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {signupPageAction,setSignupPageFieldsAction} from '../action';
+import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent} from '../action';
+
 
 class SignUpSchool extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            schoolData:[]
+            schoolData:[],
+            addSchool:false
         }
     }
-    handleSubmit=(e)=>{
-        e.preventDefault();
-        const {signupPageAction,setSignupPageFieldsAction} =this.props;
-        signupPageAction(1);
-        setSignupPageFieldsAction();
+
+    componentWillMount(){
+        if(this.props.Schools.length<=0)
+            this.props.fetchAllSchoolDetails();
     }
 
     handleChange=(e)=>{
         const {signupPageFields}=this.props;
         const {name,value}=e.target;
+
         var {schoolData}=this.state;
         if(schoolData.length<=0)
             schoolData = signupPageFields;
-        schoolData[name]=value;
+
+        if(name==='selectedSchool') {
+            this.handleSchoolNameChange(e);
+            schoolData['schoolId']=(e.target.selectedOptions[0].id || null);
+        }
+        else
+            schoolData[name]=value;
         this.setState({
             schoolData
         })
     }
+
+    handleSubmit=(e)=>{
+        e.preventDefault();
+        const {signupPageAction,setSignupPageFieldsAction,signupPageFields,registerStudent} =this.props;
+        let obj={
+            firstName:signupPageFields.firstName,
+            lastName:signupPageFields.lastName,
+            gender:signupPageFields.gender,
+            email:signupPageFields.email,
+            dob:signupPageFields.dob,
+            password:signupPageFields.password,
+            phone:signupPageFields.phone,
+            role:signupPageFields.role,
+            roleStatus:true,
+            schoolId:signupPageFields.schoolId,
+            school:signupPageFields.school,
+            organisationName:signupPageFields.organisationName,
+            organisationAddress:signupPageFields.organisationAddress,
+            organisationEmail:signupPageFields.organisationEmail,
+            organisationContact:signupPageFields.organisationContact
+        }
+        let formData=new FormData();
+        formData.append('data',JSON.stringify(obj));
+        formData.append('photo',signupPageFields.photo);
+        registerStudent(formData);
+        signupPageAction(1);
+        setSignupPageFieldsAction();
+    }
+
     previousPage=(e)=>{
         e.preventDefault();
         const {signupPageAction,setSignupPageFieldsAction,signUpPage} =this.props;
@@ -35,8 +72,37 @@ class SignUpSchool extends React.Component{
         setSignupPageFieldsAction(this.state.schoolData);
     }
 
+    handleSchoolNameChange=(e)=>{
+        const {schoolData}=this.state;
+        if(e.target.selectedOptions[0].innerHTML==='Other') {
+            this.setState({addSchool: true})
+            schoolData['organisationName']='';
+            schoolData['organisationAddress']='';
+            schoolData['organisationEmail']='';
+            schoolData['organisationContact']='';
+            schoolData['role']='Officer';
+            schoolData['roleTitle']='Admin';
+        }
+        else{
+            this.setState({addSchool:false})
+            var selectedSchool=e.target.selectedOptions[0].innerHTML;
+            const {Schools}=this.props;
+            var arr=Schools.filter((school)=>school.schoolName===selectedSchool);
+            schoolData['organisationName']=arr[0].organisationName;
+            schoolData['organisationAddress']=arr[0].organisationAddress;
+            schoolData['organisationEmail']=arr[0].organisationEmail;
+            schoolData['organisationContact']=arr[0].organisationContact;
+            schoolData['role']='Member';
+            schoolData['roleTitle']='';
+            this.setState({
+                schoolData
+            })
+        }
+    }
+
     render(){
-        const {signupPageFields}=this.props;
+
+        const {signupPageFields,Schools}=this.props;
         if(signupPageFields!==null)
             this.state.schoolData=signupPageFields;
         const {schoolData}=this.state;
@@ -45,13 +111,25 @@ class SignUpSchool extends React.Component{
                 <form className={'col-sm-10'}>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>School Name :</label>
-                        <select className={'form-control col-sm-9'}>
+                        <select className={'form-control col-sm-9'} name={'selectedSchool'} onChange={this.handleChange} value={schoolData.selectedSchool}>
                             <option>{'---Select School---'}</option>
+                            {
+                               Schools.map((school)=>{
+                                    return <option key={school._id} id={school._id}>{school.schoolName}</option>
+                                })
+                            }
+                            <option>{'Other'}</option>
                         </select>
+
+                    </div>
+                    <div className={'form-group row'}>
+                        <div className={'col-sm-3 col-md-offset-1'}>
+                        {(this.state.addSchool)?<input className={'form-control col-sm-2 col-md-offset-4'} name={'school'} onChange={this.handleChange} value={schoolData.school} type={'text'}/>:<span></span>}
+                        </div>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Organization Name :</label>
-                        <input className={'form-control col-sm-9'} type={'text'} placeholder={'Organization Name'} name={'orgName'} onChange={this.handleChange} value={schoolData.orgName}/>
+                        <input className={'form-control col-sm-9'} type={'text'} placeholder={'Organization Name'} name={'organisationName'} onChange={this.handleChange} value={schoolData.organisationName}/>
                     </div>
                     <div className="form-group radio form-inline">
                         <label className={'font-weight-bold col-sm-2'}>Role :</label>
@@ -59,16 +137,20 @@ class SignUpSchool extends React.Component{
                         <label className={'col-sm-2'}><input type="radio" name="role" value={'Member'}  onChange={this.handleChange} checked={(schoolData.role==='Member')?'checked':''}/>Member</label>
                     </div>
                     <div className={'form-group form-inline row'}>
+                        <label className={'font-weight-bold col-sm-2'}>Role Title :</label>
+                        <input type={'text'} className={'form-control col-sm-10'} placeholder={'Role Title'} name={'roleTitle'} onChange={this.handleChange} value={schoolData.roleTitle}/>
+                    </div>
+                    <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Address :</label>
-                        <textarea className={'form-control col-sm-10'} placeholder={'Address'} name={'orgAddress'} onChange={this.handleChange}>{schoolData.orgAddress}</textarea>
+                        <textarea className={'form-control col-sm-10'} placeholder={'Address'} name={'organisationAddress'} onChange={this.handleChange} value={schoolData.organisationAddress}>{schoolData.organisationAddress}</textarea>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Email :</label>
-                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Email'} name={'orgEmail'} onChange={this.handleChange} value={schoolData.orgEmail}/>
+                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Email'} name={'organisationEmail'} onChange={this.handleChange} value={schoolData.organisationEmail}/>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Contact No. :</label>
-                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Contact No.'} name={'orgContact'} onChange={this.handleChange} value={schoolData.orgContact}/>
+                        <input className={'form-control col-sm-10'} type={'text'} placeholder={'Contact No.'} name={'organisationContact'} onChange={this.handleChange} value={schoolData.organisationContact}/>
                     </div>
                     <div className={'btn-group float-right'}>
                     <button onClick={this.previousPage} className={'btn btn-primary'}>Previous</button>
@@ -80,17 +162,20 @@ class SignUpSchool extends React.Component{
     }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
+    console.log("School",state.schools);
     return{
         signUpPage:state.signupPage,
-        signupPageFields:state.signupPageFields
+        signupPageFields:state.signupPageFields,
+        Schools:state.schools
     }
 }
 
-function matchDispatchToProps(dispatch) {
+const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        signupPageAction,setSignupPageFieldsAction
+        signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,
+        registerStudent
     },dispatch)
-}
+};
 
 export default connect(mapStateToProps,matchDispatchToProps)(SignUpSchool);
