@@ -37,16 +37,48 @@ export const registerStudent = (obj) => {
     }
     return (dispatch)=>{
         return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            console.log("Response - ",response);
-            return response.json();
-        }).then((response)=>{
-            console.log("response",response);
+            debugger;
+            console.log(response);
+            //return response.json();
+        }).then((student)=>{
+            debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
-                payload:response
+                payload:student
             })
         }).catch = (error) =>{
-            console.log(error)
+            console.log("Error in Registeration of Student..",error)
+        }
+    }
+}
+
+export const registerSchool = (schoolObj,personalObj) => {
+    debugger;
+    console.log("in school",schoolObj);
+    var data={
+        mode:'cors',
+        body:JSON.stringify(schoolObj),
+        method:'post',
+        headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        }
+    }
+    return (dispatch)=>{
+        return fetch("http://localhost:3000/api/school",data).then((response)=>{
+            return response.json();
+        }).then((school)=>{
+            personalObj.append('schoolId',school.school._id)
+            //personalObj.schoolId=school.school._id;
+            debugger;
+            dispatch(registerStudent(personalObj));
+            debugger;
+            dispatch({
+                type:'REGISTER_SCHOOL',
+                payload:school
+            })
+        }).catch = (error) =>{
+            console.log("Error in Registeration of School..",error)
         }
     }
 }
