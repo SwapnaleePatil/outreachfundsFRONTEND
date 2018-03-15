@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent} from '../action';
+import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent,registerSchool} from '../action';
 
 
 class SignUpSchool extends React.Component{
@@ -39,7 +39,16 @@ class SignUpSchool extends React.Component{
 
     handleSubmit=(e)=>{
         e.preventDefault();
-        const {signupPageAction,setSignupPageFieldsAction,signupPageFields,registerStudent} =this.props;
+        console.log("new schools list  - ",this.props.Schools);
+        const {signupPageAction,setSignupPageFieldsAction,signupPageFields,registerStudent,registerSchool} =this.props;
+        let formData = new FormData();
+        let schoolInfo={
+            "schoolName":signupPageFields.school,
+            "organisationName":signupPageFields.organisationName,
+            "organisationAddress":signupPageFields.organisationAddress,
+            "organisationEmail":signupPageFields.organisationEmail,
+            "organisationContact":signupPageFields.organisationContact
+        }
         let obj={
             firstName:signupPageFields.firstName,
             lastName:signupPageFields.lastName,
@@ -50,17 +59,19 @@ class SignUpSchool extends React.Component{
             phone:signupPageFields.phone,
             role:signupPageFields.role,
             roleStatus:true,
-            schoolId:signupPageFields.schoolId,
-            school:signupPageFields.school,
-            organisationName:signupPageFields.organisationName,
-            organisationAddress:signupPageFields.organisationAddress,
-            organisationEmail:signupPageFields.organisationEmail,
-            organisationContact:signupPageFields.organisationContact
+            roleTitle:signupPageFields.roleTitle,
+            schoolId:signupPageFields.schoolId
         }
-        let formData=new FormData();
-        formData.append('data',JSON.stringify(obj));
-        formData.append('photo',signupPageFields.photo);
-        registerStudent(formData);
+        if(signupPageFields.schoolId===null){
+            formData.append('data', JSON.stringify(obj));
+            formData.append('photo', signupPageFields.photo);
+            registerSchool(schoolInfo,formData);
+        }
+        else {
+            formData.append('data', JSON.stringify(obj));
+            formData.append('photo', signupPageFields.photo);
+            registerStudent(formData);
+        }
         signupPageAction(1);
         setSignupPageFieldsAction();
     }
@@ -174,7 +185,7 @@ const mapStateToProps = (state) => {
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,
-        registerStudent
+        registerStudent,registerSchool
     },dispatch)
 };
 
