@@ -1,9 +1,9 @@
-const studentlogin=(state={user:''},action)=>{
+const businesslist=(state=[],action)=>{
     switch (action.type){
-        case 'STUDENT_LOGIN':
+        case 'BUSINESS_LIST':
             return action.payload
         default:
             return state
     }
 }
-export default studentlogin;
+export default businesslist;

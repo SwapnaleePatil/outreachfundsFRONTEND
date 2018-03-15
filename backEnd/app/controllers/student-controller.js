@@ -1,5 +1,6 @@
 var Student=require('../models/student').student;
 var SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisation;
+global.SchoolId=null;
 exports.registerStudent=(req,res)=>{
     console.log("in add");
     if(!req.files)
@@ -11,7 +12,6 @@ exports.registerStudent=(req,res)=>{
         }
     });
     var body=JSON.parse(req.body.data);
-    var student=new Student(body);
     if(body.schoolId===null){
         console.log('in if');
         var schoolInfo={
@@ -21,15 +21,17 @@ exports.registerStudent=(req,res)=>{
             organisationContact:body.organisationContact,
             organisationEmail:body.organisationEmail
         }
-        var schoolOrganisation=new SchoolOrganisation(schoolInfo);
+        let schoolOrganisation=new SchoolOrganisation(schoolInfo);
         schoolOrganisation.save().then((school)=>{
             console.log("in then of school org",school._id);
-            student.schoolId=school._id;
+            SchoolId=school._id;
         }).catch((err)=>{
             console.log('Error in School Registeration',err);
         })
     }
+    let student=new Student(body);
     student.photo=sample.name;
+    student.schoolId=SchoolId;
     console.log("Student - ",student);
     if(student.schoolId!==null) {
         student.save().then(() => {

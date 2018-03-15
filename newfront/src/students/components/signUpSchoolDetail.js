@@ -57,7 +57,7 @@ class SignUpSchool extends React.Component{
             organisationEmail:signupPageFields.organisationEmail,
             organisationContact:signupPageFields.organisationContact
         }
-        var formData=new FormData();
+        let formData=new FormData();
         formData.append('data',JSON.stringify(obj));
         formData.append('photo',signupPageFields.photo);
         registerStudent(formData);
@@ -81,6 +81,7 @@ class SignUpSchool extends React.Component{
             schoolData['organisationEmail']='';
             schoolData['organisationContact']='';
             schoolData['role']='Officer';
+            schoolData['roleTitle']='Admin';
         }
         else{
             this.setState({addSchool:false})
@@ -91,7 +92,8 @@ class SignUpSchool extends React.Component{
             schoolData['organisationAddress']=arr[0].organisationAddress;
             schoolData['organisationEmail']=arr[0].organisationEmail;
             schoolData['organisationContact']=arr[0].organisationContact;
-            schoolData['role']='';
+            schoolData['role']='Member';
+            schoolData['roleTitle']='';
             this.setState({
                 schoolData
             })
@@ -133,6 +135,10 @@ class SignUpSchool extends React.Component{
                         <label className={'font-weight-bold col-sm-2'}>Role :</label>
                         <label><input type="radio" name="role" value={'Officer'}  onChange={this.handleChange} checked={(schoolData.role==='Officer')?'checked':''}/>Officer</label>
                         <label className={'col-sm-2'}><input type="radio" name="role" value={'Member'}  onChange={this.handleChange} checked={(schoolData.role==='Member')?'checked':''}/>Member</label>
+                    </div>
+                    <div className={'form-group form-inline row'}>
+                        <label className={'font-weight-bold col-sm-2'}>Role Title :</label>
+                        <input type={'text'} className={'form-control col-sm-10'} placeholder={'Role Title'} name={'roleTitle'} onChange={this.handleChange} value={schoolData.roleTitle}/>
                     </div>
                     <div className={'form-group form-inline row'}>
                         <label className={'font-weight-bold col-sm-2'}>Address :</label>

@@ -14,7 +14,7 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        fetch("http://localhost:4000/api/school").then((response)=>{
+        fetch("http://localhost:3000/api/school").then((response)=>{
             return response.json();
         }).then((schools)=>{
             console.log("School",schools);
@@ -36,7 +36,7 @@ export const registerStudent = (obj) => {
         method:'post'
     }
     return (dispatch)=>{
-        return fetch("http://localhost:4000/api/student/profile",data).then((response)=>{
+        return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
             console.log("Response - ",response);
             return response.json();
         }).then((response)=>{

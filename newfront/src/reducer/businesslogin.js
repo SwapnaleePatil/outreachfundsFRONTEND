@@ -1,6 +1,6 @@
 const businesslogin=(state=[],action)=>{
     switch (action.type){
-        case 'businesslogin':
+        case 'BUSINESS_LOGIN':
             return action.payload;
         default:
             return state
