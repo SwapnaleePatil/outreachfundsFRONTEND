@@ -38,8 +38,8 @@ class SecondPage extends React.Component {
         this.setState({msg: ""});
         let name = e.target.name;
         if (name === "businessName" || name === "businessType") {
-            let rename = /^([a-zA-Z])*$/;
-            if (!rename.test(e.target.value)) {
+            let rename = /^([0-9])*$/;
+            if (rename.test(e.target.value)) {
                 this.setState({msg: "Do not Enter Number Please"});
             }
         }
@@ -152,8 +152,8 @@ class SecondPage extends React.Component {
                             </tr>
                             <tr>
                                 <td><label>Address</label></td>
-                                <td><input className="form-control" value={ownerData.businessAddress}
-                                           onChange={this.handleChange} name="businessAddress" type="text"/></td>
+                                <td><textarea className="form-control" value={ownerData.businessAddress}
+                                           onChange={this.handleChange} name="businessAddress" /></td>
                             </tr>
                             <tr>
                                 <td><label>Tax Payer Id</label></td>

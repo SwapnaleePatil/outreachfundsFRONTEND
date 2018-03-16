@@ -1,5 +1,7 @@
 var Student=require('../models/student').student;
 var SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisation;
+
+//REGISTER STUDENT
 exports.registerStudent=(req,res)=>{
         if (!req.files)
             return res.status(400).send('No files were uploaded.');
@@ -9,7 +11,6 @@ exports.registerStudent=(req,res)=>{
                 console.log(err);
             }
         });
-
     var body=JSON.parse(req.body.data);
     let student=new Student(body);
     student.photo=sample.name;
@@ -22,7 +23,7 @@ exports.registerStudent=(req,res)=>{
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
         })
 }
-
+//REGISTER SCHOOL ORGANISATION
 exports.registerSchoolOrganisation=(req,res)=>{
     console.log("school - ",req.body);
     var schoolOrganisation=new SchoolOrganisation(req.body);
@@ -32,18 +33,30 @@ exports.registerSchoolOrganisation=(req,res)=>{
         res.status(401).send({"message":"Error in Registration of School Organisation.","error":err})
     })
 }
-
+//FETCH ALL STUDENTS LIST
 exports.fetchAllStudents=(req,res)=>{
     console.log(req.stud);
     Student.find().then((students)=>{
-        res.status(200).send({"students":students});
+        res.status(200).send(students);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
     })
 }
+
+exports.fetchAllStudentsBySchoolId=(req,res)=>{
+    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member'}).then((students)=>{
+        res.status(200).send(students);
+    }).catch((err)=>{
+        res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
+    })
+}
+
 exports.fetchStudent=(req,res)=>{
-    Student.find().then((students)=>{
-        res.status(200).send({"students":students});
+    var token=req.header('x-auth');
+    Student.findByToken(token).then((student)=>{
+        if(!student)
+            res.status(401).send({"message":"Student Not Found."});
+        res.status(200).send(student);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving Student.","err":err})
     })

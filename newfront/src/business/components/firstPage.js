@@ -46,8 +46,8 @@ class FirstPage extends React.Component {
             }
         }
         if (name === "firstName" || name === "lastName") {
-            let rename = /^([a-zA-Z])*$/;
-            if (!rename.test(e.target.value)) {
+            let rename = /^([0-9])*$/;
+            if (rename.test(e.target.value)) {
                 this.setState({msg: "First Name Or Lastname Can't be Number"});
             }
         }
