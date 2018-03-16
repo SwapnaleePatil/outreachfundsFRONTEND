@@ -4,7 +4,6 @@ let schoolOrganisation=require('./schoolOrganisation').schoolOrganisation;
 let eventSchema = new mongoose.Schema({
     eventDate:{
         type:Date,
-        require:true
     },
     eventName:{
         type:String,

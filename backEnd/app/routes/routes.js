@@ -50,5 +50,7 @@ module.exports=(app,passport)=>{
     app.get('/api/event',eventcontroller.fetch);
 
     //Donation Routes
-    app.get('/addDonation',donationController.addDonation);
+    app.post('/addDonation',donationController.addDonation);
+    app.get('/getDonationData',donationController.getDonation);
+    app.patch('/approveDonation',donationController.approveDonation);
 }

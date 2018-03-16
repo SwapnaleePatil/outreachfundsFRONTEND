@@ -1,23 +1,21 @@
 let mongoose = require('mongoose');
-let businessOwner=require('./businessOwner').businessOwner;
-let student=require('./student').student;
-let eventSchedule=require('./eventSchedule').eventSchedule;
 let donationSchema = new mongoose.Schema({
-    eventId:{
-        type:mongoose.Schema.ObjectId,
-        ref:eventSchedule,
+    date:{
+        type:String,
         require:true
     },
-    businessSponsorId:{
-        type:mongoose.Schema.ObjectId,
-        ref:businessOwner,
+    eventName:{
+        type:String,
         require:true
     },
 
-    studentId:{
-        type:mongoose.Schema.ObjectId,
-        ref:student,
+    organizationName:{
+        type:String,
         require:true
+    },
+    location:{
+        type:String,
+        required:true
     },
     amount:{
         type:Number,
