@@ -1,21 +1,19 @@
 
 import axios from 'axios';
-
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
         axios({method:'post',url:'http://localhost:3000/api/businessOwner/loginPassport',data}).then((response)=>{
-        if(response){
-            dispatch({
-                type:'BUSINESS_LOGIN',
-                payload:response
-            })
-            console.log('login',response.data);
-            if(response.data==="success") {
+
+           if(response.data.message==="login successful"){
+                dispatch({
+                    type:'BUSINESS_LOGIN',
+                    payload:response
+                });
                 console.log('login', response.data);
-                localStorage.setItem('user', response.data);
+                localStorage.setItem('user', response.data.token);
                 window.location = "/home"
             }
-        }
+
         }).catch((e)=>{
             console.log(e);
         })
@@ -28,11 +26,13 @@ export const  studentLogin=(data)=>{
                 dispatch({
                     type:'STUDENT_LOGIN',
                     payload:response
-                })
-                console.log('login',response.data);
-                if(response.data==="success") {
+                });
+debugger;
+                console.log('slogin',response.data);
+                if(response.data.message==="login successful") {
+         debugger;
                     console.log('login', response.data);
-                    localStorage.setItem('user', response.data);
+                    localStorage.setItem('user', response.data.token);
                     window.location = "/home"
                 }
             }
@@ -41,14 +41,35 @@ export const  studentLogin=(data)=>{
         })
     }
 };
-export const getevents=()=>{
+
+export const scheduleevents=(data)=>{
     return(dispatch)=>{
-        axios({method:'get',url:''}).then((response)=>{
+        axios({method:'post',url:'http://localhost:3000/api/event',data}).then((response)=>{
             if(response){
                 dispatch({
-                    type:''
+                    type:'SCHEDULE_EVENT',
+                    payload:response.data.record
                 })
             }
+        }).catch((e)=>{
+            console.log(e);
         })
     }
-}
+};
+
+// /api/business/profile/fetchById
+
+export const eventslist=()=>{
+    return(dispatch)=>{
+        axios({method:'get',url:'http://localhost:3000/api/event'}).then((response)=>{
+            if(response){
+                dispatch({
+                    type:'EVENT_LIST',
+                    payload:response.data.record
+                })
+            }
+        }).catch((e)=>{
+            console.log(e);
+        })
+    }
+};

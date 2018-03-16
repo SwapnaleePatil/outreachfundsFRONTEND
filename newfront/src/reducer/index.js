@@ -8,13 +8,14 @@ import schoolReducer from '../students/reducers/reducer-schools';
 import businesslist from '../business/reducers/businessReducer'
 import businessSignUpPageReducer from '../business/reducers/businessSignUpReducer';
 import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
-
+import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
     blogin:businesslogin,
     slogin:studentlogin,
     businesslist:businesslist,
     signupPage:signupPageReducer,
     signupPageFields:signupPageFieldsReducer,
+    scheduleevent:scheduleEvent,
     students:studentReducer,
     schools:schoolReducer,
     businessSignUpRed:businessSignUpPageReducer,

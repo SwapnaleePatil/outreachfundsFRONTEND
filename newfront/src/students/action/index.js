@@ -4,7 +4,6 @@ export const signupPageAction=(page=1)=>{
         payload:page
     }
 }
-
 export const setSignupPageFieldsAction=(obj=[])=>{
     return {
         type:"SIGNUP_PAGE_FIELDS",
