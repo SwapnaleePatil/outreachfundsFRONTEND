@@ -5,22 +5,71 @@
     padding-top: 5%;
     padding-right: 30%;
     font-family: Cambria;
-
 }
 
 .field {
     font-family: Cambria;
     font-size: large;
-    padding: 4%;
+    color: darkgreen;
+}
+.fieldtd{
+    font-family: Cambria;
+    font-size: large;
+    padding-left: 10%;
+    color: black;
+    padding-bottom: 3%;
 }
 .fieldsecond{
     font-family: Cambria;
     font-size: large;
-    padding: 3%;
+    margin-left: 5%;
+    color: darkgreen;
+    padding-bottom: 3%;
+}
+.fieldseconds{
+    font-family: Cambria;
+    font-size: large;
+    margin-left: 5%;
+    color: black;
+    padding-bottom: 3%;
 }
 .heading {
     margin-top: 10%;
-    font-weight: bold;
-    font-size: large;
     font-family: Cambria
+}
+.edittd{
+    width:50%;
+}
+
+/*image css*/
+.container {
+    position: relative;
+
+}
+.image{
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+.container:hover .image {
+    opacity: 0.3;
+}
+.container:hover .middle {
+    opacity: 0.8;
+}
+.text {
+    background-color: grey;
+
+
+    padding: 16px 32px;
 }
