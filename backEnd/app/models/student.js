@@ -57,7 +57,7 @@ let studentSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    officerTitle: {
+    roleTitle: {
         type: String
     },
     roleStatus:{
@@ -92,7 +92,7 @@ studentSchema.statics.findByToken= function(token){
         console.log(decoded);
     }catch(err) {
         console.log("Error : ",err);
-        //return Promise.reject();
+        return Promise.reject();
     }
     console.log("before return",decoded);
     return Student.findOne({
