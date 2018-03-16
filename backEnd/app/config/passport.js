@@ -12,7 +12,6 @@ module.exports=(passport)=>{
         return done(null,user);
     })
 
-
     //Student
     passport.use('student',new LocalStrategy({
         usernameField:'email',

@@ -9,7 +9,7 @@ import Donation from "./donation";
 import BusinessList from './businesslisting'
 import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
-
+import BusinessProfile from '../business/components/businessProfile'
 class Main extends React.Component {
     render() {
         const logout=()=>{
@@ -43,6 +43,7 @@ class Main extends React.Component {
                     <Private exact path="/main/schedule" component={Schedule}/>
                     <Private exact path="/main/donation" component={Donation}/>
                     <Private exact path="/home" component={BusinessList}/>
+                    <Private exact path="/profile" component={BusinessProfile}/>
                 </Switch>
             </BrowserRouter>
         );
