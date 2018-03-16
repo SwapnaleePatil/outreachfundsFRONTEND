@@ -27,10 +27,8 @@ export const  studentLogin=(data)=>{
                     type:'STUDENT_LOGIN',
                     payload:response
                 });
-debugger;
                 console.log('slogin',response.data);
                 if(response.data.message==="login successful") {
-         debugger;
                     console.log('login', response.data);
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"

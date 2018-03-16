@@ -28,7 +28,6 @@ export const fetchAllSchoolDetails = () => {
 }
 
 export const registerStudent = (obj) => {
-    console.log("formdata",obj);
     var data={
         mode:'cors',
         body:obj,
@@ -36,9 +35,8 @@ export const registerStudent = (obj) => {
     }
     return (dispatch)=>{
         return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            debugger;
-            console.log(response);
-            //return response.json();
+            debugger
+            return response;
         }).then((student)=>{
             debugger;
             dispatch({
@@ -68,7 +66,6 @@ export const registerSchool = (schoolObj,personalObj) => {
             return response.json();
         }).then((school)=>{
             personalObj.append('schoolId',school.school._id)
-            //personalObj.schoolId=school.school._id;
             debugger;
             dispatch(registerStudent(personalObj));
             debugger;
@@ -78,6 +75,41 @@ export const registerSchool = (schoolObj,personalObj) => {
             })
         }).catch = (error) =>{
             console.log("Error in Registeration of School..",error)
+        }
+    }
+}
+export const fetchStudent=()=>{
+    debugger;
+    var data={
+        mode:'cors',
+        method:'get',
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch=>{
+        return fetch('http://localhost:3000/api/student',data).then((response)=>{
+            return response.json();
+        }).then((admin)=>{
+            console.log(admin);
+            dispatch(fetchSignupRequests(admin.schoolId));
+        }).catch((error)=>{
+            console.log("Error : ",error);
+        })
+    })
+}
+export const fetchSignupRequests = (schoolId) => {
+    return (dispatch)=>{
+        return fetch(`http://localhost:3000/api/students/${schoolId}`).then((response)=>{
+            return response.json();
+        }).then((requests)=>{
+            debugger;
+            dispatch({
+                type:'FETCH_REGISTER_REQUEST',
+                payload:requests
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
         }
     }
 }
