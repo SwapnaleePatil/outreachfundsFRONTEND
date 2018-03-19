@@ -82,15 +82,12 @@ studentSchema.methods.generateAuthToken=(stud)=>{
 }
 
 studentSchema.statics.findByToken= function(token){
-    console.log("in findByToken");
     var Student =this;
     var access='auth';
     var decoded;
     try{
-        console.log("in try");
-        decoded=jwt.verify(token,'outreachfunds');
-        console.log(decoded);
-    }catch(err) {
+       decoded=jwt.verify(token,'outreachfunds');
+      }catch(err) {
         console.log("Error : ",err);
         return Promise.reject();
     }

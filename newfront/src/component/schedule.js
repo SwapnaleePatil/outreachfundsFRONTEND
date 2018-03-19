@@ -40,8 +40,9 @@ class Schedule extends React.Component {
         nextProps.business.map((v, i) => {
             v.tokens.map((value, i) => {
                 if (value.token === localStorage.getItem('user')) {
-                    businessname = v.businessInfo.businessName;
+businessname = v.businessInfo.businessName;
                     eventowner = v._id;
+
                     this.setState({
                         businessname,
                         eventowner

@@ -12,7 +12,6 @@ class BusinessFullPage extends React.Component{
             this.props.businessSignup();
     }
     render(){
-        console.log("Page : ",this.props.Page);
         return(
             <div>
                 {(this.props.Page===1)?<FirstPage/>:<span></span>}
