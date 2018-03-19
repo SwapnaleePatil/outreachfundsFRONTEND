@@ -35,10 +35,8 @@ export const registerStudent = (obj) => {
     }
     return (dispatch)=>{
         return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            debugger
             return response;
         }).then((student)=>{
-            debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
                 payload:student
@@ -50,7 +48,6 @@ export const registerStudent = (obj) => {
 }
 
 export const registerSchool = (schoolObj,personalObj) => {
-    debugger;
     console.log("in school",schoolObj);
     var data={
         mode:'cors',
@@ -66,9 +63,7 @@ export const registerSchool = (schoolObj,personalObj) => {
             return response.json();
         }).then((school)=>{
             personalObj.append('schoolId',school.school._id)
-            debugger;
             dispatch(registerStudent(personalObj));
-            debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
                 payload:school
@@ -79,7 +74,6 @@ export const registerSchool = (schoolObj,personalObj) => {
     }
 }
 export const fetchStudent=()=>{
-    debugger;
     var data={
         mode:'cors',
         method:'get',
@@ -103,7 +97,6 @@ export const fetchSignupRequests = (schoolId) => {
         return fetch(`http://localhost:3000/api/students/${schoolId}`).then((response)=>{
             return response.json();
         }).then((requests)=>{
-            debugger;
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests
