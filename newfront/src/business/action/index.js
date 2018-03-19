@@ -16,8 +16,7 @@ export const businessFields=(obj=[])=>{
 export const addBusiness=(obj)=>{
     return (dispatch)=>{
         axios.post("http://localhost:3000/api/business/profile",obj).then((result)=>{
-            console.log("Result",result.data.record);
-            dispatch({
+           dispatch({
                 type:'BUSINESS_ADD',
                 payload:result.data
             })
@@ -25,10 +24,19 @@ export const addBusiness=(obj)=>{
         })
     }
 };
+export const updateBusiness=(obj)=>{
+    return (dispatch)=>{
+        axios.put("http://localhost:3000/api/business/profile",obj).then((result)=>{
+            dispatch({
+                type:'BUSINESS_UPDATE',
+                payload:result.data
+            })
+        })
+    }
+};
 export const listBusiness=()=>{
-    debugger
-    return(dispatch)=>{
-        axios.get("http://localhost:3000/api/business/profile").then((result)=>{
+return(dispatch)=>{
+axios.get("http://localhost:3000/api/business/profile").then((result)=>{
             dispatch({
                 type:'BUSINESS_LIST',
                 payload:result.data.record

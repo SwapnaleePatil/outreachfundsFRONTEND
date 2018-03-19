@@ -7,8 +7,12 @@ import signupPageFieldsReducer from '../students/reducers/reducer-signup-fields'
 import requestReducer from '../students/reducers/reducer-request';
 import schoolReducer from '../students/reducers/reducer-schools';
 import businesslist from '../business/reducers/businessReducer'
-import businessSignUpPageReducer from '../business/reducers/businessSignUpReducer';
+import businessSignUpPageReducer from '../business/reducers/businessPage';
 import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
+import donationReducer from './../donation/reducers/donationReducer';
+import eventReducer from './../donation/reducers/eventReducer';
+import getBusiness from './../donation/reducers/getBusinessId';
+
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
     blogin:businesslogin,
@@ -21,7 +25,10 @@ const rootreducer=combineReducers({
     requests:requestReducer,
     schools:schoolReducer,
     businessSignUpRed:businessSignUpPageReducer,
-    businessFieldsRed:businessFieldsReducer
+    businessFieldsRed:businessFieldsReducer,
+    donation:donationReducer,
+    events:eventReducer,
+    businessInfo:getBusiness
 });
 
 export default rootreducer;

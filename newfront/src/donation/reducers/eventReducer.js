@@ -1,7 +1,8 @@
 export default (state=[],action)=>{
     switch(action.type){
-        case "SIGNUP_PAGE_FIELDS":
-            return action.payload;
+        case 'GET_EVENTS':
+            state=action.payload;
+            return state;
         default:
             return state;
     }

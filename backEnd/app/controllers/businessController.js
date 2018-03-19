@@ -1,4 +1,5 @@
 let BusinessOwner = require('../models/businessOwner').businessOwner;
+const _=require('lodash')
 exports.addBusinessOwner = (req, res) => {
     if (!req.files)
         return res.status(400).send('No files were uploaded.');
@@ -23,7 +24,6 @@ exports.addBusinessOwner = (req, res) => {
     })
 }
 exports.deleteBusinessOwner = (req, res) => {
-    console.log("Id",req.body.id);
     BusinessOwner.findByIdAndUpdate(req.body.id,{ $set:{status: 'true'}},{new:true}).then((result) => {
         if (result) {
             res.send({"message":'Deleted.', 'record': result});
@@ -37,18 +37,24 @@ exports.deleteBusinessOwner = (req, res) => {
 }
 exports.updateBusinessOwner = (req, res) => {
     let img = '';
-    if (req.files !== null) {
-        img = req.files.file.name;
+    let body=JSON.parse(req.body.obj);
+    if (req.files && req.files !== null) {
+        img = req.files.photo.name;
+        let sample = req.files.photo;
+        sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
+            if (err) {
+                console.log("Error",err);
+            }
+        });
     }
     else {
-        img = req.body.file;
+        img = req.body.photo;
     }
-    BusinessOwner.findByIdAndUpdate(req.params.id, {
-        $set: {
-            body,
-            photo: img
-        }},{new:true})
+    body.photo=img;
+
+    BusinessOwner.findByIdAndUpdate(body.id,{$set:body},{new:true})
     .then((result) => {
+        console.log("result",result);
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
         console.log('Error in Update', err);
@@ -68,3 +74,17 @@ exports.fetchById = (req, res) => {
         console.log('Error in retrieving data.');
     })
 };
+exports.fetchByToken=(req,res)=>{
+    let token=req.header('x-auth');
+    console.log(token);
+    BusinessOwner.findByToken(token).then((result)=>{
+        if(!result)
+        {
+            res.send({"message":"User Not Found"});
+        }
+        else
+        {
+            res.send({"message":"User Found",'User':result});
+        }
+    })
+}

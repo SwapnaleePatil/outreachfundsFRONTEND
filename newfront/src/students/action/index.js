@@ -35,11 +35,10 @@ export const registerStudent = (obj) => {
         method:'post'
     }
     return (dispatch)=>{
-        return fetch(`http://localhost:4000/api/student/profile`,data).then((response)=>{
-            debugger;
+
+        return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
             return response;
         }).then((student)=>{
-            debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
                 payload:student
@@ -48,10 +47,9 @@ export const registerStudent = (obj) => {
             console.log("Error in Registeration of Student..",error)
         }
     }
-}
+};
 
 export const registerSchool = (schoolObj,personalObj) => {
-    debugger;
     console.log("in school",schoolObj);
     var data={
         mode:'cors',
@@ -67,9 +65,7 @@ export const registerSchool = (schoolObj,personalObj) => {
             return response.json();
         }).then((school)=>{
             personalObj.append('schoolId',school.school._id)
-            debugger;
             dispatch(registerStudent(personalObj));
-            debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
                 payload:school
@@ -80,8 +76,8 @@ export const registerSchool = (schoolObj,personalObj) => {
     }
 }
 export const fetchStudent=()=>{
-    debugger;
-    var data={
+    let data={
+
         mode:'cors',
         method:'get',
         headers:{
@@ -104,7 +100,6 @@ export const fetchSignupRequests = (schoolId) => {
         return fetch(`http://localhost:${myport}/api/students/${schoolId}`).then((response)=>{
             return response.json();
         }).then((requests)=>{
-            debugger;
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests
@@ -172,4 +167,3 @@ export const rejectSignupRequests = (resultSet) => {
         }
     }
 }
-

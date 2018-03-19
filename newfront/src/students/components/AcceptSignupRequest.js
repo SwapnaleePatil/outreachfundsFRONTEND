@@ -7,7 +7,6 @@ class AcceptSignupRequest extends React.Component{
         this.approvedCheckboxes=new Set();
         this.rejectedCheckboxes=new Set();
         if(this.props.requests.length<=0)
-            debugger;
             this.props.fetchStudent();
     }
 
