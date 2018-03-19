@@ -1,18 +1,61 @@
 import React from 'react'
-import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button} from 'react-bootstrap'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+
+import {listBusiness} from '../business/action/index'
+import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table} from 'react-bootstrap'
 import '../index.css'
-import BusinessProfile from '../business/components/businessProfile'
 
 class MainPage extends React.Component {
+    constructor(){
+        super();
+        this.state={
+            isSearching: false,
+            searchdata: [],
+            name:""
+        }
+    }
+    componentWillMount() {
+        this.props.listBusiness();
+    }
+    componentWillReceiveProps(nextProps){
+        this.state.data=nextProps.businessrecord
+    }
+    searching = (e) => {
+        this.setState({
+            name:e.target.value
+        });
+        console.log(e.target.value);
+        this.setState({
+            name:e.target.value,
+            isSearching: true,
+            searchdata: []
+        });
+        let {searchdata} = this.state;
+        searchdata = [];
+        this.state.data.map((value, i) => {
+            if (value.businessInfo.businessName.includes(e.target.value)) {
+                searchdata.push(value)
+            }
+            this.setState({
+                searchdata
+            });
+            if (e.target.value === "") {
+                this.setState({
+                    isSearching: false
+                })
+            }
+        })
+    };
     render() {
         const logout = () => {
             window.location = "/logout"
         };
         const about = () => (
           window.location='/profile'
-        )
+        );
 
-        const Navmenu = () => (
+        return (
             <div>
                 <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class-main">
                     <Navbar.Header className="imgnav">
@@ -21,9 +64,8 @@ class MainPage extends React.Component {
                                              style={{width: 150, height: 100}} alt=""/></a>
                     </Navbar.Header>
                     <Nav bsStyle="tabs">
-
-                        <NavItem className="navclassb" eventKey={1} href="#">
-                            <FormControl type="text" placeholder="search businesses here" width="20%"/>
+                        <NavItem className="navclassb" eventKey={1}>
+                            <FormControl type="text" placeholder="search businesses here" name="search" onChange={this.searching} width="20%"/>
                         </NavItem>
                     </Nav>
                     <Nav>
@@ -49,13 +91,45 @@ class MainPage extends React.Component {
                                     <MenuItem eventKey={4.5} onClick={logout}>Logout</MenuItem>
                                 </NavDropdown></Glyphicon></Button>
                     </Nav>
-                </Navbar></div>
-        );
-        return (
-            <div>
-                <Navmenu/>
+                </Navbar>
+                {this.state.isSearching ?
+                <Table striped bordered>
+                    <tbody>
+                    <tr>
+                        <td colspan={5} align="center">
+                            <h4>   business List</h4>
+                        </td>
+                    </tr>
+                <tr>
+                    <th>photo</th>
+                    <th>Business Name</th>
+                    <th>Address</th>
+                    <th>Business Type</th>
+                    <th>Phone</th>
+                </tr>
+                {
+                   this.state.searchdata.map((v, i) => {
+                        return <tr key={i}>
+                            <td><img src={"http://localhost:3000/uploads/" + v.photo}
+                                     height="50px" width="50px" alt="NO img"/></td>
+                            <td>{v.businessInfo.businessName}</td>
+                            <td>{v.businessInfo.businessAddress}</td>
+                            <td>{v.businessInfo.businessType}</td>
+                            <td>{v.businessInfo.businessPhone}</td>
+                        </tr>
+                    })
+                }
+
+            </tbody>
+                </Table>:""}
             </div>
         )
     }
 }
-export default MainPage
+const mapStateToProps = (state) => {
+    return ({businessrecord: state.businesslist})
+};
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({listBusiness}, dispatch)
+}
+export default connect(mapStateToProps,mapDispatchToProps)(MainPage)

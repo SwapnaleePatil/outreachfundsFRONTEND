@@ -17,11 +17,13 @@ let eventSchema = new mongoose.Schema({
     eventTime: {
         type: String
     },
-    businessSponsor: {
-        type: mongoose.Schema.ObjectId,
-        ref: businessOwner,
-        require: true
-    },
+    businessSponsor:
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: businessOwner,
+            require: true
+
+        },
     schoolOrganisation: {
         type: mongoose.Schema.ObjectId,
         ref: schoolOrganisation,
@@ -33,9 +35,9 @@ let eventSchema = new mongoose.Schema({
     donationOption: {
         type: String
     },
-    accept:{
-        type:Boolean,
-        default:false
+    accept: {
+        type: Boolean,
+        default: false
     },
     status: {
         type: Boolean,
