@@ -7,7 +7,7 @@ import ThirdPage from './thirdPage';
 import FourthPage from './fourthPage';
 import {businessSignup} from '../action';
 class BusinessFullPage extends React.Component{
-    componentWillMount(){
+        componentWillMount(){
         if(this.props.Page===0)
             this.props.businessSignup();
     }
@@ -23,7 +23,6 @@ class BusinessFullPage extends React.Component{
         )
     }
 }
-
 function mapStateToProps(state) {
     return{
         Page:state.businessSignUpRed

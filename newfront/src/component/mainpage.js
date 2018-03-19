@@ -1,17 +1,16 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button} from 'react-bootstrap'
+import {NavLink} from 'react-router-dom';
 import '../index.css'
+import {Route,NavLink} from 'react-router-dom'
+import ProfilePage from '../business/components/profilePage'
 
 class MainPage extends React.Component {
     render() {
         const logout = () => {
             window.location = "/logout"
         };
-        const about = () => (
-            <div>
-                Abouut
-            </div>
-        )
+
         const Navmenu = () => (
             <div>
                 <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class-main">
@@ -45,8 +44,13 @@ class MainPage extends React.Component {
                                     <MenuItem eventKey={4.1}>Edit Profile</MenuItem>
                                     <MenuItem eventKey={4.2}>Availability</MenuItem>
                                     <MenuItem eventKey={4.3}>Payments</MenuItem>
-                                    <MenuItem eventKey={4.4}>View Profile</MenuItem>
-                                    <MenuItem eventKey={4.5} onClick={logout}>Logout</MenuItem>
+
+                                   
+                                   
+                                    <MenuItem eventKey={4.4} onClick={ProfilePage}> <NavLink to="/profile">View Profile</NavLink></MenuItem>
+                                    <MenuItem eventKey={4.5}><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>
+                                    <MenuItem eventKey={4.6} onClick={logout}>Logout</MenuItem>
+
                                 </NavDropdown></Glyphicon></Button>
                     </Nav>
                 </Navbar></div>
@@ -58,5 +62,4 @@ class MainPage extends React.Component {
         )
     }
 }
-
 export default MainPage

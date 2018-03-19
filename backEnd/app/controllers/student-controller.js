@@ -1,51 +1,31 @@
 var Student=require('../models/student').student;
 var SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisation;
-global.SchoolId=null;
+
+//REGISTER STUDENT
 exports.registerStudent=(req,res)=>{
-    console.log("in add");
-    if(!req.files)
-        return res.status(400).send('No files were uploaded.');
-    let sample=req.files.photo;
-    sample.mv(__dirname + '../../../uploads/' + sample.name,(err)=>{
-        if(err) {
-            console.log(err);
-        }
-    });
+        if (!req.files)
+            return res.status(400).send('No files were uploaded.');
+         let sample = req.files.photo;
+        sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
     var body=JSON.parse(req.body.data);
-    if(body.schoolId===null){
-        console.log('in if');
-        var schoolInfo={
-            schoolName:body.school,
-            organisationName:body.organisationName,
-            organisationAddress:body.organisationAddress,
-            organisationContact:body.organisationContact,
-            organisationEmail:body.organisationEmail
-        }
-        let schoolOrganisation=new SchoolOrganisation(schoolInfo);
-        schoolOrganisation.save().then((school)=>{
-            console.log("in then of school org",school._id);
-            SchoolId=school._id;
-        }).catch((err)=>{
-            console.log('Error in School Registeration',err);
-        })
-    }
     let student=new Student(body);
     student.photo=sample.name;
-    student.schoolId=SchoolId;
-    console.log("Student - ",student);
-    if(student.schoolId!==null) {
+    student.schoolId=req.body.schoolId;
         student.save().then(() => {
-            console.log('in then');
             return student.generateAuthToken(student);
-        }).then(() => {
-            res.status(200).send({"stud": student});
+        }).then((student) => {
+            res.status(200).send(student);
         }).catch((err) => {
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
         })
-    }
 }
-
+//REGISTER SCHOOL ORGANISATION
 exports.registerSchoolOrganisation=(req,res)=>{
+    console.log("school - ",req.body);
     var schoolOrganisation=new SchoolOrganisation(req.body);
     schoolOrganisation.save().then((school)=>{
         res.status(200).send({"school":school});
@@ -53,18 +33,30 @@ exports.registerSchoolOrganisation=(req,res)=>{
         res.status(401).send({"message":"Error in Registration of School Organisation.","error":err})
     })
 }
-
+//FETCH ALL STUDENTS LIST
 exports.fetchAllStudents=(req,res)=>{
     console.log(req.stud);
     Student.find().then((students)=>{
-        res.status(200).send({"students":students});
+        res.status(200).send(students);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
     })
 }
+
+exports.fetchAllStudentsBySchoolId=(req,res)=>{
+    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member'}).then((students)=>{
+        res.status(200).send(students);
+    }).catch((err)=>{
+        res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
+    })
+}
+
 exports.fetchStudent=(req,res)=>{
-    Student.find().then((students)=>{
-        res.status(200).send({"students":students});
+    var token=req.header('x-auth');
+    Student.findByToken(token).then((student)=>{
+        if(!student)
+            res.status(401).send({"message":"Student Not Found."});
+        res.status(200).send(student);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving Student.","err":err})
     })
@@ -72,7 +64,6 @@ exports.fetchStudent=(req,res)=>{
 
 exports.fetchAllSchools=(req,res)=>{
     SchoolOrganisation.find().then((schools)=>{
-        console.log("schools",schools);
         res.status(200).send(schools);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Schools.","err":err})

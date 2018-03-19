@@ -62,9 +62,9 @@ exports.fetch = (req, res) => {
     })
 }
 exports.fetchById = (req, res) => {
-    BusinessOwner.findById(req.params.id).then((data) => {
-        res.send({"message":'Record By Id.', 'record': data});
+    BusinessOwner.findById({_id:req.body.id}).then((data) => {
+        res.send(data.businessInfo.businessName);
     }).catch(() => {
         console.log('Error in retrieving data.');
     })
-}
+};

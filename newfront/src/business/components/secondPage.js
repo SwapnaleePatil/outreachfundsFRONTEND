@@ -10,7 +10,8 @@ class SecondPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ownerData: []
+            ownerData: [],
+
         }
     }
 
@@ -21,81 +22,149 @@ class SecondPage extends React.Component {
         businessFields(this.state.ownerData);
     }
     handleChange = (e) => {
-        console.log("Log",this.props)
-        const {Fields}=this.props;
-        const {name,value}=e.target;
-        var {ownerData}=this.state;
-        if(ownerData.length<=0)
+        console.log("Log", this.props)
+        const {Fields} = this.props;
+        const {name, value} = e.target;
+        var {ownerData} = this.state;
+        if (ownerData.length <= 0)
             ownerData = Fields;
-        ownerData[name]=value;
-        this.setState({ownerData},()=>{
-            console.log("OwnerData",ownerData);
+        ownerData[name] = value;
+        this.setState({ownerData}, () => {
+            console.log("OwnerData", ownerData);
         })
+    }
+    chkValidation = (e) => {
+        // debugger
+        this.setState({msg: ""});
+        let name = e.target.name;
+        if (name === "businessName" || name === "businessType") {
+            let rename = /^([0-9])*$/;
+            if (rename.test(e.target.value)) {
+                this.setState({msg: "Do not Enter Number Please"});
+            }
+        }
+        if (name === "businessEmail") {
+            let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!reemail.test(e.target.value)) {
+                this.setState({msg: "Email is InValid"});
+            }
+        }
+        // debugger
+        if (name === "businessPhone") {
+            let rephone = /^((?!(0))[0-9]{6,13})$/;
+            if (!rephone.test(e.target.value)) {
+                this.setState({msg: "Enter Number between 6 to 13 digit"});
+            }
+        }
     }
     handlePage = (e) => {
         e.preventDefault();
-        this.props.businessSignup(this.props.Page + 1);
-        this.handleSubmit();
+        if (this.state.msg !== "") {
+            this.setState({
+                msg: "Please Fill Valid Information"
+            })
+        } else {
+            this.props.businessSignup(this.props.Page + 1);
+            this.handleSubmit();
+        }
     }
     handleSubmit = () => {
+        let {ownerData}=this.state;
+        if(ownerData["businessHour"]<9)
+        {
+            ownerData["businessHour"]="0"+ownerData["businessHour"];
+        }else{
+            ownerData["businessHour"]=ownerData["businessHour"];
+        }
+        if(ownerData["businessMinute"]<9)
+        {
+            ownerData["businessMinute"]="0"+ownerData["businessMinute"];
+        }else{
+            ownerData["businessMinute"]=ownerData["businessMinute"];
+        }
+        ownerData["businessHours"]=ownerData["businessHour"]+":"+ownerData["businessMinute"];
+        this.setState({ownerData})
         this.props.businessFields(this.state.ownerData);
     }
 
     render() {
         debugger
 
-        const {Fields}=this.props;
-        if(Fields!==null)
-            this.state.ownerData=Fields;
+        const {Fields} = this.props;
+        if (Fields !== null)
+            this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header></div>
+                        Information</label></Modal.Header>
+                    <span style={{"color": "red"}}>{this.state.msg}</span></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>
                             <tr>
                                 <td><label>Business Name</label></td>
                                 <td><input className="form-control" value={ownerData.businessName}
-                                           onChange={this.handleChange} name="businessName" type="text"/></td>
+                                           onChange={(e) => {
+                                               this.handleChange(e);
+                                               this.chkValidation(e);
+                                           }} name="businessName" type="text" required/></td>
                             </tr>
                             <tr>
                                 <td><label>Business Hours</label></td>
-                                <td><input className="form-control" value={ownerData.businessHours}
-                                           onChange={this.handleChange} name="businessHours" type="time"/></td>
+                                <td>
+                                    <div className="form-inline">
+                                        Hour:<input value={ownerData.businessHour} className="form-control"
+                                                    style={{"width": "20%"}}
+                                                    onChange={this.handleChange} name="businessHour" type="number"
+                                                    min="00" max="24" required/>{'  '}
+                                        Minute:<input value={ownerData.businessMinute} className="form-control"
+                                                      style={{"width": "20%"}}
+                                                      onChange={this.handleChange} name="businessMinute" type="number"
+                                                      min="00" max="59" required/></div>
+                                </td>
                             </tr>
                             <tr>
                                 <td><label>Business Type</label></td>
                                 <td><input className="form-control" value={ownerData.businessType}
-                                           onChange={this.handleChange} name="businessType" type="text"/></td>
+                                           onChange={(e) => {
+                                               this.handleChange(e);
+                                               this.chkValidation(e);
+                                           }} name="businessType" type="text" required/></td>
                             </tr>
                             <tr>
                                 <td><label>Phone no</label></td>
-                                <td><input className="form-control" value={ownerData.businessPhone}
-                                           onChange={this.handleChange} name="businessPhone" type="number"/></td>
+                                <td><input name="businessPhone" type="number" className="form-control"
+                                           value={ownerData.businessPhone}
+                                           onChange={(e) => {
+                                               this.handleChange(e);
+                                               this.chkValidation(e);
+                                           }} required/></td>
                             </tr>
                             <tr>
                                 <td><label>Business Email</label></td>
                                 <td><input className="form-control" name="businessEmail" value={ownerData.businessEmail}
-                                           onChange={this.handleChange} type="email"/></td>
+                                           onChange={(e) => {
+                                               this.handleChange(e);
+                                               this.chkValidation(e);
+                                           }} type="email" required/></td>
                             </tr>
                             <tr>
                                 <td><label>Address</label></td>
-                                <td><input className="form-control" value={ownerData.businessAddress}
-                                           onChange={this.handleChange} name="businessAddress" type="text"/></td>
+                                <td><textarea className="form-control" value={ownerData.businessAddress}
+                                           onChange={this.handleChange} name="businessAddress" /></td>
                             </tr>
                             <tr>
                                 <td><label>Tax Payer Id</label></td>
                                 <td><input className="form-control" value={ownerData.taxPayerId}
-                                           onChange={this.handleChange} name="taxPayerId" type="number"/></td>
+                                           onChange={this.handleChange} name="taxPayerId" type="number" required/></td>
                             </tr>
                             <tr>
                                 <td><Button active type="button" bsStyle="info" onClick={this.handlePreviousPage}>
                                     Previous
                                 </Button></td>
-                                <td><Button active type="submit" bsStyle="info" >Next</Button>
+                                <td><Button active type="submit" bsStyle="info">Next</Button>
                                 </td>
                             </tr>
                             </tbody>
@@ -109,7 +178,7 @@ class SecondPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("Fields",state.businessFieldsRed)
+    console.log("Fields", state.businessFieldsRed)
     return {
         Page: state.businessSignUpRed,
         Fields: state.businessFieldsRed
