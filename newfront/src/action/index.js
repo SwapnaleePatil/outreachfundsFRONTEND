@@ -29,6 +29,7 @@ export const  studentLogin=(data)=>{
                 });
                 console.log('slogin',response.data);
                 if(response.data.message==="login successful") {
+
                     console.log('login', response.data);
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"
@@ -55,7 +56,22 @@ export const scheduleevents=(data)=>{
     }
 };
 
-// /api/business/profile/fetchById
+export const actionevents=(data)=>{
+    return(dispatch)=>{
+        debugger;
+        axios({method:'put',url:'http://localhost:3000/api/event',data}).then((response)=>{
+            if(response){
+                dispatch({
+                    type:'ACTION_ON_EVENT',
+                    payload:response.data.record
+                })
+            }
+        }).catch((e)=>{
+            console.log(e);
+        })
+    }
+};
+
 
 export const eventslist=()=>{
     return(dispatch)=>{

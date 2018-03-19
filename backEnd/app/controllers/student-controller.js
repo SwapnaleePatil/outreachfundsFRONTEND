@@ -69,7 +69,7 @@ exports.fetchStudent=(req,res)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving Student.","err":err})
     })
-}
+};
 
 exports.fetchAllSchools=(req,res)=>{
     SchoolOrganisation.find().then((schools)=>{
@@ -77,8 +77,8 @@ exports.fetchAllSchools=(req,res)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Schools.","err":err})
     })
-}
 
+};
 exports.authenticate=(req,res,next)=>{
     var token=req.header('x-auth');
     Student.findByToken(token).then((stud)=>{
@@ -91,4 +91,4 @@ exports.authenticate=(req,res,next)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Please Login First.","error":err});
     })
-}
+};

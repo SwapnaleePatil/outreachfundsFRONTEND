@@ -39,7 +39,6 @@ class ThirdPage extends React.Component {
         this.props.businessFields(this.state.ownerData);
     }
     render() {
-        console.log("Fiels",this.props);
         const {Fields}=this.props;
         if(Fields!==null)
             this.state.ownerData=Fields;
