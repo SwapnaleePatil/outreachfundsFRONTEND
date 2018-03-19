@@ -1,15 +1,8 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
-import {fetchStudent} from '../action';
+import {fetchStudent,approveSignupRequests,rejectSignupRequests} from '../action';
 import {connect} from 'react-redux';
 class AcceptSignupRequest extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-            isApproved:false,
-            isRejected:false
-        }
-    }
     componentWillMount(){
         this.approvedCheckboxes=new Set();
         this.rejectedCheckboxes=new Set();
@@ -18,28 +11,37 @@ class AcceptSignupRequest extends React.Component{
             this.props.fetchStudent();
     }
 
-    toggleCheckbox=(e)=>{
-        const {name,value}=e.target;
-        var val=value;
-        if(name==="approve") {
-            this.setState({
-                isApproved: !this.state.isApproved,
-                isRejected: (this.state.isApproved)?true:false
-            })
-        }
-        else if(name==="reject"){
-            this.setState({
-                isRejected: !this.state.isRejected,
-                isApproved: (this.state.isRejected)?true:false
-            })
-        }
-        if(this.approvedCheckboxes.has(val)){
-            this.approvedCheckboxes.delete(val)
-            this.rejectedCheckboxes.add(val);
+    toggleApproveCheckbox=(e)=>{
+        var val=e.target.value;
+        console.log("Value - ",val);
+            if(this.approvedCheckboxes.has(val)){
+                this.approvedCheckboxes.delete(val)
+                this.rejectedCheckboxes.add(val);
+            }
+            else{
+                this.approvedCheckboxes.add(val);
+                this.rejectedCheckboxes.delete(val);
+            }
+    }
+
+    toggleRejectCheckbox=(e)=>{
+        var val=e.target.value;
+        if(this.rejectedCheckboxes.has(val)){
+            this.rejectedCheckboxes.delete(val)
+            this.approvedCheckboxes.add(val);
         }
         else{
-            this.approvedCheckboxes.add(val);
-            this.rejectedCheckboxes.delete(val);
+            this.rejectedCheckboxes.add(val);
+            this.approvedCheckboxes.delete(val);
+        }
+    }
+    handleRequest=(e)=>{
+        const{name}=e.target;
+        if(name==='approve'){
+            this.props.approveSignupRequests(this.approvedCheckboxes);
+        }
+        else if(name==='reject'){
+            this.props.rejectSignupRequests(this.rejectedCheckboxes);
         }
     }
     render(){
@@ -66,18 +68,18 @@ class AcceptSignupRequest extends React.Component{
                                     <td>{student.phone}</td>
                                     <td>{student.email}</td>
                                     <td>{student.roleTitle}</td>
-                                    <td><input name={'approve'} type={'checkbox'} checked={this.state.isApproved} value={student._id} onChange={this.toggleCheckbox}/></td>
-                                    <td><input name={'reject'} type={'checkbox'} checked={this.state.isRejected} value={student._id} onChange={this.toggleCheckbox}/></td>
+                                    <td><input id={student._id} type={'checkbox'} value={student._id} onChange={this.toggleApproveCheckbox}/></td>
+                                    <td><input id={student._id} type={'checkbox'} value={student._id} onChange={this.toggleRejectCheckbox}/></td>
                                 </tr>
                             )
                         })
                     }
                     <tr>
                         <td colSpan={5} align={'right'}>
-                            <button className={'btn btn-primary'}>Approve</button>
+                            <button className={'btn btn-primary'} name={'approve'} onClick={this.handleRequest}>Approve</button>
                         </td>
                         <td>
-                            <button className={'btn btn-primary'}>Reject</button>
+                            <button className={'btn btn-primary'} name={'reject'} onClick={this.handleRequest}>Reject</button>
                         </td>
                     </tr>
                     </tbody>
@@ -95,7 +97,7 @@ function mapStateToProps(state) {
 }
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchStudent
+        fetchStudent,approveSignupRequests,rejectSignupRequests
     },dispatch)
 }
 export default connect(mapStateToProps,matchDispatchToProps)(AcceptSignupRequest);

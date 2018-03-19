@@ -11,8 +11,10 @@ module.exports=(app,passport)=>{
 
     //Student Routes
     app.post('/api/student/profile',studentController.registerStudent);
+    app.post('/api/student/approve',studentController.approveStudent);
+    app.post('/api/student/reject',studentController.rejectStudent);
     app.get('/api/students',studentController.authenticate,studentController.fetchAllStudents);
-    app.get('/api/students/:schoolId',studentController.fetchAllStudentsBySchoolId);
+    app.get('/api/students/:schoolId',studentController.fetchAllStudentsRequest);
     app.get('/api/student',studentController.fetchStudent);
     app.post('/api/student/login',passport.authenticate('student',{
         successRedirect:'/success',
