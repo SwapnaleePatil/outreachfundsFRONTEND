@@ -6,6 +6,7 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
+import DisplayForm from './../donation/donationComponent/addDonation'
 import DashBoard from "./dashboard";
 import BusinessList from './businesslisting'
 import BusinessFullPage from '../business/components/businessFullPage'

@@ -7,6 +7,7 @@ import {getEventDataAction} from '../actions/getEventsDataAction'
 // import {getOrganizationAndSchool} from './../actions/getDonationDataAction'
 import {fetchAllSchoolDetails} from './../../students/action/index'
 import {addDonationAction, getDonationAction, updateDonationAction} from './../actions/addDonationAction'
+import {FetchByToken} from '../actions/getUserAction'
 
 class DisplayForm extends Component {
     constructor() {
@@ -22,7 +23,8 @@ class DisplayForm extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.props.FetchByToken();
         this.props.getEventDataAction();
         this.props.fetchAllSchoolDetails();
         this.props.getDonationAction();
@@ -36,7 +38,7 @@ class DisplayForm extends Component {
         let final = [];
         nextProps.eventsData.map((value) => {
             newarr = arr.filter((school) => value.schoolOrganisation === school._id);
-            final.push(newarr[0].organisationName);
+            final.push(newarr[0] && newarr[0].organisationName);
         });
         this.setState({
             organizationNameArr: final
@@ -52,22 +54,29 @@ class DisplayForm extends Component {
     onSubmit = () => {
         let status = false;
         let Udata = {};
+        let eid = "";
+        this.props.eventsData.map((value)=>{
+            if(value.eventName === this.state.eventName){
+                eid = value._id
+            }
+        });
         let data = {
             'eventDate': this.state.date,
             'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
-            'eventName': this.state.eventName,
+            'eventId': eid,
+            'businessId':this.props.businessInfo.User._id,
             'organizationName': this.state.organizationName,
             'location': this.state.location,
             'amount': Math.abs(Number(this.state.amount))
         };
         this.props.donationData.forEach((value) => {
-            if (this.state.eventName === value.eventName && this.state.organizationName === value.organizationName) {
+            if (this.state.eventId === value.eventId && this.state.organizationName === value.organizationName) {
                 value.amount = Number(value.amount) + Number(this.state.amount);
                 Udata = {
                     '_id': value._id,
                     'eventDate': this.state.date,
                     'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
-                    'eventName': this.state.eventName,
+                    'eventId': eid,
                     'organizationName': this.state.organizationName,
                     'location': this.state.location,
                     'amount': Math.abs(Number(value.amount)),
@@ -188,7 +197,14 @@ class DisplayForm extends Component {
                         this.props.donationData.map((value, index) => {
                             return <tr>
                                 <td>{value.eventDate}</td>
-                                <td>{value.eventName}</td>
+                                <td>
+                                    {
+                                        this.props.eventsData.map((e)=>{
+                                            if(value.eventId === e._id){
+                                                return e.eventName
+                                            }
+                                        })
+                                }</td>
                                 <td>{value.organizationName}</td>
                                 <td>{value.location}</td>
                                 <td>{value.amount}</td>
@@ -211,7 +227,8 @@ function mapStateToProps(state) {
     return {
         donationData: state.donation,
         organizationData: state.schools,
-        eventsData: state.events
+        eventsData: state.events,
+        businessInfo:state.businessInfo
     };
 }
 
@@ -221,7 +238,8 @@ function matchDispatchToProps(dispatch) {
         fetchAllSchoolDetails,
         addDonationAction,
         getDonationAction,
-        updateDonationAction
+        updateDonationAction,
+        FetchByToken
     }, dispatch);
 }
 

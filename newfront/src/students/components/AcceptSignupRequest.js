@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 class AcceptSignupRequest extends React.Component{
     componentWillMount(){
         if(this.props.requests.length<=0)
-            debugger;
             this.props.fetchStudent();
     }
     render(){

@@ -8,11 +8,14 @@ let donationSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    eventName:{
-        type:String,
+    eventId:{
+        type:mongoose.Schema.ObjectId,
         required:true
     },
-
+    businessId:{
+        type:mongoose.Schema.ObjectId,
+        required:true
+    },
     organizationName:{
         type:String,
         required:true

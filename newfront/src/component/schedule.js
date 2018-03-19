@@ -36,7 +36,6 @@ class Schedule extends React.Component {
         this.props.business.map((v, i) => {
             v.tokens.map((value, i) => {
                 if (value.token === localStorage.getItem('user')) {
-                    debugger;
                     businessname = v.businessInfo.businessName
                     this.setState({
                         businessname

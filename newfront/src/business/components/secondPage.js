@@ -34,7 +34,6 @@ class SecondPage extends React.Component {
         })
     }
     chkValidation = (e) => {
-        // debugger
         this.setState({msg: ""});
         let name = e.target.name;
         if (name === "businessName" || name === "businessType") {
@@ -49,7 +48,6 @@ class SecondPage extends React.Component {
                 this.setState({msg: "Email is InValid"});
             }
         }
-        // debugger
         if (name === "businessPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
@@ -88,8 +86,6 @@ class SecondPage extends React.Component {
     }
 
     render() {
-        debugger
-
         const {Fields} = this.props;
         if (Fields !== null)
             this.state.ownerData = Fields;

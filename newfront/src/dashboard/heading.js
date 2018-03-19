@@ -6,37 +6,66 @@ import {listBusiness} from './../business/action/index'
 import {getEventDataAction} from './../donation/actions/getEventsDataAction'
 import {fetchAllSchoolDetails} from './../students/action/index'
 import {getDonationAction} from './../donation/actions/addDonationAction'
+import {fetchStudent} from '../students/action/index'
 
 class Heading extends Component {
-    constructor(){
+    constructor() {
         super();
-        this.state={
-            totalBusiness:0,
-            totalEvents:0,
-            totalSchools:0,
-            totalDonation:0
+        this.state = {
+            totalBusiness: 0,
+            totalEvents: 0,
+            totalSchools: 0,
+            totalDonation: 0,
+            eventsForStudent: []
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
+        this.props.fetchStudent();
         this.props.listBusiness();
         this.props.getEventDataAction();
         this.props.fetchAllSchoolDetails();
         this.props.getDonationAction();
     }
-    componentWillReceiveProps(nextProps){
-        console.log(nextProps.donation);
-        let {totalDonation} = this.state;
-        nextProps.donation.forEach((value)=>{
-            totalDonation = totalDonation + value.amount;
+
+    componentWillReceiveProps(nextProps) {
+        console.log('student', nextProps.requests);
+        let {totalDonation, totalEvents, eventsForStudent} = this.state;
+        let tempArray = [];
+        nextProps.events.forEach((value) => {
+            // console.log('a',nextProps.requests[0] && nextProps.requests[0].schoolId);
+            if ((nextProps.requests[0] && nextProps.requests[0].schoolId) === value.schoolOrganisation) {
+                totalEvents = totalEvents + 1;
+                eventsForStudent.push(value.eventName);
+            }
+            //totalEvents = totalEvents + value.amount;
         });
-        console.log(totalDonation);
+        nextProps.donation.forEach((i) => {
+            eventsForStudent.forEach((j)=>{
+                console.log('i',i);
+                console.log('j',j);
+                if(i.eventName === j)
+                {
+                    totalDonation = totalDonation + i.amount
+                }
+            });
+        });
+
+        // nextProps.donation.forEach((value,index)=>{
+        //     if((eventsForStudent[0] && eventsForStudent[index].eventName) === value.eventName){
+        //         console.log(value);
+        //         totalDonation = totalDonation + value.amount;
+        //     }
+        // });
+        // console.log(totalDonation);
         this.setState({
-            totalBusiness:nextProps.businessList.length,
-            totalEvents:nextProps.events.length,
-            totalSchools:nextProps.schools.length,
-            totalDonation
+            totalBusiness: nextProps.businessList.length,
+            totalSchools: nextProps.schools.length,
+            totalDonation,
+            totalEvents
         });
     }
+
     render() {
         return (
             <div>
@@ -68,20 +97,25 @@ class Heading extends Component {
         )
     }
 }
-function mapStateToProps(state){
+
+function mapStateToProps(state) {
     return {
-        businessList:state.businesslist,
-        events:state.events,
-        schools:state.schools,
-        donation:state.donation
+        businessList: state.businesslist,
+        events: state.events,
+        schools: state.schools,
+        donation: state.donation,
+        requests: state.requests
     };
 }
-function matchDispatchToProps(dispatch){
+
+function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         listBusiness,
         getEventDataAction,
         fetchAllSchoolDetails,
-        getDonationAction
-    },dispatch);
+        getDonationAction,
+        fetchStudent
+    }, dispatch);
 }
-export default connect(mapStateToProps,matchDispatchToProps)(Heading)
+
+export default connect(mapStateToProps, matchDispatchToProps)(Heading)

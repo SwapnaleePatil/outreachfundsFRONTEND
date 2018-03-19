@@ -43,7 +43,7 @@ module.exports=(app,passport)=>{
     app.put('/api/business/profile',businesscontroller.updateBusinessOwner);
     app.get('/api/business/profile',businesscontroller.fetch);
     app.post('/api/business/profile/fetchById',businesscontroller.fetchById);
-
+    app.get('/api/business/profile/fetchByToken',businesscontroller.fetchByToken);
 
     //Event Routes
     app.post('/api/event', eventcontroller.addeventSchedule);

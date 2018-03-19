@@ -7,7 +7,6 @@ import {bindActionCreators} from 'redux';
 
 class BusinessProfile extends React.Component {
     constructor(props) {
-        debugger
         super(props);
         this.state = {
             owner: [],
@@ -17,7 +16,6 @@ class BusinessProfile extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        debugger
         this.setState({
             owner: nextProps.List
         }, () => {
@@ -40,7 +38,6 @@ class BusinessProfile extends React.Component {
     }
 
     getOwner = () => {
-        debugger
         let {businessOwner} = this.state;
         this.props.List.map((value, index) => {
             //console.log("Value",value.tokens[0].token);
@@ -57,7 +54,6 @@ class BusinessProfile extends React.Component {
     }
 
     render() {
-        debugger
         let businessOwner = this.state.businessOwner;
         let businessInfo = this.state.businessOwner.businessInfo;
         let address = this.state.businessOwner.businessInfo && this.state.businessOwner.businessInfo.businessAddress.split(",");

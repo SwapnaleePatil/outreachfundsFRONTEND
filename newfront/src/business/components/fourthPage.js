@@ -88,7 +88,6 @@ class FourthPage extends React.Component {
 
     }
     chkValidation = (e) => {
-        // debugger
         this.setState({msg: ""});
         let name = e.target.name;
         if (name === "cardNumber") {
