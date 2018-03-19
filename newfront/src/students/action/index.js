@@ -47,7 +47,7 @@ export const registerStudent = (obj) => {
             console.log("Error in Registeration of Student..",error)
         }
     }
-}
+};
 
 export const registerSchool = (schoolObj,personalObj) => {
     debugger;
@@ -113,4 +113,3 @@ export const fetchSignupRequests = (schoolId) => {
         }
     }
 }
-
