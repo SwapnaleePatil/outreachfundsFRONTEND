@@ -9,6 +9,9 @@ import schoolReducer from '../students/reducers/reducer-schools';
 import businesslist from '../business/reducers/businessReducer'
 import businessSignUpPageReducer from '../business/reducers/businessSignUpReducer';
 import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
+import donationReducer from './../donation/reducers/donationReducer';
+import eventReducer from './../donation/reducers/eventReducer';
+
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
     blogin:businesslogin,
@@ -21,7 +24,9 @@ const rootreducer=combineReducers({
     requests:requestReducer,
     schools:schoolReducer,
     businessSignUpRed:businessSignUpPageReducer,
-    businessFieldsRed:businessFieldsReducer
+    businessFieldsRed:businessFieldsReducer,
+    donation:donationReducer,
+    events:eventReducer
 });
 
 export default rootreducer;

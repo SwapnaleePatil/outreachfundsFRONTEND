@@ -1,17 +1,21 @@
 let mongoose = require('mongoose');
 let donationSchema = new mongoose.Schema({
-    date:{
+    eventDate:{
         type:String,
-        require:true
+        required:true
+    },
+    donationDate:{
+        type:String,
+        required:true
     },
     eventName:{
         type:String,
-        require:true
+        required:true
     },
 
     organizationName:{
         type:String,
-        require:true
+        required:true
     },
     location:{
         type:String,
@@ -19,7 +23,7 @@ let donationSchema = new mongoose.Schema({
     },
     amount:{
         type:Number,
-        require:true
+        required:true
     },
     status:{
         type:Boolean,

@@ -55,4 +55,5 @@ module.exports=(app,passport)=>{
     app.post('/addDonation',donationController.addDonation);
     app.get('/getDonationData',donationController.getDonation);
     app.patch('/approveDonation',donationController.approveDonation);
+    app.patch('/updateDonation',donationController.updateDonation);
 }

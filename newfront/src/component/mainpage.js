@@ -1,6 +1,5 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button} from 'react-bootstrap'
-import {NavLink} from 'react-router-dom';
 import '../index.css'
 import {Route,NavLink} from 'react-router-dom'
 import ProfilePage from '../business/components/profilePage'

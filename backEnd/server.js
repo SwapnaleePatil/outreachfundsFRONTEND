@@ -32,6 +32,6 @@ db.once('open',()=>{
 require('./app/config/passport')(passport);
 require('./app/routes/routes')(app,passport);
 
-app.listen(4000,()=>{
+app.listen(3000,()=>{
     console.log('server is started');
 })
