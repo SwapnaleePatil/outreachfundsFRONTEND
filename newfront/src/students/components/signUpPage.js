@@ -5,11 +5,13 @@ import SignUpPersonal from './signUpPersonalDetail';
 import SignUpSchool from './signUpSchoolDetail';
 import {signupPageAction} from '../action';
 class signUpPage extends React.Component{
-
+    constructor(props){
+        super(props);
+    }
     componentWillMount(){
         if(this.props.signUpPage===0)
             this.props.signupPageAction();
-    }
+        }
 
     render(){
         console.log("Page : ",this.props.signUpPage);
@@ -20,6 +22,7 @@ class signUpPage extends React.Component{
             </div>
         )
     }
+
 }
 
 function mapStateToProps(state) {

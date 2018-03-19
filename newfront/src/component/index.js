@@ -8,7 +8,8 @@ import Schedule from './schedule'
 import Donation from "./donation";
 import BusinessList from './businesslisting'
 import BusinessFullPage from '../business/components/businessFullPage'
-
+import StudentSignUpPage from '../students/components/signUpPage'
+import BusinessProfile from '../business/components/businessProfile'
 class Main extends React.Component {
     render() {
         const logout=()=>{
@@ -38,9 +39,11 @@ class Main extends React.Component {
                     <Private exact path="/logout" component={logout} />
                     <Public exact path="/" component={HomePage}/>
                     <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
+                    <Public exact path="/main/studentSignUp" component={StudentSignUpPage}/>
                     <Private exact path="/main/schedule" component={Schedule}/>
                     <Private exact path="/main/donation" component={Donation}/>
                     <Private exact path="/home" component={BusinessList}/>
+                    <Private exact path="/profile" component={BusinessProfile}/>
                 </Switch>
             </BrowserRouter>
         );

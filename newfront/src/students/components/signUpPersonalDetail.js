@@ -57,8 +57,10 @@ class SignUpPersonal extends React.Component{
     handleChange=(e)=>{
         const {name,value}=e.target;
         const {personalData}=this.state;
-        personalData[name]=value;
-        personalData['flag']=1;
+        if(name==='photo')
+            personalData[name]=e.target.files[0];
+        else
+            personalData[name]=value;
         this.setState({
             personalData
         })
@@ -66,7 +68,13 @@ class SignUpPersonal extends React.Component{
 
     handleSubmit=(e)=>{
         console.log('submitted');
-        this.props.setSignupPageFieldsAction(this.state.personalData);
+        const {personalData}=this.state;
+        let date=(personalData.month|| 1) + "/" + (personalData.day || 1) + "/" + (personalData.year || new Date().getFullYear()-50);
+        personalData['dob']=date;
+        this.setState({
+            personalData
+        },()=>{this.props.setSignupPageFieldsAction(personalData)})
+
 
     }
 
@@ -77,12 +85,12 @@ class SignUpPersonal extends React.Component{
         const {days,months,years,personalData}=this.state;
         return(
                 <div className={'container row'}>
-                    <form className={'col-sm-10'}>
+                    <form className={'col-sm-10'} encType={'multipart/form-data'}>
                         <div className={'form-group form-inline row'}>
                             <label className={'font-weight-bold col-sm-2'}>First Name :</label>
-                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'First Name'} name={'fnm'} onChange={this.handleChange} value={personalData.fnm}/>
+                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'First Name'} name={'firstName'} onChange={this.handleChange} value={personalData.firstName}/>
                             <label className={'font-weight-bold col-sm-2'}>Last Name :</label>
-                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'Last Name'} name={'lnm'} onChange={this.handleChange} value={personalData.lnm}/>
+                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'Last Name'} name={'lastName'} onChange={this.handleChange} value={personalData.lastName}/>
                         </div>
                         <div className={'form-group form-inline row'}>
                             <label className={'font-weight-bold col-sm-2'}>Email :</label>
@@ -92,6 +100,10 @@ class SignUpPersonal extends React.Component{
                             <label className={'font-weight-bold col-sm-2'}>Gender :</label>
                             <label><input type="radio" name="gender" value={'Male'}  onChange={this.handleChange} checked={(personalData.gender==='Male')?'checked':''}/>Male</label>
                             <label className={'col-sm-2'}><input type="radio" name="gender" value={'Female'}  onChange={this.handleChange} checked={(personalData.gender==='Female')?'checked':''}/>Female</label>
+                        </div>
+                        <div className={'form-group form-inline row'}>
+                            <label className={'font-weight-bold col-sm-2'}>Password :</label>
+                            <input className={'form-control col-sm-10'} type={'password'} placeholder={'Password'} name={'password'} onChange={this.handleChange} value={personalData.password}/>
                         </div>
                         <div className={'form-group form-inline row'}>
                             <label className={'font-weight-bold col-sm-2'}>Date of Birth :</label>
@@ -129,7 +141,7 @@ class SignUpPersonal extends React.Component{
                         </div>
                         <div className={'form-group form-inline row'}>
                             <label className={'font-weight-bold col-sm-2'}>Profile Image :</label>
-                            <input className={'form-control col-sm-10'} type={'file'}/>
+                            <input className={'form-control col-sm-10'} type={'file'} name={'photo'} onChange={this.handleChange}/>
                         </div>
                         <button onClick={this.nextPage} className={'btn btn-primary float-right'}>Next</button>
                     </form>

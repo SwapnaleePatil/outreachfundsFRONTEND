@@ -51,7 +51,7 @@ class HomePage extends React.Component {
     };
     loginstudent = () => {
         let data = {
-            username: this.state.email,
+            email: this.state.email,
             password: this.state.password
         };
         this.props.studentLogin(data);

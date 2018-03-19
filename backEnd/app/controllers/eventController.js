@@ -33,7 +33,7 @@ exports.updateeventSchedule = (req, res) => {
     })
 }
 exports.fetch = (req, res) => {
-    eventSchedule.find().then((data) => {
+    eventSchedule.find({status:true}).then((data) => {
         res.send({"message":'All Record.', 'record': data});
     }).catch((err) => {
         console.log('Error in retrieving data.', err);
@@ -45,4 +45,4 @@ exports.fetchById = (req, res) => {
     }).catch(() => {
         console.log('Error in retrieving data.');
     })
-}
+};

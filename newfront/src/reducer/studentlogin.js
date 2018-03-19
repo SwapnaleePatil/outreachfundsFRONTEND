@@ -1,4 +1,4 @@
-const studentlogin=(state={user:''},action)=>{
+const studentlogin=(state=[],action)=>{
     switch (action.type){
         case 'STUDENT_LOGIN':
             return action.payload
