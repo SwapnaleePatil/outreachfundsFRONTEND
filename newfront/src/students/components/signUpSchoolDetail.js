@@ -30,8 +30,8 @@ class SignUpSchool extends React.Component{
             schoolData = signupPageFields;
 
         if(name==='selectedSchool') {
-            this.handleSchoolNameChange(e);
             schoolData['schoolId']=(e.target.selectedOptions[0].id || null);
+            this.handleSchoolNameChange(e);
         }
         else
             schoolData[name]=value;
@@ -65,14 +65,15 @@ class SignUpSchool extends React.Component{
             roleTitle:signupPageFields.roleTitle,
             schoolId:signupPageFields.schoolId
         }
+        console.log(obj);
+        console.log(schoolInfo);
+        formData.append('data', JSON.stringify(obj));
+        formData.append('photo', signupPageFields.photo);
         if(signupPageFields.schoolId===null){
-            formData.append('data', JSON.stringify(obj));
-            formData.append('photo', signupPageFields.photo);
+            debugger;
             registerSchool(schoolInfo,formData);
         }
         else {
-            formData.append('data', JSON.stringify(obj));
-            formData.append('photo', signupPageFields.photo);
             registerStudent(formData);
         }
         signupPageAction(1);
@@ -101,17 +102,21 @@ class SignUpSchool extends React.Component{
         else{
             this.setState({addSchool:false})
             var selectedSchool=e.target.selectedOptions[0].innerHTML;
+            debugger;
             const {Schools}=this.props;
             var arr=Schools.filter((school)=>school.schoolName===selectedSchool);
             schoolData['organisationName']=arr[0].organisationName;
             schoolData['organisationAddress']=arr[0].organisationAddress;
             schoolData['organisationEmail']=arr[0].organisationEmail;
             schoolData['organisationContact']=arr[0].organisationContact;
+            schoolData['school']=selectedSchool;
             schoolData['role']='Member';
             schoolData['roleTitle']='';
             schoolData['roleStatus']=false;
             this.setState({
                 schoolData
+            },()=>{
+                setSignupPageFieldsAction(this.state.schoolData);
             })
         }
     }

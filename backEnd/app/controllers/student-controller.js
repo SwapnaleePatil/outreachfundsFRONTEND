@@ -14,12 +14,20 @@ exports.registerStudent=(req,res)=>{
     var body=JSON.parse(req.body.data);
     let student=new Student(body);
     student.photo=sample.name;
-    student.schoolId=req.body.schoolId;
-        student.save().then(() => {
+    if(req.body.schoolId!==undefined) {
+        console.log("School Id - ",req.body.schoolId);
+        console.log("in if");
+        student.schoolId = req.body.schoolId;
+    }
+    console.log(student);
+    student.save().then(() => {
+            console.log("in then");
             return student.generateAuthToken(student);
         }).then((student) => {
+            console.log("in 2nd then");
             res.status(200).send(student);
         }).catch((err) => {
+        console.log(err,'---------------------------------------------')
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
         })
 }
@@ -33,6 +41,7 @@ exports.registerSchoolOrganisation=(req,res)=>{
         res.status(401).send({"message":"Error in Registration of School Organisation.","error":err})
     })
 }
+
 //FETCH ALL STUDENTS LIST
 exports.fetchAllStudents=(req,res)=>{
     console.log(req.stud);
@@ -68,6 +77,7 @@ exports.fetchAllSchools=(req,res)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Schools.","err":err})
     })
+
 };
 exports.authenticate=(req,res,next)=>{
     var token=req.header('x-auth');

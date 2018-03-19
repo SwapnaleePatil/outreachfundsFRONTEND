@@ -1,3 +1,4 @@
+let myport=4000;
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -13,7 +14,7 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        fetch("http://localhost:3000/api/school").then((response)=>{
+        fetch(`http://localhost:${myport}/api/school`).then((response)=>{
             return response.json();
         }).then((schools)=>{
             console.log("School",schools);
@@ -34,6 +35,7 @@ export const registerStudent = (obj) => {
         method:'post'
     }
     return (dispatch)=>{
+
         return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
             return response;
         }).then((student)=>{
@@ -59,7 +61,7 @@ export const registerSchool = (schoolObj,personalObj) => {
         }
     }
     return (dispatch)=>{
-        return fetch("http://localhost:3000/api/school",data).then((response)=>{
+        return fetch(`http://localhost:${myport}/api/school`,data).then((response)=>{
             return response.json();
         }).then((school)=>{
             personalObj.append('schoolId',school.school._id)
@@ -83,7 +85,7 @@ export const fetchStudent=()=>{
         }
     }
     return (dispatch=>{
-        return fetch('http://localhost:3000/api/student',data).then((response)=>{
+        return fetch(`http://localhost:${myport}/api/student`,data).then((response)=>{
             return response.json();
         }).then((admin)=>{
             dispatch(fetchSignupRequests(admin.schoolId));
@@ -94,7 +96,7 @@ export const fetchStudent=()=>{
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
-        return fetch(`http://localhost:3000/api/students/${schoolId}`).then((response)=>{
+        return fetch(`http://localhost:${myport}/api/students/${schoolId}`).then((response)=>{
             return response.json();
         }).then((requests)=>{
             dispatch({
