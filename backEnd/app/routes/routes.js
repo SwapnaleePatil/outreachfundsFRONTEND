@@ -43,7 +43,7 @@ module.exports=(app,passport)=>{
     app.put('/api/business/profile',businesscontroller.updateBusinessOwner);
     app.get('/api/business/profile',businesscontroller.fetch);
     app.post('/api/business/profile/fetchById',businesscontroller.fetchById);
-
+    app.get('/api/business/profile/fetchByToken',businesscontroller.fetchByToken);
 
     //Event Routes
     app.post('/api/event', eventcontroller.addeventSchedule);
@@ -52,5 +52,8 @@ module.exports=(app,passport)=>{
     app.get('/api/event',eventcontroller.fetch);
 
     //Donation Routes
-    app.get('/addDonation',donationController.addDonation);
+    app.post('/addDonation',donationController.addDonation);
+    app.get('/getDonationData',donationController.getDonation);
+    app.patch('/approveDonation',donationController.approveDonation);
+    app.patch('/updateDonation',donationController.updateDonation);
 }

@@ -74,7 +74,8 @@ export const registerSchool = (schoolObj,personalObj) => {
     }
 }
 export const fetchStudent=()=>{
-    var data={
+    let data={
+
         mode:'cors',
         method:'get',
         headers:{
@@ -85,7 +86,6 @@ export const fetchStudent=()=>{
         return fetch('http://localhost:3000/api/student',data).then((response)=>{
             return response.json();
         }).then((admin)=>{
-            console.log(admin);
             dispatch(fetchSignupRequests(admin.schoolId));
         }).catch((error)=>{
             console.log("Error : ",error);

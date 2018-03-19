@@ -74,3 +74,17 @@ exports.fetchById = (req, res) => {
         console.log('Error in retrieving data.');
     })
 };
+exports.fetchByToken=(req,res)=>{
+    let token=req.header('x-auth');
+    console.log(token);
+    BusinessOwner.findByToken(token).then((result)=>{
+        if(!result)
+        {
+            res.send({"message":"User Not Found"});
+        }
+        else
+        {
+            res.send({"message":"User Found",'User':result});
+        }
+    })
+}

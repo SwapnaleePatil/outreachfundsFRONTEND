@@ -116,7 +116,7 @@ let businessOwnerSchema = new mongoose.Schema({
         }
     },
     tokens:[{
-        auth:String,
+        access:String,
         token:String
     }]
 });
@@ -150,11 +150,25 @@ businessOwnerSchema.methods.generateAuthToken=function(){
             _id:businessOwner._id.toHexString(),
             access
         },
-        'abc123'
+        'outreachfunds'
     ).toString();
     businessOwner.tokens.push({access,token});
     return businessOwner.save().then(()=>{
         return token;
+    })
+}
+businessOwnerSchema.statics.findByToken=function(token) {
+    let businessOwner=this;
+    let decoded='';
+    try {
+        decoded = jwt.verify(token, 'outreachfunds');
+    } catch (e) {
+        console.log("Error :=", e);
+    }
+    return businessOwner.findOne({
+        _id: decoded._id,
+        'tokens.access':'auth',
+        'tokens.token': token
     })
 }
 let businessOwner = mongoose.model('businessOwner', businessOwnerSchema);

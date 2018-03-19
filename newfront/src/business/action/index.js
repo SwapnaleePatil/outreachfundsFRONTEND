@@ -35,8 +35,8 @@ export const updateBusiness=(obj)=>{
     }
 };
 export const listBusiness=()=>{
-        return(dispatch)=>{
-        axios.get("http://localhost:3000/api/business/profile").then((result)=>{
+return(dispatch)=>{
+axios.get("http://localhost:3000/api/business/profile").then((result)=>{
             dispatch({
                 type:'BUSINESS_LIST',
                 payload:result.data.record
