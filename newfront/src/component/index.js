@@ -50,11 +50,14 @@ class Main extends React.Component {
                     <Route exact path="/main/donation" component={Donation}/>
                     <Route exact path="/main/studentdonation" component={StudentDonation}/>
                     <Private exact path="/home" component={BusinessList}/>
+
                     <Route exact path="/dashboard" component={DashBoard}/>
-                    <Private exact path="/profile" component={BusinessProfile}/>
+                
+                    <Private exact path="/viewProfile" component={BusinessProfile}/>
+
                       <Private exact path="/main/requests" component={AcceptSignupRequest}/>
 
-                    <Private exact path="/profilepage" component={ProfilePage}/>
+                    <Private exact path="/editProfile" component={BusinessProfile}/>
 
                 </Switch>
             </BrowserRouter>

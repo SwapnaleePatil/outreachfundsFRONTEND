@@ -33,9 +33,13 @@ let eventSchema = new mongoose.Schema({
     donationOption: {
         type: String
     },
+    accept:{
+        type:Boolean,
+        default:false
+    },
     status: {
         type: Boolean,
-        default: false
+        default: true
     }
 });
 let eventSchedule = mongoose.model('eventSchedule', eventSchema);

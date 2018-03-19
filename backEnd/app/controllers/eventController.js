@@ -11,7 +11,6 @@ exports.addeventSchedule = (req, res) => {
         })
 }
 exports.deleteeventSchedule = (req, res) => {
-    console.log("Id",req.body.id);
     eventSchedule.findByIdAndUpdate(req.body.id,{ $set:{status: 'true'}},{new:true}).then((result) => {
         if (result) {
             res.send({"message":'Deleted.', 'record': result});
@@ -25,7 +24,6 @@ exports.deleteeventSchedule = (req, res) => {
 }
 exports.updateeventSchedule = (req, res) => {
     let body=req.body;
-    console.log("body",body);
     eventSchedule.findByIdAndUpdate(req.body.id, {$set: body},{new:true}).then((result) => {
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
@@ -33,7 +31,7 @@ exports.updateeventSchedule = (req, res) => {
     })
 }
 exports.fetch = (req, res) => {
-    eventSchedule.find().then((data) => {
+    eventSchedule.find({status:true}).then((data) => {
         res.send({"message":'All Record.', 'record': data});
     }).catch((err) => {
         console.log('Error in retrieving data.', err);
@@ -45,4 +43,4 @@ exports.fetchById = (req, res) => {
     }).catch(() => {
         console.log('Error in retrieving data.');
     })
-}
+};

@@ -14,7 +14,6 @@ class signUpPage extends React.Component{
         }
 
     render(){
-        console.log("Page : ",this.props.signUpPage);
         return(
             <div>
                 {(this.props.signUpPage===1)?<SignUpPersonal/>:<span></span>}
