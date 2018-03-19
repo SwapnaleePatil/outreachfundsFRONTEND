@@ -34,6 +34,10 @@ export const  studentLogin=(data)=>{
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"
                 }
+                else{
+                    alert('You are not authorized.');
+                }
+                window.location = "/";
             }
         }).catch((e)=>{
             console.log(e);

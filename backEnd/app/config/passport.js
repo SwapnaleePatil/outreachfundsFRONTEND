@@ -24,9 +24,11 @@ module.exports=(passport)=>{
             if(password!==stud.password){
                 return done(null,false);
             }
-                studentToken=stud.tokens[0].token;
-
-                return done(null,stud);
+            if(stud.roleStatus===true) {
+                studentToken = stud.tokens[0].token;
+                return done(null, stud);
+            }
+            return done(null,false);
         }).catch((err)=>{
                 console.log(err);
             })

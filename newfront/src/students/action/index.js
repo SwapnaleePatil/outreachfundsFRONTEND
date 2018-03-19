@@ -87,8 +87,9 @@ export const fetchStudent=()=>{
     return (dispatch=>{
         return fetch(`http://localhost:${myport}/api/student`,data).then((response)=>{
             return response.json();
-        }).then((admin)=>{
-            dispatch(fetchSignupRequests(admin.schoolId));
+        }).then((user)=>{
+            if(user.roleTitle==='Admin')
+                dispatch(fetchSignupRequests(user.schoolId));
         }).catch((error)=>{
             console.log("Error : ",error);
         })
@@ -105,6 +106,64 @@ export const fetchSignupRequests = (schoolId) => {
             })
         }).catch = (error) =>{
             console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
+export const approveSignupRequests = (resultSet) => {
+    let arr=[...resultSet];
+    var obj={
+        "arr":arr
+    }
+    var url=`http://localhost:${myport}/api/student/approve`;
+    var data={
+        method:'post',
+        mode:'cors',
+        body:JSON.stringify(obj),
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }
+    return (dispatch)=>{
+        return fetch(url,data).then((response)=>{
+            return response.json();
+        }).then(()=>{
+            debugger;
+            dispatch({
+                type:'APPROVE_REQUEST',
+                payload:arr
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
+export const rejectSignupRequests = (resultSet) => {
+    let arr=[...resultSet];
+    var obj={
+        "arr":arr
+    }
+    var url=`http://localhost:${myport}/api/student/reject`;
+    var data={
+        method:'post',
+        mode:'cors',
+        body:JSON.stringify(obj),
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }
+    return (dispatch)=>{
+        return fetch(url,data).then((response)=>{
+            return response.json();
+        }).then(()=>{
+            debugger;
+            dispatch({
+                type:'REJECT_REQUEST',
+                payload:arr
+            })
+        }).catch = (error) =>{
+            console.log("Error in Rejecting Requests..",error)
         }
     }
 }

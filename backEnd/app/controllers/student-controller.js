@@ -27,7 +27,6 @@ exports.registerStudent=(req,res)=>{
             console.log("in 2nd then");
             res.status(200).send(student);
         }).catch((err) => {
-        console.log(err,'---------------------------------------------')
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
         })
 }
@@ -52,8 +51,8 @@ exports.fetchAllStudents=(req,res)=>{
     })
 }
 
-exports.fetchAllStudentsBySchoolId=(req,res)=>{
-    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member'}).then((students)=>{
+exports.fetchAllStudentsRequest=(req,res)=>{
+    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member',status:false}).then((students)=>{
         res.status(200).send(students);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
@@ -91,4 +90,46 @@ exports.authenticate=(req,res,next)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Please Login First.","error":err});
     })
-};
+}
+
+exports.approveStudent=(req,res)=>{
+    var arr=req.body.arr;
+    var l=arr.length;
+    console.log(l);
+    for(var i=0;i<l;i++) {
+        Student.findById(arr[i]).then((stud)=>{
+            if(stud) {
+                stud.roleStatus=true;
+                stud.save().then(()=>{
+                    "use strict";
+                    console.log("updated");
+                })
+            }
+        }).catch(()=>{
+            console.log('error in Approving.');
+            res.status(201).send({"message":"error"});
+        })
+    }
+    res.status(200).send({"message":"success"});
+}
+
+exports.rejectStudent=(req,res)=>{
+    var arr=req.body.arr;
+    var l=arr.length;
+    console.log(l);
+    for(var i=0;i<l;i++) {
+        Student.findById(arr[i]).then((stud)=>{
+            if(stud) {
+                stud.status=true;
+                stud.save().then(()=>{
+                    "use strict";
+                    console.log("updated");
+                })
+            }
+        }).catch(()=>{
+            console.log('error in Rejecting');
+            res.status(201).send({"message":"error"});
+        })
+    }
+    res.status(200).send({"message":"success"});
+}
