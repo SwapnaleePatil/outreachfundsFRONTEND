@@ -4,17 +4,24 @@ import {Table,Button} from 'react-bootstrap';
 import {bindActionCreators} from 'redux'
 import {getDonationAction} from './../actions/addDonationAction'
 import {approveDonation} from './../actions/addDonationAction'
+import {FetchStudent} from './../actions/getUserAction'
+import {getEventDataAction} from '../actions/getEventsDataAction'
+import {fetchAllSchoolDetails} from './../../students/action/index'
 
 class StudentDonation extends Component{
     constructor(){
         super();
 
     }
-    componentWillMount(){
+    componentDidMount(){
         this.props.getDonationAction();
+        this.props.FetchStudent();
+        this.props.getEventDataAction();
+        this.props.fetchAllSchoolDetails();
     };
     componentWillReceiveProps(nextProps){
-        console.log('asd',nextProps.donationData);
+        console.log('req',nextProps.organizationData);
+
     }
     Approved=(id)=>{
         let data={
@@ -33,6 +40,7 @@ class StudentDonation extends Component{
                             <th>Donation Date</th>
                             <th>Event Name</th>
                             <th>Organization Name</th>
+                            {/*<th>Business Name</th>*/}
                             <th>Location</th>
                             <th>Amount</th>
                         </tr>
@@ -40,8 +48,27 @@ class StudentDonation extends Component{
                             this.props.donationData.map((value,index)=>{
                                 return<tr>
                                     <td>{value.donationDate}</td>
-                                    <td>{value.eventName}</td>
-                                    <td>{value.organizationName}</td>
+                                    <td>{
+                                        this.props.eventsData.map((e)=>{
+                                            if(value.eventId === e._id){
+                                                return e.eventName
+                                            }
+                                        })
+                                    }</td>
+                                    <td>{
+                                        this.props.organizationData.map((e)=>{
+                                            if(value.organizationId === e._id){
+                                                return e.organisationName
+                                            }
+                                        })
+                                    }</td>
+                                    {/*<td>{
+                                        this.props.businessInfo.map((e)=>{
+                                            if(value.businessId === e._id){
+                                                return e.businessInfo.businessName
+                                            }
+                                        })
+                                    }</td>*/}
                                     <td>{value.location}</td>
                                     <td>{value.amount}</td>
                                     <td>
@@ -68,13 +95,21 @@ class StudentDonation extends Component{
 
 function mapStateToProps(state){
     return {
-        donationData:state.donation
+        donationData:state.donation,
+        requests:state.requests,
+        studentLogged:state.studentLogged,
+        organizationData:state.schools,
+        businessInfo:state.businessInfo,
+        eventsData:state.events
     };
 }
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
         getDonationAction,
-        approveDonation
+        approveDonation,
+        FetchStudent,
+        getEventDataAction,
+        fetchAllSchoolDetails,
     },dispatch);
 }
 export default connect(mapStateToProps,matchDispatchToProps)(StudentDonation)

@@ -1,6 +1,7 @@
 export default (state=[],action)=>{
     switch(action.type){
         case "FETCH_REGISTER_REQUEST":
+            debugger;
             return action.payload;
         case "APPROVE_REQUEST":
             var arr=action.payload;

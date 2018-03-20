@@ -13,7 +13,7 @@ export const addDonationAction=(data)=>{
 };
 export const getDonationAction=()=>{
     return ((dispatch)=>{
-        axios({
+        axiosI({
             method: 'get',
             url: 'http://localhost:3000/getDonationData'
         }).then((response)=>{
@@ -27,7 +27,7 @@ export const getDonationAction=()=>{
 export const approveDonation=(data)=>{
     console.log(data)
     return ((dispatch)=>{
-        axios.patch('http://localhost:3000/approveDonation',data).then((response)=>{
+        axiosI.patch('http://localhost:3000/approveDonation',data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
                 payload:response.data
@@ -38,7 +38,7 @@ export const approveDonation=(data)=>{
 
 export const updateDonationAction=(data)=>{
     return ((dispatch)=>{
-        axios.patch('http://localhost:3000/updateDonation',data).then((response)=>{
+        axiosI.patch('http://localhost:3000/updateDonation',data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
                 payload:response.data

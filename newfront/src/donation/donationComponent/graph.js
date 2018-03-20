@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {getDonationAction} from './../actions/addDonationAction'
 
+
 class Graph extends Component {
     constructor(){
         super();
@@ -25,16 +26,28 @@ class Graph extends Component {
 
     }
     componentWillReceiveProps(nextProps){
-        console.log('Graph',nextProps.donationData);
+        let {graphData} = this.state;
+        graphData=[];
+        console.log('a',this.props.businessInfo.User && this.props.businessInfo.User._id);
+        nextProps.donationData.forEach((rec)=>{
+            if(rec.businessId === (this.props.businessInfo.User && this.props.businessInfo.User._id)){
+                graphData.push(rec);
+            }
+        });
         this.setState({
-            graphData:nextProps.donationData
+            graphData
         },()=>{
+            console.log('graph Data ',this.state.graphData);
             this.changeGraph();
         });
     }
     changeGraph=()=>{
-
         let {totalDonationAmount,confirmAmount,yearAmount,monthAmount,pendingAmount} = this.state;
+        totalDonationAmount=0;
+        confirmAmount=0;
+        yearAmount=0;
+        monthAmount=0;
+        pendingAmount=0;
         this.state.graphData.forEach((value)=>{
             //chartData.push({x:value.eventName,y:value.amount});
             totalDonationAmount = totalDonationAmount + Number(value.amount);
@@ -73,6 +86,8 @@ class Graph extends Component {
             confirmAmount,
             yearAmount,
             monthAmount
+        },()=>{
+            console.log('asdasdasdad',totalDonationAmount);
         });
     };
     render() {
@@ -103,12 +118,13 @@ class Graph extends Component {
 function mapStateToProps(state) {
     return {
         donationData: state.donation,
+        businessInfo:state.businessInfo
     };
 }
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDonationAction
+        getDonationAction,
     }, dispatch);
 }
 
