@@ -1,12 +1,12 @@
 import React from 'react'
-import DisplayForm from './../donation/donationComponent/addDonation'
-import Graph from './../donation/donationComponent/graph'
+import DisplayForm from '../donation/Component/addDonation'
+import Graph from '../donation/Component/graph'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchAllSchoolDetails} from '../students/action/index'
-import {FetchByToken} from '../donation/actions/getUserAction'
-import {getDonationAction} from '../donation/actions/addDonationAction'
-import {getEventDataAction} from '../donation/actions/getEventsDataAction'
+import {FetchByToken} from '../donation/actions/index'
+import {getDonationAction} from '../donation/actions/index'
+import {getEventDataAction} from '../donation/actions/index'
 
 class Donation extends React.Component{
     constructor(){

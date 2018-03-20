@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import './addDonation.css'
-import {Button, FormControl, FormGroup, HelpBlock, Table} from 'react-bootstrap';
+import './graph.css'
+import {Button,FormControl,FormGroup,HelpBlock,Table} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getEventDataAction} from '../actions/getEventsDataAction'
+import {getEventDataAction} from '../actions/index'
 import {fetchAllSchoolDetails} from './../../students/action/index'
-import {addDonationAction, getDonationAction, updateDonationAction} from './../actions/addDonationAction'
-import {FetchByToken} from '../actions/getUserAction'
+import {addDonationAction, getDonationAction, updateDonationAction} from '../actions/index'
+import {FetchByToken} from '../actions/index'
 
 class DisplayForm extends Component {
     constructor() {
@@ -51,7 +51,7 @@ class DisplayForm extends Component {
         let arr = nextProps.organizationData;
         let newarr;
         let final = [];
-        nextProps.eventsData.map((value) => {
+        nextProps.eventsData.forEach((value) => {
             newarr = arr.filter((school) => value.schoolOrganisation === school._id);
             final.push(newarr[0] && newarr[0].organisationName);
         });
@@ -71,7 +71,7 @@ class DisplayForm extends Component {
         let Udata = {};
         let eventId = "";
         let organizationId="";
-        this.props.eventsData.map((value)=>{
+        this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
                 eventId = value._id;
                 organizationId = value.schoolOrganisation;
@@ -142,7 +142,7 @@ class DisplayForm extends Component {
     displayEvents = () => {
         let items = [];
         items.push(<option value="" selected={true} disabled={true} hidden={true}>Select Event</option>);
-        this.props.eventsData.map((value, index) => {
+        this.props.eventsData.forEach((value, index) => {
             items.push(<option value={index} key={index}>{value.eventName}</option>)
         });
         return items;

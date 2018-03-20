@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import './graph.css'
 import {BarChart} from 'react-easy-chart'
-import {Label} from 'react-bootstrap'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getDonationAction} from './../actions/addDonationAction'
+import {getDonationAction} from '../actions/index'
 
 
 class Graph extends Component {

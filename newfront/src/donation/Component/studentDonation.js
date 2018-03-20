@@ -2,17 +2,13 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {Table,Button} from 'react-bootstrap';
 import {bindActionCreators} from 'redux'
-import {getDonationAction} from './../actions/addDonationAction'
-import {approveDonation} from './../actions/addDonationAction'
-import {FetchStudent} from './../actions/getUserAction'
-import {getEventDataAction} from '../actions/getEventsDataAction'
-import {fetchAllSchoolDetails} from './../../students/action/index'
+import {getDonationAction} from '../actions/index'
+import {approveDonation} from '../actions/index'
+import {FetchStudent} from './../actions/index'
+import {getEventDataAction} from '../actions/index'
+import {fetchAllSchoolDetails} from '../../students/action/index'
 
 class StudentDonation extends Component{
-    constructor(){
-        super();
-
-    }
     componentDidMount(){
         this.props.getDonationAction();
         this.props.FetchStudent();
