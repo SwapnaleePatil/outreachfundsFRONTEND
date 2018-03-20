@@ -10,8 +10,6 @@ import {scheduleevents, eventslist, actionevents} from '../action/index'
 import {listBusiness} from '../business/action/index'
 import {fetchAllSchoolDetails} from '../students/action/index';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
-
 let business = "";
 let school = "";
 let eventlenght = ""
@@ -61,7 +59,7 @@ class Schedule extends React.Component {
                         eventowner
                     })
                 }
-                console.log(this.state.eventowner);
+                console.log(this.state.eventowner)
             });
         });
     }
