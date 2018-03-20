@@ -16,10 +16,17 @@ exports.registerStudent=(req,res)=>{
     console.log("after json",body);
     let student=new Student(body);
     student.photo=sample.name;
-    student.schoolId=req.body.schoolId;
-        student.save().then(() => {
+    if(req.body.schoolId!==undefined) {
+        console.log("School Id - ",req.body.schoolId);
+        console.log("in if");
+        student.schoolId = req.body.schoolId;
+    }
+    console.log(student);
+    student.save().then(() => {
+            console.log("in then");
             return student.generateAuthToken(student);
         }).then((student) => {
+            console.log("in 2nd then");
             res.status(200).send(student);
         }).catch((err) => {
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
@@ -35,6 +42,7 @@ exports.registerSchoolOrganisation=(req,res)=>{
         res.status(401).send({"message":"Error in Registration of School Organisation.","error":err})
     })
 }
+
 //FETCH ALL STUDENTS LIST
 exports.fetchAllStudents=(req,res)=>{
     console.log(req.stud);
@@ -45,8 +53,8 @@ exports.fetchAllStudents=(req,res)=>{
     })
 }
 
-exports.fetchAllStudentsBySchoolId=(req,res)=>{
-    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member'}).then((students)=>{
+exports.fetchAllStudentsRequest=(req,res)=>{
+    Student.find({schoolId:req.params.schoolId,roleStatus:false,role:'Member',status:false}).then((students)=>{
         res.status(200).send(students);
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Students.","err":err})
@@ -70,6 +78,7 @@ exports.fetchAllSchools=(req,res)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Error in Retrieving list of Schools.","err":err})
     })
+
 };
 exports.authenticate=(req,res,next)=>{
     var token=req.header('x-auth');
@@ -83,4 +92,46 @@ exports.authenticate=(req,res,next)=>{
     }).catch((err)=>{
         res.status(401).send({"message":"Please Login First.","error":err});
     })
-};
+}
+
+exports.approveStudent=(req,res)=>{
+    var arr=req.body.arr;
+    var l=arr.length;
+    console.log(l);
+    for(var i=0;i<l;i++) {
+        Student.findById(arr[i]).then((stud)=>{
+            if(stud) {
+                stud.roleStatus=true;
+                stud.save().then(()=>{
+                    "use strict";
+                    console.log("updated");
+                })
+            }
+        }).catch(()=>{
+            console.log('error in Approving.');
+            res.status(201).send({"message":"error"});
+        })
+    }
+    res.status(200).send({"message":"success"});
+}
+
+exports.rejectStudent=(req,res)=>{
+    var arr=req.body.arr;
+    var l=arr.length;
+    console.log(l);
+    for(var i=0;i<l;i++) {
+        Student.findById(arr[i]).then((stud)=>{
+            if(stud) {
+                stud.status=true;
+                stud.save().then(()=>{
+                    "use strict";
+                    console.log("updated");
+                })
+            }
+        }).catch(()=>{
+            console.log('error in Rejecting');
+            res.status(201).send({"message":"error"});
+        })
+    }
+    res.status(200).send({"message":"success"});
+}

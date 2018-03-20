@@ -54,6 +54,7 @@ class Schedule extends React.Component {
                 if (value.token === localStorage.getItem('user')) {
                     businessname = v.businessInfo.businessName;
                     eventowner = v._id;
+
                     this.setState({
                         businessname,
                         eventowner
@@ -64,6 +65,7 @@ class Schedule extends React.Component {
         });
     }
 
+
     onFieldChange = (e) => {
         let {name, value} = e.target;
         let {eventData} = this.state;
@@ -73,6 +75,8 @@ class Schedule extends React.Component {
         })
         ;
     };
+
+
     rejectEvent = (did) => {
         let data = {
             id: did,
@@ -84,7 +88,9 @@ class Schedule extends React.Component {
     };
 
     scheduleEvent = () => {
-        debugger;
+        let data = {
+            ...this.state.eventData
+        };
         if (this.state.businessname !== "") {
             let data = {
                 businessSponsor: this.state.eventowner,

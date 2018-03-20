@@ -30,8 +30,9 @@ class SecondPage extends React.Component {
         this.setState({ownerData})
     }
     chkValidation = (e) => {
+
          this.setState({msg: ""});
-        let name = e.target.name;
+let name = e.target.name;
         if (name === "businessName" || name === "businessType") {
             let rename = /^([A-Za-z ])*$/;;
             if (!rename.test(e.target.value)) {
@@ -44,7 +45,9 @@ class SecondPage extends React.Component {
                 this.setState({msg: "Email is InValid"});
             }
         }
+
        if (name === "businessPhone") {
+ newfront/src/business/components/secondPage.js
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
                 this.setState({msg: "Enter Number between 6 to 13 digit"});
@@ -82,8 +85,9 @@ class SecondPage extends React.Component {
     }
 
     render() {
+
        const {Fields} = this.props;
-        if (Fields !== null)
+ if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
         return (

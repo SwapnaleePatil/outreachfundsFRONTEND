@@ -10,6 +10,7 @@ import {GoogleMap, Marker, withGoogleMap, withScriptjs} from "react-google-maps"
 class BusinessList extends React.Component {
     constructor() {
         super();
+
         this.state = {
             dataperpage: "3",
             currentpage: "1",

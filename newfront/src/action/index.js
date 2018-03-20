@@ -1,6 +1,5 @@
-
-//import axiosI from 'axiosI';
 import axiosI from '../services/axiosInstance';
+import axios from 'axios';
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
@@ -35,6 +34,10 @@ export const  studentLogin=(data)=>{
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"
                 }
+                else{
+                    alert('You are not authorized.');
+                }
+                window.location = "/";
             }
         }).catch((e)=>{
             console.log(e);
@@ -43,7 +46,6 @@ export const  studentLogin=(data)=>{
 };
 
 export const scheduleevents=(data)=>{
-    debugger;
     return(dispatch)=>{
         axiosI({method:'post',url:'api/event',data}).then((response)=>{
             if(response){

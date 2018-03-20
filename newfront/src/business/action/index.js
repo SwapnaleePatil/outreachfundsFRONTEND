@@ -15,7 +15,6 @@ export const businessFields=(obj=[])=>{
     }
 };
 export const addBusiness=(obj)=>{
-    debugger
     return (dispatch)=>{
         axiosI.post('/api/business/profile',obj).then((result)=>{
            dispatch({
@@ -39,10 +38,8 @@ export const updateBusiness=(obj)=>{
     }
 };
 export const listBusiness=()=>{
-
         return(dispatch)=>{
-
-        axiosI.get('api/business/profile').then((result)=>{
+            axiosI.get('api/business/profile').then((result)=>{
             dispatch({
                 type:'BUSINESS_LIST',
                 payload:result.data.record

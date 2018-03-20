@@ -1,0 +1,11 @@
+.graphLabel{
+    text-decoration: line-through;
+    font-size: 16px;
+}
+.labelHandler{
+    left:930px;
+    position: fixed;
+}
+.graphLabel.active{
+    text-decoration:solid;
+}
