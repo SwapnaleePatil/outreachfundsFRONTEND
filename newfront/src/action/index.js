@@ -75,8 +75,6 @@ export const actionevents=(data)=>{
         })
     }
 };
-
-
 export const eventslist=()=>{
     return(dispatch)=>{
         axiosI({method:'get',url:'api/event'}).then((response)=>{

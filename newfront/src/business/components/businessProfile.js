@@ -341,7 +341,7 @@ class BusinessProfile extends React.Component {
                                         }} value={businessInfo && businessInfo.businessPhone}
                                                name="businessPhone" type="number" required
                                         /> :
-                                        businessInfo && "+91" + businessInfo.businessPhone}</td>
+                                        businessInfo &&  businessInfo.businessPhone}</td>
                             </tr>
 
                             <tr>

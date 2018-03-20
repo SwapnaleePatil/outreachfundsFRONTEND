@@ -31,8 +31,6 @@ class MainPage extends React.Component {
         localStorage.removeItem('user');
         window.location = "/"
     }
-
-
     searching = (e) => {
         this.setState({
             name:e.target.value

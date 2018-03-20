@@ -152,6 +152,7 @@ class BusinessList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+    console.log("State",state)
     return ({businessrecord: state.businesslist,
         studentRecord:state.students})
 };

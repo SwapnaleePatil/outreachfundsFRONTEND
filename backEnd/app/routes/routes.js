@@ -8,9 +8,12 @@ module.exports=(app,passport)=>{
     //School Routes
     app.post('/api/school',studentController.registerSchoolOrganisation);
     app.get('/api/school',studentController.fetchAllSchools);
+    app.put('/api/school',studentController.updateSchool);
 
     //Student Routes
+
     app.post('/api/student/profile',studentController.registerStudent);
+    app.put('/api/student/profile',studentController.updateSchool);
     app.post('/api/student/approve',studentController.approveStudent);
     app.post('/api/student/reject',studentController.rejectStudent);
     app.get('/api/students',studentController.authenticate,studentController.fetchAllStudents);

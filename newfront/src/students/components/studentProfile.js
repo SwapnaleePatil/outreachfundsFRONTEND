@@ -1,0 +1,436 @@
+import React from 'react';
+import {bindActionCreators} from 'redux';
+import {Glyphicon, Button} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import '../../business/components/businessCSS.css';
+import {fetchStudent} from '../action/index'
+import {fetchAllSchoolDetails} from '../action/index'
+import {updateSchool} from '../action/index'
+import {updateStudent} from '../action/index'
+class StudentProfile extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            student: {},
+            school: [],
+            selectedSchool: '',
+            isEditing: false,
+            msg: '',
+            changeimg: false,
+            previewFile: ''
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            school: nextProps.School,
+            student: nextProps.Student
+        }, () => {
+            console.log("Props", this.state.school)
+            this.getSchool();
+        })
+
+    }
+    componentWillMount() {
+        this.setState({
+            student: this.props.Student
+        });
+        if (this.props.School.length > 0) {
+            this.setState({
+                school: this.props.School
+            }, () => {
+                this.getSchool();
+                console.log("School in mount", this.props.School);
+            })
+        }
+        else {
+            this.props.fetchAllSchoolDetails();
+            this.props.fetchStudent();
+        }
+        this.setState({
+            isEditing: this.props.location.pathname.includes('edit') ? true : false
+        })
+    }
+    getSchool = () => {
+        let {selectedSchool} = this.state;
+        this.state.school.map((value) => {
+            if (value._id === this.props.Student.schoolId) {
+                selectedSchool = value;
+            }
+        })
+        this.setState({selectedSchool}, () => {
+            console.log("School", this.state.selectedSchool)
+        })
+    }
+    handleChange = (e) => {
+        let {name, value} = e.target;
+        const {student} = this.state;
+
+        if (name === "photo") {
+            student[name] = e.target.files[0];
+        }
+        else {
+            student[name] = value;
+        }
+        this.setState({student})
+    }
+    handleorganisationDetail = (e) => {
+        let {name, value} = e.target;
+        const {selectedSchool} = this.state;
+        selectedSchool[name] = value;
+        this.setState({selectedSchool})
+    }
+    chkValidation = (e) => {
+        this.setState({msg: ""});
+        let name = e.target.name;
+        if (name === "email") {
+            let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!reemail.test(e.target.value)) {
+                this.setState({msg: "Email is InValid"});
+            }
+        }
+        if (name === "organisationEmail") {
+            let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!reemail.test(e.target.value)) {
+                this.setState({msg: "Email is InValid"});
+            }
+        }
+        //
+        if (name === "phone") {
+            let rephone = /^((?!(0))[0-9]{6,13})$/;
+            if (!rephone.test(e.target.value)) {
+                this.setState({msg: "Enter Number between 6 to 13 digit"});
+            }
+        }
+        if (name === "organisationPhone") {
+            let rephone = /^((?!(0))[0-9]{6,13})$/;
+            if (!rephone.test(e.target.value)) {
+                this.setState({msg: "Enter Number between 6 to 13 digit"});
+            }
+        }
+        if (name === "firstName" || name === "lastName" || name === "organisationName" || name === "schoolName" || name === "roleTitle") {
+            let rename = /^([A-Za-z ])*$/;
+            ;
+            if (!rename.test(e.target.value)) {
+                this.setState({msg: "Can't be Number"});
+            }
+        }
+        if (name === "dob") {
+            let date = new Date();
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            if (month <= 9) {
+                month = "0" + month;
+            }
+            let year = date.getFullYear() - 15;
+            let dobdate = year + '-' + month + '-' + day;
+            if (e.target.value > dobdate) {
+                this.setState({
+                    msg: "Please Select Proper Birth Date"
+                })
+            }
+        }
+        if (e.target.value === "") {
+            this.setState({msg: ""});
+        }
+    }
+    handleimg = (e) => {
+        e.preventDefault();
+        this.setState({
+            changeimg: true
+        })
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onloadend = () => {
+            this.setState({
+                photo: file,
+                previewFile: reader.result
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+    updateRecord = (e) => {
+        debugger
+        e.preventDefault();
+        if (this.state.msg !== "") {
+            this.setState({
+                msg: "Please Fill Valid Information"
+            })
+        }
+        else
+        {
+                let {student,selectedSchool}=this.state;
+                let studentObj={
+                    firstName:student.firstName,
+                    lastName:student.lastName,
+                    gender:student.gender,
+                    dob:student.dob,
+                    email:student.email,
+                    phone:student.phone,
+                    roleTitle:student.roleTitle,
+                    schoolId:student.schoolId
+                };
+                let schoolObj={
+                    schoolName:selectedSchool.schoolName,
+                    organisationName:selectedSchool.organisationName,
+                    organisationEmail:selectedSchool.organisationEmail,
+                    organisationAddress:selectedSchool.organisationAddress,
+                    organisationContact:selectedSchool.organisationContact
+                }
+            let formData = new FormData();
+            formData.append('obj', JSON.stringify(studentObj));
+            formData.append('photo', student.photo);
+
+            this.props.updateSchool(schoolObj);
+            this.props.updateStudent(formData);
+            this.setState({
+                isEditing: false,
+            })        }
+    }
+    render() {
+        let student = this.state.student;
+        let selectedSchool = this.state.selectedSchool;
+        let isEditing = this.state.isEditing;
+        let address = this.state.selectedSchool && this.state.selectedSchool.organisationAddress.split(",");
+
+        return (
+            <div className="container">
+                <div className="col-lg-12">
+                    <div className="col-sm-4">
+                        <div className="containers">
+
+                            {
+                                this.state.changeimg ? <img className="image" src={this.state.previewFile}
+                                                            style={{"width": "100%", "height": "100%"}}/>
+                                    :
+                                    <img className="image"
+                                         src={"http://localhost:3000/uploads/" + student.photo}
+                                         style={{"width": "100%", "height": "100%"}}/>
+
+                            }
+                            {isEditing && <div className="middle">
+                                <input type="file" ref="img" id="fileLoader" name="photo" title="Load File"
+                                       onChange={(e) => {
+                                           this.handleChange(e);
+                                           this.handleimg(e);
+                                       }}/>
+                                <div className="text btn-lg" onClick={(e) => this.refs.img.click()}>
+                                    <Glyphicon className="iconcss" glyph="glyphicon glyphicon-camera gi-5px"/>
+                                </div>
+                            </div>}
+                        </div>
+                    </div>
+                    <div className="col-sm-8">
+                        <fieldset>
+                            <legend style={{"color": "darkgreen"}}>Student Details{' '}<span
+                                style={{"color": "red"}}>{this.state.msg}</span></legend>
+                            <table style={{"width": "100%"}}>
+                                <tr>
+                                    <td className="fieldsecond">Name</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div className="form-inline">
+                                                <input className="form-control edittd" type="text" name="firstName"
+                                                       value={student.firstName} required onChange={(e) => {
+                                                    this.handleChange(e);
+                                                    this.chkValidation(e)
+                                                }}/>
+                                                <input className="form-control edittd" required type='text'
+                                                       name='lastName'
+                                                       value={student.lastName} onChange={(e) => {
+                                                    this.handleChange(e)
+                                                    this.chkValidation(e);
+                                                }}/>
+                                            </div>
+                                            : student.firstName + " " + student.lastName
+                                    }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Email</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div>
+                                                <input className="form-control edittd" type='email' name='email'
+                                                       value={student.email} required onChange={(e) => {
+                                                    this.handleChange(e);
+                                                    this.chkValidation(e);
+                                                }}/>
+                                            </div>
+                                            : student.email}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Date Of Birth</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div>
+                                                <input className="form-control edittd" type='date' name='dob'
+                                                       value={student.dob && student.dob.split("T")[0]}
+                                                       onChange={(e) => {
+                                                           this.handleChange(e);
+                                                           this.chkValidation(e);
+                                                       }} required/>
+                                            </div>
+                                            : student.dob && student.dob.split("T")[0]}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Phone</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div>
+                                                <input className="form-control edittd" type='number' name='phone'
+                                                       value={student.phone && student.phone}
+                                                       onChange={(e) => {
+                                                           this.handleChange(e);
+                                                           this.chkValidation(e);
+                                                       }} required/>
+                                            </div>
+                                            : student.phone && student.phone}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Gender</td>
+                                    <td className="fieldseconds">{isEditing ?
+                                        <div>
+                                            <input onChange={this.handleChange}
+                                                   checked={student.gender === "male" ? true : false}
+                                                   name="gender"
+                                                   type="radio" value="male"/>{' '}Male{' '}
+                                            <input name="gender" onChange={this.handleChange}
+                                                   checked={student.gender === "female" ? true : false}
+                                                   type="radio"
+                                                   value="female"/>{' '}Female </div>
+                                        : student.gender}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Role Title</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div>
+                                                <input className="form-control edittd" type='text' name='roleTitle'
+                                                       value={student.roleTitle && student.roleTitle}
+                                                       onChange={(e) => {
+                                                           this.handleChange(e);
+                                                           this.chkValidation(e);
+                                                       }} required/>
+                                            </div>
+                                            : student.roleTitle && student.roleTitle}</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                </div>
+                <div className="col-lg-12">
+                    <div className="col-sm-4">
+                        <fieldset style={{"margin-top": "3%"}}>
+                            <legend style={{"color": "darkgreen"}}>School Contact Details</legend>
+                        </fieldset>
+
+                        <table>
+                            <tr>
+                                <td className="field">Phone Number</td>
+                            </tr>
+                            <tr>
+                                <td className="fieldtd">{
+                                    isEditing ?
+                                        <input className="form-control" maxLength="13" minLength="6" onChange={(e) => {
+                                            this.handleorganisationDetail(e);
+                                            this.chkValidation(e)
+                                        }} value={selectedSchool && selectedSchool.organisationContact}
+                                               name="organisationContact" type="number" required
+                                        /> :
+                                        selectedSchool && selectedSchool.organisationContact}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="field">Address</td>
+                            </tr>
+                            <tr>
+                                <td className="fieldtd">{
+                                    isEditing ? <textarea className="form-control" required
+                                                          value={selectedSchool && selectedSchool.organisationAddress}
+                                                          onChange={this.handleorganisationDetail}
+                                                          name="organisationAddress"/> :
+                                        address && address.map((value, i) => {
+                                            return (
+                                                <div>{value}<br/></div>
+
+                                            )
+                                        })
+                                }</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div className="col-sm-8">
+                        <fieldset style={{"margin-top": "2%"}}>
+                            <legend style={{"color": "darkgreen"}}>School Details</legend>
+                            <table style={{"width": "100%"}}>
+                                <tr>
+                                    <td className="fieldsecond">School Name:</td>
+                                    <td align="left"
+                                        className="fieldseconds">{isEditing ?
+                                        <input className="form-control"
+                                               value={selectedSchool && selectedSchool.schoolName}
+                                               onChange={(e) => {
+                                                   this.handleorganisationDetail(e);
+                                                   this.chkValidation(e);
+                                               }} name="schoolName" type="text"
+                                               required/> : selectedSchool && selectedSchool.schoolName || ''}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Organisation Name:</td>
+                                    <td align="left"
+                                        className="fieldseconds">{isEditing ?
+                                        <input className="form-control"
+                                               value={selectedSchool && selectedSchool.organisationName}
+                                               onChange={(e) => {
+                                                   this.handleorganisationDetail(e);
+                                                   this.chkValidation(e);
+                                               }} name="organisationName" type="text"
+                                               required/> : selectedSchool && selectedSchool.organisationName || ''}</td>
+                                </tr>
+
+                                <tr>
+                                    <td className="fieldsecond">Organisation Email</td>
+                                    <td align="left"
+                                        className="fieldseconds">{isEditing ?
+                                        <input className="form-control" name="organisationEmail"
+                                               value={selectedSchool && selectedSchool.organisationEmail}
+                                               onChange={(e) => {
+                                                   this.handleorganisationDetail(e);
+                                                   this.chkValidation(e);
+                                               }} type="email" required/>
+                                        : selectedSchool && selectedSchool.organisationEmail || ''}</td>
+                                </tr>
+                                {isEditing ? <tr>
+                                    <td colSpan="2" align="right"><Button bsStyle="success" onClick={this.updateRecord}>Update</Button>
+                                    </td>
+                                </tr> : ''
+                                }
+
+                            </table>
+                        </fieldset>
+                    </div>
+                </div>
+
+
+            </div>
+        )
+
+    }
+
+
+}
+
+function mapStateToProps(state) {
+    console.log("State", state)
+    return {
+        Student: state.students,
+        School: state.schools
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({fetchStudent, fetchAllSchoolDetails,updateSchool,updateStudent}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudentProfile);

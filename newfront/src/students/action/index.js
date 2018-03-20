@@ -156,3 +156,25 @@ export const rejectSignupRequests = (resultSet) => {
         }
     }
 }
+export const updateStudent=(obj)=>{
+    debugger
+    return (dispatch)=>{
+        axiosI.put('api/student/profile',obj).then((result)=>{
+            dispatch({
+                type:'STUDENT_UPDATE',
+                payload:result.data
+            })
+        })
+    }
+};
+export const updateSchool=(obj)=>{
+    debugger
+    return (dispatch)=>{
+        axiosI.put('api/school',obj).then((result)=>{
+            dispatch({
+                type:'SCHOOL_UPDATE',
+                payload:result.data
+            })
+        })
+    }
+};

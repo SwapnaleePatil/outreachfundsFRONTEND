@@ -135,3 +135,38 @@ exports.rejectStudent=(req,res)=>{
     }
     res.status(200).send({"message":"success"});
 }
+
+exports.UpdateStudent=(req,res)=>{
+    let img = '';
+    console.log("body",req.body);
+    let body=JSON.parse(req.body.obj);
+    if (req.files && req.files !== null) {
+        img = req.files.photo.name;
+        let sample = req.files.photo;
+        sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
+            if (err) {
+                console.log("Error",err);
+            }
+        });
+    }
+    else {
+        img = req.body.photo;
+    }
+    body.photo=img;
+
+    Student.findByIdAndUpdate(body.id,{$set:body},{new:true})
+        .then((result) => {
+            console.log("result",result);
+            res.send({"message": 'Updated.', 'record': result});
+        }).catch((err) => {
+        console.log('Error in Update', err);
+    })
+}
+exports.updateSchool=(req,res)=>{
+    let body = req.body;
+    SchoolOrganisation.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
+        res.send({"message": 'Updated.', 'record': result});
+    }).catch((err) => {
+        console.log('Error in record updation', err);
+    })
+}

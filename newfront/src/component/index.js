@@ -14,7 +14,7 @@ import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
 import StudentDonation from './../donation/studentDonation/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
-
+import StudentProfile from '../students/components/studentProfile';
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
 
 class Main extends React.Component {
@@ -92,12 +92,13 @@ class Main extends React.Component {
                     <Private exact path="/home" component={BusinessList}/>
 
                     <Route exact path="/dashboard" component={DashBoard}/>
-                
-                    <Private exact path="/viewProfile" component={BusinessProfile}/>
+                    <Private exact path="/main/requests" component={AcceptSignupRequest}/>
 
-                      <Private exact path="/main/requests" component={AcceptSignupRequest}/>
+                    {/*<Private exact path="/viewProfile" component={BusinessProfile}/>*/}
+                    {/*<Private exact path="/editProfile" component={BusinessProfile}/>*/}
 
-                    <Private exact path="/editProfile" component={BusinessProfile}/>
+                    <Private exact path="/viewProfile" component={StudentProfile}/>
+                    <Private exact path="/editProfile" component={StudentProfile}/>
 
                 </Switch>
             </BrowserRouter>
