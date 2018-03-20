@@ -47,7 +47,6 @@ let name = e.target.name;
         }
 
        if (name === "businessPhone") {
- newfront/src/business/components/secondPage.js
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
                 this.setState({msg: "Enter Number between 6 to 13 digit"});
