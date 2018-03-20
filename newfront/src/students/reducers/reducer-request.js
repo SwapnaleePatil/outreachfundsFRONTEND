@@ -4,17 +4,23 @@ export default (state=[],action)=>{
             debugger;
             return action.payload;
         case "APPROVE_REQUEST":
-            var arr=action.payload;
-            for(let i=0;i<arr.length;i++){
-                arr=[...state].filter((req)=>req._id!==arr[i])
+            let approvedArr=action.payload;
+            let len=approvedArr.length;
+            let st=[...state];
+            debugger;
+            for(let i=0;i<len;i++){
+                st=st.filter((req)=>req._id!==approvedArr[i])
             }
-            return arr;
+            return st;
         case "REJECT_REQUEST":
-            var arr=action.payload;
-            for(let i=0;i<arr.length;i++){
-                arr=[...state].filter((req)=>req._id!==arr[i])
+            let rejectedArr=action.payload;
+            let l=rejectedArr.length;
+            let str=[...state];
+            debugger;
+            for(let i=0;i<l;i++){
+                str=str.filter((req)=>req._id!==rejectedArr[i])
             }
-            return arr;
+            return str;
         default:
             return state;
     }

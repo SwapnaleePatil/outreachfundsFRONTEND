@@ -16,6 +16,7 @@ exports.registerStudent=(req,res)=>{
     console.log("after json",body);
     let student=new Student(body);
     student.photo=sample.name;
+    console.log(student);
     if(req.body.schoolId!==undefined) {
         console.log("School Id - ",req.body.schoolId);
         console.log("in if");
