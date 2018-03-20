@@ -14,7 +14,7 @@ import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
 import StudentDonation from './../donation/studentDonation/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
-import ProfilePage from "../business/components/profilePage";
+
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
 
 class Main extends React.Component {

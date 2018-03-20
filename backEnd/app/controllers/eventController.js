@@ -3,17 +3,17 @@ exports.addeventSchedule = (req, res) => {
     let body = req.body;
     let neweventSchedule = new eventSchedule(body);
     neweventSchedule.save()
-        .then(()=>{
-           res.send({"message":'Inserted.', 'record': neweventSchedule})
+        .then(() => {
+            res.send({"message": 'Inserted.', 'record': neweventSchedule})
         })
         .catch((e) => {
-            console.log('error in inserting record.',e);
+            console.log('error in inserting record.', e);
         })
 }
 exports.deleteeventSchedule = (req, res) => {
-    eventSchedule.findByIdAndUpdate(req.body.id,{ $set:{status: 'true'}},{new:true}).then((result) => {
+    eventSchedule.findByIdAndUpdate(req.body.id, {$set: {status: 'true'}}, {new: true}).then((result) => {
         if (result) {
-            res.send({"message":'Deleted.', 'record': result});
+            res.send({"message": 'Deleted.', 'record': result});
         }
         else {
             res.send("User Not Found");
@@ -23,24 +23,32 @@ exports.deleteeventSchedule = (req, res) => {
     })
 }
 exports.updateeventSchedule = (req, res) => {
-    let body=req.body;
-    eventSchedule.findByIdAndUpdate(req.body.id, {$set: body},{new:true}).then((result) => {
+    let body = req.body;
+    eventSchedule.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
         console.log('Error in record updation', err);
     })
 }
 exports.fetch = (req, res) => {
-    eventSchedule.find({status:true}).then((data) => {
-        res.send({"message":'All Record.', 'record': data});
+    eventSchedule.find({status: true}).then((data) => {
+        res.send({"message": 'All Record.', 'record': data});
     }).catch((err) => {
         console.log('Error in retrieving data.', err);
     })
 }
 exports.fetchById = (req, res) => {
     eventSchedule.findById(req.body.id).then((data) => {
-        res.send({"message":'Record By Id.', 'record': data});
+        res.send({"message": 'Record By Id.', 'record': data});
     }).catch(() => {
         console.log('Error in retrieving data.');
     })
 };
+exports.fetchBySponser = (req, res) => {
+        let id=req.body.id;
+        eventSchedule.find({businessSponsor: id}).then((data) => {
+            res.send(data);
+        }).catch((err) => {
+                console.log("Error", err);
+            })
+}

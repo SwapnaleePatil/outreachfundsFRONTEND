@@ -141,11 +141,12 @@ businessOwnerSchema.pre('save',function (next) {
     else {
         next();
     }
-})
+});
+
 businessOwnerSchema.methods.generateAuthToken=function(){
-    var businessOwner=this;
-    var access='auth';
-    var token=jwt.sign(
+    let businessOwner=this;
+    let access='auth';
+    let token=jwt.sign(
         {
             _id:businessOwner._id.toHexString(),
             access
@@ -162,7 +163,7 @@ businessOwnerSchema.statics.findByToken=function(token) {
     let decoded='';
     try {
         decoded = jwt.verify(token, 'outreachfunds');
-    } catch (e) {
+          } catch (e) {
         console.log("Error :=", e);
     }
     return businessOwner.findOne({

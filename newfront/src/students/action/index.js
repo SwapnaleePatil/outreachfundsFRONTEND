@@ -14,7 +14,7 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        fetch(`http://localhost:${myport}/api/school`).then((response)=>{
+        fetch("http://localhost:3000/api/school").then((response)=>{
             return response.json();
         }).then((schools)=>{
             console.log("School",schools);
@@ -71,16 +71,18 @@ export const fetchStudent=()=>{
             'x-auth':localStorage.getItem('user')
         }
     }
-    return (dispatch=>{
-        return fetch(`http://localhost:${myport}/api/student`,data).then((response)=>{
+    return (dispatch)=>{
+        return fetch('http://localhost:3000/api/student',data).then((response)=>{
             return response.json();
-        }).then((user)=>{
-            if(user.roleTitle==='Admin')
-                dispatch(fetchSignupRequests(user.schoolId));
+        }).then((admin)=>{
+            dispatch({
+                type:'FETCH_STUDENT',
+                payload:admin
+            })
         }).catch((error)=>{
             console.log("Error : ",error);
         })
-    })
+    }
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
@@ -101,7 +103,7 @@ export const approveSignupRequests = (resultSet) => {
     var obj={
         "arr":arr
     }
-    var url=`http://localhost:${myport}/api/student/approve`;
+    var url=`http://localhost:3000/api/student/approve`;
     var data={
         method:'post',
         mode:'cors',
@@ -130,7 +132,7 @@ export const rejectSignupRequests = (resultSet) => {
     var obj={
         "arr":arr
     }
-    var url=`http://localhost:${myport}/api/student/reject`;
+    var url=`http://localhost:3000/api/student/reject`;
     var data={
         method:'post',
         mode:'cors',

@@ -9,7 +9,6 @@ import '../index.css'
 
 
 import {Route,NavLink} from 'react-router-dom'
-import ProfilePage from '../business/components/profilePage'
 
 
 class MainPage extends React.Component {

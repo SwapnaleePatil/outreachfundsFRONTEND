@@ -52,6 +52,7 @@ module.exports=(app,passport)=>{
     app.delete('/api/event', eventcontroller.deleteeventSchedule);
     app.put('/api/event',eventcontroller.updateeventSchedule);
     app.get('/api/event',eventcontroller.fetch);
+    app.post('/api/eventBySponser',eventcontroller.fetchBySponser);
 
     //Donation Routes
     app.post('/addDonation',donationController.addDonation);
