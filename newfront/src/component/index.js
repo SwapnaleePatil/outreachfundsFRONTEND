@@ -6,13 +6,13 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
-import DisplayForm from './../donation/donationComponent/addDonation'
+import DisplayForm from '../donation/Component/addDonation'
 import DashBoard from "./dashboard";
 import BusinessList from './businesslisting'
 import SignUp from './signup'
 import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
-import StudentDonation from './../donation/studentDonation/studentDonation'
+import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
 import ProfilePage from "../business/components/profilePage";
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';

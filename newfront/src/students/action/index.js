@@ -1,4 +1,4 @@
-import axiosI from '../../services/axiosInstance';
+import axiosI from '../../services/axiosInstance'
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -14,7 +14,7 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        fetch(`http://localhost:${myport}/api/school`).then((response)=>{
+        fetch(`http://localhost:3000/api/school`).then((response)=>{
             return response.json();
         }).then((schools)=>{
             console.log("School",schools);
@@ -31,7 +31,7 @@ export const fetchAllSchoolDetails = () => {
 export const registerStudent = (obj) => {
 debugger;
     return (dispatch)=>{
-        axiosI.post("http://localhost:3000/api/student/profile",obj).then((student)=>{
+        axiosI.post("/api/student/profile",obj).then((student)=>{
             debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
@@ -72,7 +72,7 @@ export const fetchStudent=()=>{
         }
     }
     return (dispatch=>{
-        return fetch(`http://localhost:${myport}/api/student`,data).then((response)=>{
+        return fetch(`/api/student`,data).then((response)=>{
             return response.json();
         }).then((user)=>{
             if(user.roleTitle==='Admin')
@@ -101,7 +101,7 @@ export const approveSignupRequests = (resultSet) => {
     var obj={
         "arr":arr
     }
-    var url=`http://localhost:${myport}/api/student/approve`;
+    var url=`/api/student/approve`;
     var data={
         method:'post',
         mode:'cors',
@@ -130,7 +130,7 @@ export const rejectSignupRequests = (resultSet) => {
     var obj={
         "arr":arr
     }
-    var url=`http://localhost:${myport}/api/student/reject`;
+    var url=`/api/student/reject`;
     var data={
         method:'post',
         mode:'cors',

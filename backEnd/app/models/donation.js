@@ -16,8 +16,8 @@ let donationSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         required:true
     },
-    organizationName:{
-        type:String,
+    organizationId:{
+        type:mongoose.Schema.ObjectId,
         required:true
     },
     location:{
