@@ -11,7 +11,6 @@ class SecondPage extends React.Component {
         super(props);
         this.state = {
             ownerData: [],
-
         }
     }
 
@@ -22,23 +21,19 @@ class SecondPage extends React.Component {
         businessFields(this.state.ownerData);
     }
     handleChange = (e) => {
-        console.log("Log", this.props)
         const {Fields} = this.props;
         const {name, value} = e.target;
         var {ownerData} = this.state;
         if (ownerData.length <= 0)
             ownerData = Fields;
         ownerData[name] = value;
-        this.setState({ownerData}, () => {
-            console.log("OwnerData", ownerData);
-        })
+        this.setState({ownerData})
     }
     chkValidation = (e) => {
-        // debugger
-        this.setState({msg: ""});
+         this.setState({msg: ""});
         let name = e.target.name;
         if (name === "businessName" || name === "businessType") {
-            let rename = /^([a-zA-Z])*$/;
+            let rename = /^([A-Za-z ])*$/;;
             if (!rename.test(e.target.value)) {
                 this.setState({msg: "Do not Enter Number Please"});
             }
@@ -49,8 +44,7 @@ class SecondPage extends React.Component {
                 this.setState({msg: "Email is InValid"});
             }
         }
-        // debugger
-        if (name === "businessPhone") {
+       if (name === "businessPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
                 this.setState({msg: "Enter Number between 6 to 13 digit"});
@@ -88,9 +82,7 @@ class SecondPage extends React.Component {
     }
 
     render() {
-        debugger
-
-        const {Fields} = this.props;
+       const {Fields} = this.props;
         if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
@@ -99,6 +91,11 @@ class SecondPage extends React.Component {
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
                         Information</label></Modal.Header>
+                        <div align="right">
+                            <Button onClick={()=>{
+                                window.location="/"}
+                            }
+                            >Close</Button></div>
                     <span style={{"color": "red"}}>{this.state.msg}</span></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
@@ -152,8 +149,8 @@ class SecondPage extends React.Component {
                             </tr>
                             <tr>
                                 <td><label>Address</label></td>
-                                <td><input className="form-control" value={ownerData.businessAddress}
-                                           onChange={this.handleChange} name="businessAddress" type="text"/></td>
+                                <td><textarea className="form-control" value={ownerData.businessAddress}
+                                           onChange={this.handleChange} name="businessAddress" /></td>
                             </tr>
                             <tr>
                                 <td><label>Tax Payer Id</label></td>
@@ -164,7 +161,7 @@ class SecondPage extends React.Component {
                                 <td><Button active type="button" bsStyle="info" onClick={this.handlePreviousPage}>
                                     Previous
                                 </Button></td>
-                                <td><Button active type="submit" bsStyle="info">Next</Button>
+                                 <td><Button active type="submit" bsStyle="info">Next</Button>
                                 </td>
                             </tr>
                             </tbody>
@@ -178,7 +175,6 @@ class SecondPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("Fields", state.businessFieldsRed)
     return {
         Page: state.businessSignUpRed,
         Fields: state.businessFieldsRed

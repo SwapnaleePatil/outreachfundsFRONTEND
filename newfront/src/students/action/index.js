@@ -1,3 +1,4 @@
+import axiosI from '../../services/axiosInstance';
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -28,23 +29,16 @@ export const fetchAllSchoolDetails = () => {
 }
 
 export const registerStudent = (obj) => {
-    console.log("formdata",obj);
-    var data={
-        mode:'cors',
-        body:obj,
-        method:'post'
-    }
+debugger;
     return (dispatch)=>{
-        return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            debugger;
-            console.log(response);
-            //return response.json();
-        }).then((student)=>{
+        axiosI.post("http://localhost:3000/api/student/profile",obj).then((student)=>{
             debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
-                payload:student
+                payload:student.data
             })
+            window.location = "/"
+
         }).catch = (error) =>{
             console.log("Error in Registeration of Student..",error)
         }
@@ -52,34 +46,54 @@ export const registerStudent = (obj) => {
 };
 
 export const registerSchool = (schoolObj,personalObj) => {
-    debugger;
     console.log("in school",schoolObj);
-    var data={
-        mode:'cors',
-        body:JSON.stringify(schoolObj),
-        method:'post',
-        headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-        }
-    }
+    debugger;
     return (dispatch)=>{
-        return fetch("http://localhost:3000/api/school",data).then((response)=>{
-            return response.json();
-        }).then((school)=>{
-            personalObj.append('schoolId',school.school._id)
-            //personalObj.schoolId=school.school._id;
+        axiosI.post("http://localhost:3000/api/school",schoolObj).then((school)=>{
             debugger;
+            personalObj.append('schoolId',school.data.school._id)
             dispatch(registerStudent(personalObj));
             debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
                 payload:school
-            })
+            });
+
         }).catch = (error) =>{
             console.log("Error in Registeration of School..",error)
         }
     }
-};
-
-
+}
+export const fetchStudent=()=>{
+    var data={
+        mode:'cors',
+        method:'get',
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch=>{
+        return fetch('http://localhost:3000/api/student',data).then((response)=>{
+            return response.json();
+        }).then((admin)=>{
+            console.log(admin);
+            dispatch(fetchSignupRequests(admin.schoolId));
+        }).catch((error)=>{
+            console.log("Error : ",error);
+        })
+    })
+}
+export const fetchSignupRequests = (schoolId) => {
+    return (dispatch)=>{
+        return fetch(`http://localhost:3000/api/students/${schoolId}`).then((response)=>{
+            return response.json();
+        }).then((requests)=>{
+            dispatch({
+                type:'FETCH_REGISTER_REQUEST',
+                payload:requests
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}

@@ -1,8 +1,9 @@
 
-import axios from 'axios';
+//import axiosI from 'axiosI';
+import axiosI from '../services/axiosInstance';
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
-        axios({method:'post',url:'http://localhost:3000/api/businessOwner/loginPassport',data}).then((response)=>{
+        axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
 
            if(response.data.message==="login successful"){
                 dispatch({
@@ -21,7 +22,7 @@ export const  businessLogin=(data)=>{
 };
 export const  studentLogin=(data)=>{
     return (dispatch)=>{
-        axios({method:'post',url:'http://localhost:3000/api/student/login',data}).then((response)=>{
+        axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
             if(response){
                 dispatch({
                     type:'STUDENT_LOGIN',
@@ -42,8 +43,9 @@ export const  studentLogin=(data)=>{
 };
 
 export const scheduleevents=(data)=>{
+    debugger;
     return(dispatch)=>{
-        axios({method:'post',url:'http://localhost:3000/api/event',data}).then((response)=>{
+        axiosI({method:'post',url:'api/event',data}).then((response)=>{
             if(response){
                 dispatch({
                     type:'SCHEDULE_EVENT',
@@ -59,7 +61,7 @@ export const scheduleevents=(data)=>{
 export const actionevents=(data)=>{
     return(dispatch)=>{
         debugger;
-        axios({method:'put',url:'http://localhost:3000/api/event',data}).then((response)=>{
+        axiosI({method:'put',url:'api/event',data}).then((response)=>{
             if(response){
                 dispatch({
                     type:'ACTION_ON_EVENT',
@@ -75,7 +77,7 @@ export const actionevents=(data)=>{
 
 export const eventslist=()=>{
     return(dispatch)=>{
-        axios({method:'get',url:'http://localhost:3000/api/event'}).then((response)=>{
+        axiosI({method:'get',url:'api/event'}).then((response)=>{
             if(response){
                 dispatch({
                     type:'EVENT_LIST',

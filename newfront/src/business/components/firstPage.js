@@ -46,7 +46,7 @@ class FirstPage extends React.Component {
             }
         }
         if (name === "firstName" || name === "lastName") {
-            let rename = /^([a-zA-Z])*$/;
+            let rename = /^([A-Za-z ])*$/;
             if (!rename.test(e.target.value)) {
                 this.setState({msg: "First Name Or Lastname Can't be Number"});
             }
@@ -60,7 +60,7 @@ class FirstPage extends React.Component {
             {
                 month="0"+month;
             }
-            let year=date.getFullYear()-10;
+            let year=date.getFullYear()-15;
             let dobdate=year+'-'+month+'-'+day;
             if(e.target.value>dobdate)
             {
@@ -72,8 +72,7 @@ class FirstPage extends React.Component {
         if (e.target.value === "") {
             this.setState({msg: ""});
         }
-        console.log("Msg", this.state.msg);
-    }
+        }
     handlePage = (e) => {
       e.preventDefault();
         if (this.state.msg !== "") {
@@ -93,14 +92,17 @@ class FirstPage extends React.Component {
         if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
-        console.log("dob",this.state.ownerData);
-        //let datadob=this.state.ownerData.dob.split("T");
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
                         Information</label></Modal.Header>
                         <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    <div align="right">
+                    <Button onClick={()=>{
+                        window.location="/"}
+                    }
+                    >Close</Button></div>
                     <div>
                         <Table hover bordered condensed responsive style={{"background-color": "white"}}>
                             <tbody>

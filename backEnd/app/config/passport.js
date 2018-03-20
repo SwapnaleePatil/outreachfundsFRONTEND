@@ -35,7 +35,6 @@ module.exports=(passport)=>{
 
     //Business
     passport.use('businessOwner',new LocalStrategy((username, password, done) => {
-        console.log('UserName and Password is:', username, password);
         businessOwner.findOne({email: username}, (err, user) => {
             if (err) {
                 console.log("Error", err);

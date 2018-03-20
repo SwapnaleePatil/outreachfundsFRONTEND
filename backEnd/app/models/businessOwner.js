@@ -154,7 +154,6 @@ businessOwnerSchema.methods.generateAuthToken=function(){
     ).toString();
     businessOwner.tokens.push({access,token});
     return businessOwner.save().then(()=>{
-        console.log("Token",token)
         return token;
     })
 }

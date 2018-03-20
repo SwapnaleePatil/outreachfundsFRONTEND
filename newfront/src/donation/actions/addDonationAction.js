@@ -1,8 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
+import axiosI from '../../services/axiosInstance';
 
 export const addDonationAction=(data)=>{
     return ((dispatch)=>{
-        axios.post('http://localhost:3400/addDonation',{data}).then((response)=>{
+        axiosI.post('addDonation',{data}).then((response)=>{
             dispatch({
                 type:'ADD_DONATION',
                 payload:response.data

@@ -1,8 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
+import axiosI from '../../services/axiosInstance';
 
 export const getDonationDataAction=()=>{
     return ((dispatch)=>{
-        axios.get('http://localhost:3400/getDonation').then((response)=>{
+        axiosI.get('getDonation').then((response)=>{
             dispatch({
                 type:'GET_DONATION',
                 payload:response.data
@@ -11,4 +12,4 @@ export const getDonationDataAction=()=>{
             console.log(err);
         })
     });
-}
+};

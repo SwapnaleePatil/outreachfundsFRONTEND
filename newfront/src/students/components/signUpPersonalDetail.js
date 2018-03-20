@@ -1,5 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
+import {Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import {signupPageAction,setSignupPageFieldsAction} from '../action';
 class SignUpPersonal extends React.Component{
@@ -84,29 +85,38 @@ class SignUpPersonal extends React.Component{
             this.state.personalData=signupPageFields;
         const {days,months,years,personalData}=this.state;
         return(
-                <div className={'container row'}>
-                    <form className={'col-sm-10'} encType={'multipart/form-data'}>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>First Name :</label>
-                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'First Name'} name={'firstName'} onChange={this.handleChange} value={personalData.firstName}/>
-                            <label className={'font-weight-bold col-sm-2'}>Last Name :</label>
-                            <input className={'form-control col-sm-4'} type={'text'} placeholder={'Last Name'} name={'lastName'} onChange={this.handleChange} value={personalData.lastName}/>
+            <div className={'col-sm-6 jumbotron col-sm-offset-3'}>
+                    <form className={'container col-sm-8 col-sm-offset-2'} encType={'multipart/form-data'}>
+                        <div className={'modal-header'}><h2>Personal Information</h2></div>
+                        <div align="right">
+                            <Button onClick={()=>{
+                                window.location="/"}
+                            }
+                            >Close</Button></div>
+                        <div className={'modal-body'}>
+                        <div className={'form-group'}>
+                            <label>First Name :</label>
+                            <input className={'form-control'} type={'text'} placeholder={'First Name'} name={'firstName'} onChange={this.handleChange} value={personalData.firstName}/>
                         </div>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>Email :</label>
-                            <input className={'form-control col-sm-10'} type={'text'} placeholder={'Email'} name={'email'} onChange={this.handleChange} value={personalData.email}/>
+                        <div className={'form-group'}>
+                            <label>Last Name :</label>
+                            <input className={'form-control'} type={'text'} placeholder={'Last Name'} name={'lastName'} onChange={this.handleChange} value={personalData.lastName}/>
                         </div>
-                        <div className="form-group radio form-inline">
-                            <label className={'font-weight-bold col-sm-2'}>Gender :</label>
-                            <label><input type="radio" name="gender" value={'Male'}  onChange={this.handleChange} checked={(personalData.gender==='Male')?'checked':''}/>Male</label>
-                            <label className={'col-sm-2'}><input type="radio" name="gender" value={'Female'}  onChange={this.handleChange} checked={(personalData.gender==='Female')?'checked':''}/>Female</label>
+                        <div className={'form-group'}>
+                            <label>Email :</label>
+                            <input className={'form-control'} type={'text'} placeholder={'Email'} name={'email'} onChange={this.handleChange} value={personalData.email}/>
                         </div>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>Password :</label>
-                            <input className={'form-control col-sm-10'} type={'password'} placeholder={'Password'} name={'password'} onChange={this.handleChange} value={personalData.password}/>
+                        <div className="form-group">
+                            <label>Gender :</label>
+                            <input type="radio" name="gender" value={'Male'}  onChange={this.handleChange} checked={(personalData.gender==='Male')?'checked':''}/>Male
+                            <input type={'radio'} name="gender" value={'Female'}  onChange={this.handleChange} checked={(personalData.gender==='Female')?'checked':''}/>Female
                         </div>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>Date of Birth :</label>
+                        <div className={'form-group'}>
+                            <label>Password :</label>
+                            <input className={'form-control'} type={'password'} placeholder={'Password'} name={'password'} onChange={this.handleChange} value={personalData.password}/>
+                        </div>
+                        <div className={'form-group'}>
+                            <label>Date of Birth :</label>
                             <label>DD<select className={'form-control'} name={'day'} onChange={this.handleChange} value={personalData.day}>
                                 {
                                     days.map((day)=>{
@@ -135,17 +145,18 @@ class SignUpPersonal extends React.Component{
                                 }
                             </select></label>
                         </div>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>Contact No. :</label>
-                            <input className={'form-control col-sm-10'} type={'text'} placeholder={'Contact No.'}name={'phone'} onChange={this.handleChange} value={personalData.phone}/>
+                        <div className={'form-group'}>
+                            <label>Contact No. :</label>
+                            <input className={'form-control'} type={'text'} placeholder={'Contact No.'}name={'phone'} onChange={this.handleChange} value={personalData.phone}/>
                         </div>
-                        <div className={'form-group form-inline row'}>
-                            <label className={'font-weight-bold col-sm-2'}>Profile Image :</label>
-                            <input className={'form-control col-sm-10'} type={'file'} name={'photo'} onChange={this.handleChange}/>
+                        <div className={'form-group'}>
+                            <label>Profile Image :</label>
+                            <input className={'form-control'} type={'file'} name={'photo'} onChange={this.handleChange}/>
                         </div>
-                        <button onClick={this.nextPage} className={'btn btn-primary float-right'}>Next</button>
+                        <Button bsStyle="primary" onClick={this.nextPage}>Next</Button>
+                        </div>
                     </form>
-                </div>
+                    </div>
         )
     }
 }

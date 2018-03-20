@@ -5,7 +5,7 @@ class Donation extends React.Component{
     }
     render(){
         return(
-            <div>donation</div>
+            <div>Comming Soon</div>
         )
     }
 }

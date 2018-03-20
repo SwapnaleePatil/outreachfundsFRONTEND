@@ -19,8 +19,7 @@ let eventSchema = new mongoose.Schema({
     },
     businessSponsor:
         {
-            type: mongoose.Schema.ObjectId,
-            ref: businessOwner,
+            type: Array,
             require: true
 
         },

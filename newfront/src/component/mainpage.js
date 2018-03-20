@@ -1,10 +1,16 @@
 import React from 'react'
+
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
 import {listBusiness} from '../business/action/index'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table} from 'react-bootstrap'
 import '../index.css'
+
+
+import {Route,NavLink} from 'react-router-dom'
+import ProfilePage from '../business/components/profilePage'
+
 
 class MainPage extends React.Component {
     constructor(){
@@ -21,6 +27,13 @@ class MainPage extends React.Component {
     componentWillReceiveProps(nextProps){
         this.state.data=nextProps.businessrecord
     }
+    logout=()=> {
+
+        localStorage.removeItem('user');
+        window.location = "/"
+    }
+
+
     searching = (e) => {
         this.setState({
             name:e.target.value
@@ -48,12 +61,7 @@ class MainPage extends React.Component {
         })
     };
     render() {
-        const logout = () => {
-            window.location = "/logout"
-        };
-        const about = () => (
-          window.location='/profile'
-        );
+
 
         return (
             <div>
@@ -84,11 +92,13 @@ class MainPage extends React.Component {
                         <Button bsSize="large" className="navclass-bs">
                             <Glyphicon glyph="glyphicon glyphicon-user">
                                 <NavDropdown eventKey={4} id="basic-nav-dropdown" title="" className="navclassa">
-                                    <MenuItem eventKey={4.1}>Edit Profile</MenuItem>
-                                    <MenuItem eventKey={4.2}>Availability</MenuItem>
-                                    <MenuItem eventKey={4.3}>Payments</MenuItem>
-                                    <MenuItem eventKey={4.4} onClick={about}>View Profile</MenuItem>
-                                    <MenuItem eventKey={4.5} onClick={logout}>Logout</MenuItem>
+                                    <MenuItem eventKey={4.1} ><NavLink to="/editProfile">Edit Profile</NavLink></MenuItem>
+                                    <MenuItem eventKey={4.2} ><NavLink to="/availability">Availability</NavLink></MenuItem>
+                                    <MenuItem eventKey={4.3}><NavLink to="/payment">Payments</NavLink></MenuItem>
+                                    <MenuItem eventKey={4.4} ><NavLink to="/viewProfile">View Profile</NavLink></MenuItem>
+                                    {/*<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>*/}
+                                    <MenuItem eventKey={4.6} onClick={this.logout}>Logout</MenuItem>
+
                                 </NavDropdown></Glyphicon></Button>
                     </Nav>
                 </Navbar>
