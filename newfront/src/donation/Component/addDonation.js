@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import './addDonation.css'
-import {Button, FormControl, FormGroup, HelpBlock, Table} from 'react-bootstrap';
+import './graph.css'
+import {Button,FormControl,FormGroup,HelpBlock,Table} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getEventDataAction} from '../actions/getEventsDataAction'
-// import {getOrganizationAndSchool} from './../actions/getDonationDataAction'
+import {getEventDataAction} from '../actions/index'
 import {fetchAllSchoolDetails} from './../../students/action/index'
-import {addDonationAction, getDonationAction, updateDonationAction} from './../actions/addDonationAction'
-import {FetchByToken} from '../actions/getUserAction'
+import {addDonationAction, getDonationAction, updateDonationAction} from '../actions/index'
+import {FetchByToken} from '../actions/index'
 
 class DisplayForm extends Component {
     constructor() {
@@ -15,11 +14,14 @@ class DisplayForm extends Component {
         this.state = {
             amount: "",
             eventName: "",
-            organizationName: "",
+            organizationId: "",
             allData: [],
             organizationNameArr: [],
             date: "",
-            location: ""
+            location: "",
+            donationData:[],
+            organizationName:"",
+            eventId:""
         }
     }
 
@@ -33,10 +35,23 @@ class DisplayForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         console.log(nextProps.donationData);
+
+        //display
+        let {donationData} = this.state;
+        donationData=[]
+        nextProps.donationData.forEach((rec)=>{
+            if(rec.businessId === (this.props.businessInfo.User && this.props.businessInfo.User._id)){
+                donationData.push(rec);
+            }
+        });
+        this.setState({
+            donationData
+        });
+
         let arr = nextProps.organizationData;
         let newarr;
         let final = [];
-        nextProps.eventsData.map((value) => {
+        nextProps.eventsData.forEach((value) => {
             newarr = arr.filter((school) => value.schoolOrganisation === school._id);
             final.push(newarr[0] && newarr[0].organisationName);
         });
@@ -54,30 +69,32 @@ class DisplayForm extends Component {
     onSubmit = () => {
         let status = false;
         let Udata = {};
-        let eid = "";
-        this.props.eventsData.map((value)=>{
+        let eventId = "";
+        let organizationId="";
+        this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
-                eid = value._id
+                eventId = value._id;
+                organizationId = value.schoolOrganisation;
             }
         });
         let data = {
             'eventDate': this.state.date,
             'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
-            'eventId': eid,
+            'eventId': eventId,
             'businessId':this.props.businessInfo.User._id,
-            'organizationName': this.state.organizationName,
+            'organizationId': organizationId,
             'location': this.state.location,
             'amount': Math.abs(Number(this.state.amount))
         };
         this.props.donationData.forEach((value) => {
-            if (this.state.eventId === value.eventId && this.state.organizationName === value.organizationName) {
+            if (eventId === value.eventId && organizationId === value.organizationId) {
                 value.amount = Number(value.amount) + Number(this.state.amount);
                 Udata = {
                     '_id': value._id,
                     'eventDate': this.state.date,
                     'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
-                    'eventId': eid,
-                    'organizationName': this.state.organizationName,
+                    'eventId': eventId,
+                    'organizationId': organizationId,
                     'location': this.state.location,
                     'amount': Math.abs(Number(value.amount)),
                     'status': false
@@ -107,7 +124,6 @@ class DisplayForm extends Component {
         this.setState({
             amount:""
         });
-
         document.getElementById('treventDate').style.visibility = "visible";
         document.getElementById('trorganizationName').style.visibility = "visible";
         document.getElementById('trlocation').style.visibility = "visible";
@@ -117,14 +133,16 @@ class DisplayForm extends Component {
         this.setState({
             date: this.props.eventsData[e.target.value].eventDate,
             eventName: this.props.eventsData[e.target.value].eventName,
-            organizationName: this.state.organizationNameArr[e.target.value],
-            location: this.props.eventsData[e.target.value].location
+            organizationId: this.props.eventsData[e.target.value].schoolOrganisation,
+            location: this.props.eventsData[e.target.value].location,
+            organizationName:this.state.organizationNameArr[e.target.value],
+            eventId:this.props.eventsData[e.target.value].eventId
         });
     };
     displayEvents = () => {
         let items = [];
         items.push(<option value="" selected={true} disabled={true} hidden={true}>Select Event</option>);
-        this.props.eventsData.map((value, index) => {
+        this.props.eventsData.forEach((value, index) => {
             items.push(<option value={index} key={index}>{value.eventName}</option>)
         });
         return items;
@@ -194,7 +212,7 @@ class DisplayForm extends Component {
                         <th>Status</th>
                     </tr>
                     {
-                        this.props.donationData.map((value, index) => {
+                        this.state.donationData.map((value, index) => {
                             return <tr>
                                 <td>{value.eventDate}</td>
                                 <td>
@@ -205,7 +223,13 @@ class DisplayForm extends Component {
                                             }
                                         })
                                 }</td>
-                                <td>{value.organizationName}</td>
+                                <td>{
+                                    this.props.organizationData.map((e)=>{
+                                        if(value.organizationId === e._id){
+                                            return e.organisationName
+                                        }
+                                    })
+                                }</td>
                                 <td>{value.location}</td>
                                 <td>{value.amount}</td>
                                 <td>{

@@ -84,6 +84,7 @@ class FourthPage extends React.Component {
             formData.append('obj', JSON.stringify(obj));
             formData.append('photo', ownerData.photo);
             this.props.addBusiness(formData);
+
         }
 
     }
@@ -141,6 +142,11 @@ this.setState({msg: ""});
                         Information</label></Modal.Header>
                         <span style={{"color": "red"}}>{this.state.msg}</span></div>
                     <div>
+                        <div align="right">
+                            <Button onClick={()=>{
+                                window.location="/"}
+                            }
+                            >Close</Button></div>
                         <Table hover bordered responsive style={{"background-color": "white"}}>
                             <tbody>
                             <tr>
@@ -166,7 +172,7 @@ this.setState({msg: ""});
                                         Year:<input value={ownerData.expireYear} className="form-control"
                                                     style={{"width": "20%"}}
                                                     onChange={this.handleChange} name="expireYear" type="number"
-                                                    min="2000" max="2032" required/></div>
+                                                    min="2020" max="2040" required/></div>
                                 </td>
                             </tr>
                             <tr>

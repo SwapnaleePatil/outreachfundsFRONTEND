@@ -8,9 +8,14 @@ const scheduleEvent=(state=[],action)=>{
             return action.payload
         case 'ACTION_ON_EVENT':
             debugger;
-           let id= state.map(x=>x._id).indexOf(action.payload._id)
-                state.splice(id, 1, action.payload);
-                return _.cloneDeep(state);
+            let eid= state.map(x=>x._id).indexOf(action.payload._id)
+              if(action.payload.status===false){
+                state.splice(eid,1);
+              }
+              else {
+                  state.splice(eid, 1, action.payload);
+              }
+              return _.cloneDeep(state);
         default:
             return state
     }

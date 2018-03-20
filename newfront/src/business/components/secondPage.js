@@ -94,6 +94,11 @@ let name = e.target.name;
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
                         Information</label></Modal.Header>
+                        <div align="right">
+                            <Button onClick={()=>{
+                                window.location="/"}
+                            }
+                            >Close</Button></div>
                     <span style={{"color": "red"}}>{this.state.msg}</span></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>

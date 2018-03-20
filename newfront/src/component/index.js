@@ -6,12 +6,13 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
-import DisplayForm from './../donation/donationComponent/addDonation'
+import DisplayForm from '../donation/Component/addDonation'
 import DashBoard from "./dashboard";
 import BusinessList from './businesslisting'
+import SignUp from './signup'
 import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
-import StudentDonation from './../donation/studentDonation/studentDonation'
+import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
 import ProfilePage from "../business/components/profilePage";
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
@@ -22,6 +23,37 @@ class Main extends React.Component {
             window.location="/"
                 localStorage.removeItem('user');
         };
+       const availability=()=> (
+            <div>
+                Comming Soon...
+            </div>
+
+        )
+        const aboutUs=()=> (
+            <div>
+                Comming Soon...
+            </div>
+
+        )
+       const contactUs=()=> (
+            <div>
+                Comming Soon...
+            </div>
+
+        )
+        const fundRaisingIdea=()=> (
+            <div>
+                Comming Soon...
+            </div>
+
+        )
+        const payment=()=> (
+            <div>
+                Comming Soon...
+            </div>
+
+        )
+
         const Private = ({...props}) => {
             return localStorage.getItem('user')?   <div>
                     <MainPage/>  <Route {...props}/></div> :
@@ -44,6 +76,14 @@ class Main extends React.Component {
                 <Switch>
                     <Private exact path="/logout" component={logout} />
                     <Public exact path="/" component={HomePage}/>
+                    <Private exact path="/availability" component={availability}/>
+
+                    <Private exact path="/payment" component={payment}/>
+                    <Public exact path="/aboutus" component={aboutUs}/>
+
+                    <Public exact path="/contactus" component={contactUs}/>
+                    <Public exact path="/fundideas" component={fundRaisingIdea}/>
+
                     <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/studentSignUp" component={StudentSignUpPage}/>
                     <Private exact path="/main/schedule" component={Schedule}/>

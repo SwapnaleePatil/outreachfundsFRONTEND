@@ -86,7 +86,8 @@ class AcceptSignupRequest extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        requests:state.requests
+        requests:state.requests,
+        studentLogged:state.studentLogged
     }
 }
 function matchDispatchToProps(dispatch) {

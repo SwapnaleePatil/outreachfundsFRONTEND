@@ -1,4 +1,5 @@
-import axios from 'axios';
+// import axios from 'axios';
+import axiosI from '../../services/axiosInstance';
 
 export const businessSignup=(page=1)=>{
         return {
@@ -15,18 +16,20 @@ export const businessFields=(obj=[])=>{
 };
 export const addBusiness=(obj)=>{
     return (dispatch)=>{
-        axios.post("http://localhost:3000/api/business/profile",obj).then((result)=>{
+        axiosI.post('/api/business/profile',obj).then((result)=>{
            dispatch({
                 type:'BUSINESS_ADD',
                 payload:result.data
             })
-            localStorage.setItem('user',result.data.record);
+            localStorage.setItem('user',result.data.record.tokens[0].token);
+            console.log("local",result.data);
+            window.location = "/home"
         })
     }
 };
 export const updateBusiness=(obj)=>{
     return (dispatch)=>{
-        axios.put("http://localhost:3000/api/business/profile",obj).then((result)=>{
+        axiosI.put('api/business/profile',obj).then((result)=>{
             dispatch({
                 type:'BUSINESS_UPDATE',
                 payload:result.data
@@ -35,8 +38,8 @@ export const updateBusiness=(obj)=>{
     }
 };
 export const listBusiness=()=>{
-return(dispatch)=>{
-axios.get("http://localhost:3000/api/business/profile").then((result)=>{
+        return(dispatch)=>{
+            axiosI.get('api/business/profile').then((result)=>{
             dispatch({
                 type:'BUSINESS_LIST',
                 payload:result.data.record

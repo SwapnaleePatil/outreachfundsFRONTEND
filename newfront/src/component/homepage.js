@@ -8,6 +8,12 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import '../index.css'
 import Modal from 'react-modal'
+import {NavLink} from 'react-router-dom'
+
+import BusinessFullPage from '../business/components/businessFullPage'
+import signUpPage from '../students/components/signUpPage'
+
+import SignUp from './signup'
 // import Login from './login'
 let message = "";
 
@@ -18,8 +24,11 @@ class HomePage extends React.Component {
             email: "",
             password: "",
             isActive: false,
+            isSActive:false,
             isRole: false,
             role: "",
+            sisRole:false,
+            srole:'',
             message: ""
         }
     }
@@ -71,12 +80,37 @@ class HomePage extends React.Component {
             isActive: !this.state.isActive
         })
     };
+
+    toggleSModal = () => {
+        this.setState({
+            isSActive: !this.state.isSActive
+        })
+    };
     toggleRole = () => {
         this.setState({
             isRole: !this.state.isRole
         })
     };
-
+    toggleSRole = () => {
+        this.setState({
+            sisRole: !this.state.sisRole
+        })
+    };
+    about=()=>(
+        <div>
+            Comming Soon...
+        </div>
+    )
+    contactus=()=>(
+        <div>
+            Comming Soon...
+        </div>
+    )
+    fundideas=()=>(
+        <div>
+            Comming Soon...
+        </div>
+    )
     render() {
         return (
             <section>
@@ -191,14 +225,48 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td align="center">
-                                    <h3><a href="">Sign Up</a></h3>
+                                    { this.state.role === "student" ?
+                                    <h3><a href="/main/studentSignUp">Sign Up</a></h3>:
+                                    <h3><a href="/main/businessSignUp">Sign Up</a></h3>
+                                        }
                                 </td>
                             </tr>
+
                             </tbody>
                         </Table>
                     </Modal>
 
+{/*sign up pages*/}
+                    <div>
 
+                        <Modal isOpen={this.state.sisRole} ariaHideApp={true} onRequestClose={this.toggleSRole}
+                               className="role-class">
+                            <Table bordered>
+                                <tbody>
+                                <tr>
+                                    <td align="center">
+                                        <Button bsSize="large" className="rolebtn" type="button" value="student"
+                                                onClick={() => {
+                                                    // this.setState({
+                                                    //     sisRole: false,
+                                                    //     srole: "student"
+                                                    // });
+                                                    // this.toggleSModal()
+                                                    window.location="/main/studentSignUp"
+                                                }}>I am Student</Button>
+                                    </td>
+                                    <td>
+                                        <Button bsSize="large" className="rolebtn" type="button" value="business"
+                                                onClick={() => {
+                                                window.location="/main/businessSignUp"
+                                                }}>I am Business Person</Button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </Table>
+                        </Modal>
+
+                    </div>
                     {/*header menu bar*/}
                     <div>
                         <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class">
@@ -208,16 +276,16 @@ class HomePage extends React.Component {
                                                  style={{width: 150, height: 100}} alt=""/></a>
                             </Navbar.Header>
                             <Nav pullRight>
-                                <NavItem className="navclassa" eventKey={1} href="/main/studentSignUp">
+                                <NavItem className="navclassa" eventKey={1} href="#" onClick={this.toggleSRole}>
                                     SignUp
                                 </NavItem>
                                 <NavItem eventKey={2} className="navclassa" href="#" onClick={this.toggleRole}>
                                     Login
                                 </NavItem>
                                 <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown" className="navclassa">
-                                    <MenuItem eventKey={3.1}>About Us</MenuItem>
-                                    <MenuItem eventKey={3.2}>Contact Us</MenuItem>
-                                    <MenuItem eventKey={3.3}>FundRising Ideas</MenuItem>
+                                    <MenuItem eventKey={3.1} ><NavLink to="/aboutus">About Us</NavLink></MenuItem>
+                                    <MenuItem eventKey={3.2}  ><NavLink to="/contactus">Contact Us</NavLink></MenuItem>
+                                    <MenuItem eventKey={3.3} ><NavLink to="/fundideas">Fund Raisinng Ideas</NavLink></MenuItem>
                                 </NavDropdown>
                             </Nav>
                         </Navbar></div>
@@ -227,21 +295,19 @@ class HomePage extends React.Component {
                                 <img width={1500} height={500} alt="1550x300" src={require('../images/school.png')}/>
                                 <Carousel.Caption>
                                     <h3>Student Fund Rising</h3>
-                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+
                                 </Carousel.Caption>
                             </Carousel.Item>
                             <Carousel.Item>
                                 <img width={1500} height={500} alt="900x500" src={require("../images/carosoul1.jpg")}/>
                                 <Carousel.Caption>
                                     <h3>Help to Develop School </h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                                 </Carousel.Caption>
                             </Carousel.Item>
                             <Carousel.Item>
                                 <img width={1500} height={500} alt="900x500" src={require("../images/carosoul2.jpg")}/>
                                 <Carousel.Caption>
                                     <h3>We togather can do it</h3>
-                                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
                                 </Carousel.Caption>
                             </Carousel.Item>
                         </Carousel>;

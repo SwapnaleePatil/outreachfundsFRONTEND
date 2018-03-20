@@ -98,6 +98,11 @@ class FirstPage extends React.Component {
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
                         Information</label></Modal.Header>
                         <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    <div align="right">
+                    <Button onClick={()=>{
+                        window.location="/"}
+                    }
+                    >Close</Button></div>
                     <div>
                         <Table hover bordered condensed responsive style={{"background-color": "white"}}>
                             <tbody>

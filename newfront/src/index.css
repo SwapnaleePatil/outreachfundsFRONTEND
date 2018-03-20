@@ -124,3 +124,14 @@ height: 43%;
 .schedule-class{
   padding-bottom: 50%;
 }
+.tbt{
+  margin: .5%;
+  width:3%;
+  height: 5%;
+}
+.approve-class{
+  color:green;
+}
+.pending-class{
+  color: red;
+}

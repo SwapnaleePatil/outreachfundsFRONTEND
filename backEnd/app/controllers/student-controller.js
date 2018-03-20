@@ -11,7 +11,9 @@ exports.registerStudent=(req,res)=>{
                 console.log(err);
             }
         });
+    console.log("before json",req.body);
     var body=JSON.parse(req.body.data);
+    console.log("after json",body);
     let student=new Student(body);
     student.photo=sample.name;
     console.log(student);

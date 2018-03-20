@@ -47,7 +47,12 @@ class ThirdPage extends React.Component {
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header></div>
+                        Information</label></Modal.Header>
+                        <div align="right">
+                            <Button onClick={()=>{
+                                window.location="/"}
+                            }
+                            >Close</Button></div></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>

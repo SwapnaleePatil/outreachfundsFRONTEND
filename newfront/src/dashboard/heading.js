@@ -3,9 +3,9 @@ import './heading.css'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {listBusiness} from './../business/action/index'
-import {getEventDataAction} from './../donation/actions/getEventsDataAction'
+import {getEventDataAction} from './../donation/actions/index'
 import {fetchAllSchoolDetails} from './../students/action/index'
-import {getDonationAction} from './../donation/actions/addDonationAction'
+import {getDonationAction} from '../donation/actions/index'
 import {fetchStudent} from '../students/action/index'
 
 class Heading extends Component {
