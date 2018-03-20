@@ -76,8 +76,11 @@ class SignUpSchool extends React.Component{
         else {
             registerStudent(formData);
         }
-        signupPageAction(1);
+
+
         setSignupPageFieldsAction();
+
+
     }
 
     previousPage=(e)=>{
@@ -131,6 +134,11 @@ class SignUpSchool extends React.Component{
             <div className={'col-sm-6 jumbotron col-sm-offset-3'}>
                 <form className={'container col-sm-8 col-sm-offset-2'}>
                     <div className={'modal-header'}><h2>School Information</h2></div>
+                    <div align="right">
+                        <Button onClick={()=>{
+                            window.location="/"}
+                        }
+                        >Close</Button></div>
                     <div className={'modal-body'}>
                     <div className={'form-group'}>
                         <label>School Name :</label>

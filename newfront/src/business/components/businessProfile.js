@@ -208,6 +208,8 @@ class BusinessProfile extends React.Component {
         let address = this.state.businessInfo && this.state.businessInfo.businessAddress.split(",");
         let isEditing = this.state.isEditing;
         return (
+            this.state.businessOwner!==""?
+
             <div className="container">
                 <div className="col-lg-12">
                     <div className="col-sm-4">
@@ -431,7 +433,7 @@ class BusinessProfile extends React.Component {
                         </fieldset>
                     </div>
                 </div>
-            </div>
+            </div>:<div>Comming Soon</div>
 
         );
     }

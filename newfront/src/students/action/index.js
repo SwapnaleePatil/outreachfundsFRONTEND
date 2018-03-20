@@ -1,4 +1,4 @@
-let myport=4000;
+import axiosI from '../../services/axiosInstance';
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -29,20 +29,16 @@ export const fetchAllSchoolDetails = () => {
 }
 
 export const registerStudent = (obj) => {
-    var data={
-        mode:'cors',
-        body:obj,
-        method:'post'
-    }
+debugger;
     return (dispatch)=>{
-
-        return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            return response;
-        }).then((student)=>{
+        axiosI.post("http://localhost:3000/api/student/profile",obj).then((student)=>{
+            debugger;
             dispatch({
                 type:'REGISTER_STUDENT',
-                payload:student
+                payload:student.data
             })
+            window.location = "/"
+
         }).catch = (error) =>{
             console.log("Error in Registeration of Student..",error)
         }
@@ -51,33 +47,24 @@ export const registerStudent = (obj) => {
 
 export const registerSchool = (schoolObj,personalObj) => {
     console.log("in school",schoolObj);
-    var data={
-        mode:'cors',
-        body:JSON.stringify(schoolObj),
-        method:'post',
-        headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-        }
-    }
     return (dispatch)=>{
-        return fetch(`http://localhost:${myport}/api/school`,data).then((response)=>{
-            return response.json();
-        }).then((school)=>{
-            personalObj.append('schoolId',school.school._id)
+        axiosI.post("http://localhost:3000/api/school",schoolObj).then((school)=>{
+            debugger;
+            personalObj.append('schoolId',school.data.school._id)
             dispatch(registerStudent(personalObj));
+            debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
                 payload:school
-            })
+            });
+
         }).catch = (error) =>{
             console.log("Error in Registeration of School..",error)
         }
     }
 }
 export const fetchStudent=()=>{
-    let data={
-
+    var data={
         mode:'cors',
         method:'get',
         headers:{
@@ -97,7 +84,7 @@ export const fetchStudent=()=>{
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
-        return fetch(`http://localhost:${myport}/api/students/${schoolId}`).then((response)=>{
+        return fetch(`http://localhost:3000/api/students/${schoolId}`).then((response)=>{
             return response.json();
         }).then((requests)=>{
             dispatch({
