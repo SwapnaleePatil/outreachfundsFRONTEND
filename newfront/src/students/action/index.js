@@ -1,4 +1,3 @@
-
 import axiosI from '../../services/axiosInstance'
 export const signupPageAction=(page=1)=>{
     return {
@@ -79,7 +78,7 @@ export const fetchStudent=()=>{
         }
     }
     return (dispatch=>{
-        axios.get(`http://localhost:4000/api/student`,data).then((user)=>{
+        axiosI.get(`/api/student`,data).then((user)=>{
             dispatch({
                 type:'FETCH_STUDENT',
                 payload:user.data
@@ -91,7 +90,7 @@ export const fetchStudent=()=>{
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
-        axios.get(`http://localhost:4000/api/students/${schoolId}`).then((requests)=>{
+        axiosI.get(`/api/students/${schoolId}`).then((requests)=>{
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests.data
@@ -110,7 +109,7 @@ export const approveSignupRequests = (resultSet) => {
     var url=`/api/student/approve`;
 
         return (dispatch) => {
-            axios.post(url, obj).then(() => {
+            axiosI.post(url, obj).then(() => {
                 dispatch({
                     type: 'APPROVE_REQUEST',
                     payload: arr
@@ -128,7 +127,7 @@ export const rejectSignupRequests = (resultSet) => {
     var url=`/api/student/reject`;
 
         return (dispatch) => {
-            axios.post(url, obj).then(() => {
+            axiosI.post(url, obj).then(() => {
                 debugger;
                 dispatch({
                     type: 'REJECT_REQUEST',
