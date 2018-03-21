@@ -1,4 +1,4 @@
-import axiosI from '../../services/axiosInstance';
+import axiosI from '../../services/axiosInstance'
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -48,12 +48,10 @@ export const registerSchool = (schoolObj,personalObj) => {
         axiosI.post("api/school",schoolObj).then((school)=>{
             personalObj.append('schoolId',school.data.school._id)
             dispatch(registerStudent(personalObj));
-            debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
                 payload:school.data
             });
-
         }).catch = (error) =>{
             console.log("Error in Registeration of School..",error)
         }
@@ -123,6 +121,7 @@ export const FetchAllStudents = () => {
     }
 }
 export const approveSignupRequests = (resultSet) => {
+    console.log(resultSet);
     let arr=[...resultSet];
     let obj={
         "arr":arr
