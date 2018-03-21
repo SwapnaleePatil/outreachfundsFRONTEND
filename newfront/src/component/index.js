@@ -87,11 +87,11 @@ class Main extends React.Component {
                     <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/studentSignUp" component={StudentSignUpPage}/>
                     <Private exact path="/main/schedule" component={Schedule}/>
-                    <Route exact path="/main/donation" component={Donation}/>
-                    <Route exact path="/main/studentdonation" component={StudentDonation}/>
+                    <Private exact path="/main/donation" component={Donation}/>
+                    <Private exact path="/main/studentdonation" component={StudentDonation}/>
                     <Private exact path="/home" component={BusinessList}/>
 
-                    <Route exact path="/dashboard" component={DashBoard}/>
+                    <Private exact path="/dashboard" component={DashBoard}/>
                 
                     <Private exact path="/viewProfile" component={BusinessProfile}/>
 

@@ -4,9 +4,10 @@ import {BarChart} from 'react-easy-chart'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {getDonationAction} from '../actions/index'
+import {FetchAllStudents} from '../../students/action/index'
 
 
-class Graph extends Component {
+class StudentGraph extends Component {
     constructor(){
         super();
         this.state={
@@ -20,17 +21,18 @@ class Graph extends Component {
         };
     }
     componentDidMount(){
-
+        this.props.FetchAllStudents();
         this.props.getDonationAction();
 
     }
     componentWillReceiveProps(nextProps){
-
+        console.log('All Students',nextProps.students);
         let {graphData} = this.state;
         graphData=[];
-        console.log('a',this.props.businessInfo.User && this.props.businessInfo.User._id);
+        // const temp = nextProps.students[0];
+        console.log('asd',nextProps.students[0] && nextProps.students[0].schoolId);
         nextProps.donationData.forEach((rec)=>{
-            if(rec.businessId === (this.props.businessInfo.User && this.props.businessInfo.User._id)){
+            if(rec.organizationId === (nextProps.students[0] && nextProps.students[0].schoolId)){
                 graphData.push(rec);
             }
         });
@@ -118,14 +120,16 @@ class Graph extends Component {
 function mapStateToProps(state) {
     return {
         donationData: state.donation,
-        businessInfo:state.businessInfo
+        businessInfo:state.businessInfo,
+        students:state.students
     };
 }
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         getDonationAction,
+        FetchAllStudents
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Graph)
+export default connect(mapStateToProps, matchDispatchToProps)(StudentGraph)

@@ -7,16 +7,42 @@ import {approveDonation} from '../actions/index'
 import {FetchStudent} from './../actions/index'
 import {getEventDataAction} from '../actions/index'
 import {fetchAllSchoolDetails} from '../../students/action/index'
+import StudentGraph from './studentGraph'
+// import {FetchAllStudents} from '../../students/action/index'
+
 
 class StudentDonation extends Component{
+    constructor(){
+        super();
+        this.state={
+            donationData:[],
+            editable:false
+        }
+    }
     componentDidMount(){
+        // this.props.FetchAllStudents();
         this.props.getDonationAction();
         this.props.FetchStudent();
         this.props.getEventDataAction();
         this.props.fetchAllSchoolDetails();
     };
     componentWillReceiveProps(nextProps){
-        console.log('req',nextProps.organizationData);
+        let {donationData,editable} = this.state;
+        donationData=[];
+        editable=false;
+        nextProps.donationData.forEach((rec,index)=>{
+            if(rec.organizationId === (nextProps.studentLogged.data && nextProps.studentLogged.data.schoolId)){
+                console.log('Logged In Student',nextProps.studentLogged.data.roleTitle);
+                if(nextProps.studentLogged.data.roleTitle === 'Admin'){
+                    editable=true;
+                }
+                donationData.push(rec);
+            }
+        });
+        this.setState({
+            donationData,
+            editable
+        })
 
     }
     Approved=(id)=>{
@@ -41,7 +67,7 @@ class StudentDonation extends Component{
                             <th>Amount</th>
                         </tr>
                         {
-                            this.props.donationData.map((value,index)=>{
+                            this.state.donationData.map((value,index)=>{
                                 return<tr>
                                     <td>{value.donationDate}</td>
                                     <td>{
@@ -72,7 +98,7 @@ class StudentDonation extends Component{
                                             value.status?
                                                 <Button>Approved</Button>
                                                 :
-                                                <Button onClick={()=>{this.Approved(value._id)}}>Pending</Button>
+                                                <Button onClick={()=>{this.Approved(value._id)}} disabled={!this.state.editable}>Pending</Button>
                                         }
                                     </td>
                                 </tr>
@@ -81,7 +107,7 @@ class StudentDonation extends Component{
                     </Table>
                 </div>
                 <div className="col-sm-6">
-                    <h2>Donation Graph</h2>
+                    <StudentGraph/>
                 </div>
 
             </div>
@@ -96,7 +122,8 @@ function mapStateToProps(state){
         studentLogged:state.studentLogged,
         organizationData:state.schools,
         businessInfo:state.businessInfo,
-        eventsData:state.events
+        eventsData:state.events,
+        students:state.students
     };
 }
 function matchDispatchToProps(dispatch){

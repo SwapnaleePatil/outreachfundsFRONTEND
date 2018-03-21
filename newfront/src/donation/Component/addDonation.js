@@ -52,6 +52,7 @@ class DisplayForm extends Component {
         let newarr;
         let final = [];
         nextProps.eventsData.forEach((value) => {
+
             newarr = arr.filter((school) => value.schoolOrganisation === school._id);
             final.push(newarr[0] && newarr[0].organisationName);
         });
@@ -71,12 +72,14 @@ class DisplayForm extends Component {
         let Udata = {};
         let eventId = "";
         let organizationId="";
+        debugger;
         this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
                 eventId = value._id;
                 organizationId = value.schoolOrganisation;
             }
         });
+        console.log('business Info',this.props.businessInfo);
         let data = {
             'eventDate': this.state.date,
             'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
@@ -87,7 +90,7 @@ class DisplayForm extends Component {
             'amount': Math.abs(Number(this.state.amount))
         };
         this.props.donationData.forEach((value) => {
-            if (eventId === value.eventId && organizationId === value.organizationId) {
+            if (eventId === value.eventId && this.props.businessInfo.User._id === value.businessId) {
                 value.amount = Number(value.amount) + Number(this.state.amount);
                 Udata = {
                     '_id': value._id,
@@ -110,7 +113,7 @@ class DisplayForm extends Component {
             this.props.addDonationAction(data);
         }
     };
-    donate = (value, index) => {
+    /*donate = (value, index) => {
 
         this.setState({
             date: value.eventDate,
@@ -118,7 +121,7 @@ class DisplayForm extends Component {
             organizationName: this.state.organizationNameArr[index],
             location: value.location
         });
-    };
+    };*/
     onEventChange = (e) => {
 
         this.setState({
@@ -231,7 +234,7 @@ class DisplayForm extends Component {
                                     })
                                 }</td>
                                 <td>{value.location}</td>
-                                <td>{value.amount}</td>
+                                <td>{`$ ${value.amount}`}</td>
                                 <td>{
                                     value.status ?
                                         <b>Confirmed</b>

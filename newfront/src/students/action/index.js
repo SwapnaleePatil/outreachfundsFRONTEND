@@ -101,6 +101,25 @@ export const fetchSignupRequests = (schoolId) => {
         }
     }
 }
+export const FetchAllStudents = () => {
+    let data={
+        mode:'cors',
+        method:'get',
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch)=>{
+        return axiosI.get(`api/students`,data).then((response)=>{
+            dispatch({
+                type:'GET_STUDENTS',
+                payload:response.data
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
 export const approveSignupRequests = (resultSet) => {
     console.log(resultSet);
     let arr=[...resultSet];
