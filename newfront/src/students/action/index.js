@@ -12,9 +12,10 @@ export const setSignupPageFieldsAction=(obj=[])=>{
     }
 }
 
+
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        axiosI.get(`/api/school`).then((schools)=>{
+        axiosI.get(`api/school`).then((schools)=>{
             console.log("School",schools);
             dispatch({
                 type:'FETCH_SCHOOLS',
@@ -28,7 +29,7 @@ export const fetchAllSchoolDetails = () => {
 
 export const registerStudent = (obj) => {
     return (dispatch)=>{
-        axiosI.post("/api/student/profile",obj).then((student)=>{
+        axiosI.post("api/student/profile",obj).then((student)=>{
             dispatch({
                 type:'REGISTER_STUDENT',
                 payload:student.data
@@ -44,7 +45,7 @@ export const registerStudent = (obj) => {
 export const registerSchool = (schoolObj,personalObj) => {
     console.log("in school",schoolObj);
     return (dispatch)=>{
-        axiosI.post("/api/school",schoolObj).then((school)=>{
+        axiosI.post("api/school",schoolObj).then((school)=>{
             personalObj.append('schoolId',school.data.school._id)
             dispatch(registerStudent(personalObj));
             debugger;
@@ -65,7 +66,7 @@ export const fetchAdmin=()=>{
         }
     }
     return (dispatch=>{
-        axiosI.get(`/api/student`,data).then((user)=>{
+        axiosI.get(`api/student`,data).then((user)=>{
             if(user.data.roleTitle==='Admin')
                 dispatch(fetchSignupRequests(user.data.schoolId));
         }).catch((error)=>{
@@ -80,7 +81,7 @@ export const fetchStudent=()=>{
         }
     }
     return (dispatch)=>{
-        axios.get(`http://localhost:4000/api/student`,data).then((user)=>{
+        axiosI.get(`api/student`,data).then((user)=>{
             dispatch({
                 type:'FETCH_STUDENT',
                 payload:user.data
@@ -92,7 +93,7 @@ export const fetchStudent=()=>{
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
-        axios.get(`http://localhost:4000/api/students/${schoolId}`).then((requests)=>{
+        axiosI.get(`api/students/${schoolId}`).then((requests)=>{
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests.data
@@ -123,13 +124,13 @@ export const FetchAllStudents = () => {
 }
 export const approveSignupRequests = (resultSet) => {
     let arr=[...resultSet];
-    var obj={
+    let obj={
         "arr":arr
     }
-    var url=`/api/student/approve`;
+    let url=`api/student/approve`;
 
         return (dispatch) => {
-            axios.post(url, obj).then(() => {
+            axiosI.post(url, obj).then(() => {
                 dispatch({
                     type: 'APPROVE_REQUEST',
                     payload: arr
@@ -141,13 +142,13 @@ export const approveSignupRequests = (resultSet) => {
 }
 export const rejectSignupRequests = (resultSet) => {
     let arr=[...resultSet];
-    var obj={
+    let obj={
         "arr":arr
     }
-    var url=`/api/student/reject`;
+    let url=`api/student/reject`;
 
         return (dispatch) => {
-            axios.post(url, obj).then(() => {
+            axiosI.post(url, obj).then(() => {
                 debugger;
                 dispatch({
                     type: 'REJECT_REQUEST',

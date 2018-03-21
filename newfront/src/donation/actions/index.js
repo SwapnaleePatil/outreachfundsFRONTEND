@@ -23,7 +23,7 @@ export const getDonationAction=()=>{
             });
         }).catch((err)=>{console.log(err)})
     });
-}
+};
 export const approveDonation=(data)=>{
     console.log(data)
     return ((dispatch)=>{
@@ -72,7 +72,7 @@ export const getEventDataAction=()=>{
             console.log(err);
         })
     });
-}
+};
 
 export const FetchByToken=()=>{
     let data={
@@ -81,7 +81,7 @@ export const FetchByToken=()=>{
         headers:{
             'x-auth':localStorage.getItem('user')
         }
-    }
+    };
     return ((dispatch)=>{
         axiosI.get('api/business/profile/fetchByToken',data).then((response)=>{
             return (dispatch({
@@ -92,7 +92,7 @@ export const FetchByToken=()=>{
             console.log(err);
         })
     });
-}
+};
 
 export const FetchStudent=()=>{
     let data={
@@ -112,4 +112,4 @@ export const FetchStudent=()=>{
             console.log("Error : ",error);
         })
     })
-}
+};

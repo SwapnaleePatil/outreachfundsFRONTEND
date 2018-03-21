@@ -14,6 +14,7 @@ import eventReducer from './../donation/reducers/eventReducer';
 import getBusiness from './../donation/reducers/getBusinessId';
 import studentLogged from '../donation/reducers/studentLogged';
 
+import scheduleEventBySponser from './eventsponser'
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
     blogin:businesslogin,
@@ -22,6 +23,7 @@ const rootreducer=combineReducers({
     signupPage:signupPageReducer,
     signupPageFields:signupPageFieldsReducer,
     scheduleevent:scheduleEvent,
+    eventsbysponser:scheduleEventBySponser,
     students:studentReducer,
     requests:requestReducer,
     schools:schoolReducer,

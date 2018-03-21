@@ -11,7 +11,6 @@ module.exports=(app,passport)=>{
     app.put('/api/school',studentController.updateSchool);
 
     //Student Routes
-
     app.post('/api/student/profile',studentController.registerStudent);
     app.put('/api/student/profile',studentController.UpdateStudent);
     app.post('/api/student/approve',studentController.approveStudent);
