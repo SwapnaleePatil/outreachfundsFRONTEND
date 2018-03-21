@@ -1,50 +1,86 @@
 import React from 'react';
+import {bindActionCreators} from 'redux';
 import {Glyphicon, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import './businessCSS.css';
-import {listBusiness, updateBusiness} from '../action/index';
-import {bindActionCreators} from 'redux';
-
-class BusinessProfile extends React.Component {
-    constructor(props) {
-        super(props);
+import '../../business/components/businessCSS.css';
+import {fetchStudent} from '../action/index'
+import {fetchAllSchoolDetails} from '../action/index'
+import {updateSchool} from '../action/index'
+import {updateStudent} from '../action/index'
+class StudentProfile extends React.Component {
+    constructor() {
+        super();
         this.state = {
-            owner: [],
-            businessOwner: '',
-            businessInfo: '',
+            student: {},
+            school: [],
+            selectedSchool: '',
             isEditing: false,
             msg: '',
             changeimg: false,
             previewFile: ''
         }
-        console.log("Props",props)
     }
-
     componentWillReceiveProps(nextProps) {
         this.setState({
-            owner: nextProps.List,
+            school: nextProps.School,
+            student: nextProps.Student,
             isEditing: nextProps.location.pathname.includes('edit') ? true : false
-        }, () => {
-            this.getOwner();
-        });
-    }
 
+        }, () => {
+            console.log("Props", this.state.school)
+            this.getSchool();
+        })
+
+    }
     componentWillMount() {
-        this.getOwner();
-        if (this.props.List.length !== 0) {
+        this.setState({
+            student: this.props.Student
+        });
+        if (this.props.School.length > 0) {
             this.setState({
-                owner: this.props.List
+                school: this.props.School
+            }, () => {
+                this.getSchool();
+                console.log("School in mount", this.props.School);
             })
         }
         else {
-            this.props.listBusiness();
+            this.props.fetchAllSchoolDetails();
+            this.props.fetchStudent();
         }
         this.setState({
             isEditing: this.props.location.pathname.includes('edit') ? true : false
         })
-
     }
+    getSchool = () => {
+        let {selectedSchool} = this.state;
+        this.state.school.map((value) => {
+            if (value._id === this.props.Student.schoolId) {
+                selectedSchool = value;
+            }
+        })
+        this.setState({selectedSchool}, () => {
+            console.log("School", this.state.selectedSchool)
+        })
+    }
+    handleChange = (e) => {
+        let {name, value} = e.target;
+        const {student} = this.state;
 
+        if (name === "photo") {
+            student[name] = e.target.files[0];
+        }
+        else {
+            student[name] = value;
+        }
+        this.setState({student})
+    }
+    handleorganisationDetail = (e) => {
+        let {name, value} = e.target;
+        const {selectedSchool} = this.state;
+        selectedSchool[name] = value;
+        this.setState({selectedSchool})
+    }
     chkValidation = (e) => {
         this.setState({msg: ""});
         let name = e.target.name;
@@ -54,7 +90,7 @@ class BusinessProfile extends React.Component {
                 this.setState({msg: "Email is InValid"});
             }
         }
-        if (name === "businessEmail") {
+        if (name === "organisationEmail") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
                 this.setState({msg: "Email is InValid"});
@@ -67,13 +103,13 @@ class BusinessProfile extends React.Component {
                 this.setState({msg: "Enter Number between 6 to 13 digit"});
             }
         }
-        if (name === "businessPhone") {
+        if (name === "organisationPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
                 this.setState({msg: "Enter Number between 6 to 13 digit"});
             }
         }
-        if (name === "firstName" || name === "lastName" || name === "businessName" || name === "businessType") {
+        if (name === "firstName" || name === "lastName" || name === "organisationName" || name === "schoolName" || name === "roleTitle") {
             let rename = /^([A-Za-z ])*$/;
             ;
             if (!rename.test(e.target.value)) {
@@ -99,95 +135,6 @@ class BusinessProfile extends React.Component {
             this.setState({msg: ""});
         }
     }
-    getOwner = () => {
-        let {businessOwner} = this.state;
-        let {businessInfo} = this.state;
-        this.props.List.map((value, index) => {
-            if (value.tokens[0].token === localStorage.getItem('user')) {
-                businessOwner = value;
-                businessInfo = value.businessInfo;
-
-            }
-            this.setState({businessOwner, businessInfo})
-        })
-    }
-    handleChange = (e) => {
-        let {name, value} = e.target;
-        const {businessOwner} = this.state;
-
-        if (name === "photo") {
-            businessOwner[name] = e.target.files[0];
-        }
-        else {
-            businessOwner[name] = value;
-        }
-        this.setState({businessOwner})
-    }
-    handlebusinessDetail = (e) => {
-        let {name, value} = e.target;
-        const {businessInfo} = this.state;
-        if (name === "businessHour") {
-            let hour = businessInfo.businessHours.split(':');
-            if (value <= 9) {
-                hour[0] = "0" + value;
-            }
-            else {
-                hour[0] = value;
-            }
-            businessInfo.businessHours = hour.join(':');
-        }
-        else if (name === "businessMinute") {
-            let hour = businessInfo.businessHours.split(':');
-            if (value <= 9) {
-                hour[1] = "0" + value;
-            }
-            else {
-                hour[1] = value;
-            }
-            businessInfo.businessHours = hour.join(':')
-        }
-        else {
-            businessInfo[name] = value;
-        }
-        this.setState({businessInfo})
-    }
-    updateRecord = (e) => {
-        e.preventDefault();
-        if (this.state.msg !== "") {
-            this.setState({
-                msg: "Please Fill Valid Information"
-            })
-        }
-        else {
-            let {businessInfo, businessOwner} = this.state;
-            let obj = {
-                id: businessOwner._id,
-                firstName: businessOwner.firstName,
-                lastName: businessOwner.lastName,
-                gender: businessOwner.gender,
-                dob: businessOwner.dob,
-                email: businessOwner.email,
-                phone: businessOwner.phone,
-                photo: businessOwner.photo,
-                businessInfo: {
-                    businessName: businessInfo.businessName,
-                    businessType: businessInfo.businessType,
-                    businessHours: businessInfo.businessHours,
-                    businessAddress: businessInfo.businessAddress,
-                    businessPhone: businessInfo.businessPhone,
-                    businessEmail: businessInfo.businessEmail,
-                },
-            }
-            let formData = new FormData();
-            formData.append('obj', JSON.stringify(obj));
-            formData.append('photo', businessOwner.photo);
-            this.props.updateBusiness(formData);
-            this.setState({
-                isEditing: false,
-            })
-            this.props.history.push('/viewProfile')
-        }
-    }
     handleimg = (e) => {
         e.preventDefault();
         this.setState({
@@ -195,7 +142,7 @@ class BusinessProfile extends React.Component {
         })
         let reader = new FileReader();
         let file = e.target.files[0];
-         reader.onloadend = () => {
+        reader.onloadend = () => {
             this.setState({
                 photo: file,
                 previewFile: reader.result
@@ -203,15 +150,55 @@ class BusinessProfile extends React.Component {
         };
         reader.readAsDataURL(file);
     }
+    updateRecord = (e) => {
+        debugger
+        e.preventDefault();
+        if (this.state.msg !== "") {
+            this.setState({
+                msg: "Please Fill Valid Information"
+            })
+        }
+        else
+        {
+                let {student,selectedSchool}=this.state;
+                let studentObj={
+                    id:student._id,
+                    firstName:student.firstName,
+                    lastName:student.lastName,
+                    gender:student.gender,
+                    dob:student.dob,
+                    email:student.email,
+                    phone:student.phone,
+                    roleTitle:student.roleTitle,
+                    schoolId:student.schoolId
+                };
+                let schoolObj={
+                    id:student.schoolId,
+                    schoolName:selectedSchool.schoolName,
+                    organisationName:selectedSchool.organisationName,
+                    organisationEmail:selectedSchool.organisationEmail,
+                    organisationAddress:selectedSchool.organisationAddress,
+                    organisationContact:selectedSchool.organisationContact
+                }
+            let formData = new FormData();
+            formData.append('obj', JSON.stringify(studentObj));
+            formData.append('photo', student.photo);
 
+            this.props.updateSchool(schoolObj);
+            this.props.updateStudent(formData);
+            this.setState({
+                isEditing: false,
+            })
+            this.props.history.push('/viewStudentProfile');
+        }
+    }
     render() {
-        let businessOwner = this.state.businessOwner;
-        let businessInfo = this.state.businessInfo;
-        let address = this.state.businessInfo && this.state.businessInfo.businessAddress.split(",");
+        let student = this.state.student;
+        let selectedSchool = this.state.selectedSchool;
         let isEditing = this.state.isEditing;
-        return (
-            this.state.businessOwner!==""?
+        let address = this.state.selectedSchool.organisationAddress && this.state.selectedSchool.organisationAddress.split(",");
 
+        return (
             <div className="container">
                 <div className="col-lg-12">
                     <div className="col-sm-4">
@@ -222,7 +209,7 @@ class BusinessProfile extends React.Component {
                                                             style={{"width": "100%", "height": "100%"}}/>
                                     :
                                     <img className="image"
-                                         src={"http://localhost:3000/uploads/" + businessOwner.photo}
+                                         src={"http://localhost:3000/uploads/" + student.photo}
                                          style={{"width": "100%", "height": "100%"}}/>
 
                             }
@@ -237,11 +224,10 @@ class BusinessProfile extends React.Component {
                                 </div>
                             </div>}
                         </div>
-
                     </div>
                     <div className="col-sm-8">
                         <fieldset>
-                            <legend style={{"color": "darkgreen"}}>Owner Details{' '}<span
+                            <legend style={{"color": "darkgreen"}}>Student Details{' '}<span
                                 style={{"color": "red"}}>{this.state.msg}</span></legend>
                             <table style={{"width": "100%"}}>
                                 <tr>
@@ -250,18 +236,18 @@ class BusinessProfile extends React.Component {
                                         isEditing ?
                                             <div className="form-inline">
                                                 <input className="form-control edittd" type="text" name="firstName"
-                                                       value={businessOwner.firstName} required onChange={(e) => {
+                                                       value={student.firstName} required onChange={(e) => {
                                                     this.handleChange(e);
                                                     this.chkValidation(e)
                                                 }}/>
                                                 <input className="form-control edittd" required type='text'
                                                        name='lastName'
-                                                       value={businessOwner.lastName} onChange={(e) => {
+                                                       value={student.lastName} onChange={(e) => {
                                                     this.handleChange(e)
                                                     this.chkValidation(e);
                                                 }}/>
                                             </div>
-                                            : businessOwner.firstName + " " + businessOwner.lastName
+                                            : student.firstName + " " + student.lastName
                                     }
                                     </td>
                                 </tr>
@@ -271,12 +257,12 @@ class BusinessProfile extends React.Component {
                                         isEditing ?
                                             <div>
                                                 <input className="form-control edittd" type='email' name='email'
-                                                       value={businessOwner.email} required onChange={(e) => {
+                                                       value={student.email} required onChange={(e) => {
                                                     this.handleChange(e);
                                                     this.chkValidation(e);
                                                 }}/>
                                             </div>
-                                            : businessOwner.email}</td>
+                                            : student.email}</td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Date Of Birth</td>
@@ -284,13 +270,13 @@ class BusinessProfile extends React.Component {
                                         isEditing ?
                                             <div>
                                                 <input className="form-control edittd" type='date' name='dob'
-                                                       value={businessOwner.dob && businessOwner.dob.split("T")[0]}
+                                                       value={student.dob && student.dob.split("T")[0]}
                                                        onChange={(e) => {
                                                            this.handleChange(e);
                                                            this.chkValidation(e);
                                                        }} required/>
                                             </div>
-                                            : businessOwner.dob && businessOwner.dob.split("T")[0]}</td>
+                                            : student.dob && student.dob.split("T")[0]}</td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Phone</td>
@@ -298,27 +284,41 @@ class BusinessProfile extends React.Component {
                                         isEditing ?
                                             <div>
                                                 <input className="form-control edittd" type='number' name='phone'
-                                                       value={businessOwner.phone && businessOwner.phone}
+                                                       value={student.phone && student.phone}
                                                        onChange={(e) => {
                                                            this.handleChange(e);
                                                            this.chkValidation(e);
                                                        }} required/>
                                             </div>
-                                            : businessOwner.phone && businessOwner.phone}</td>
+                                            : student.phone && student.phone}</td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Gender</td>
                                     <td className="fieldseconds">{isEditing ?
                                         <div>
                                             <input onChange={this.handleChange}
-                                                   checked={businessOwner.gender === "male" ? true : false}
+                                                   checked={student.gender === "male" ? true : false}
                                                    name="gender"
                                                    type="radio" value="male"/>{' '}Male{' '}
                                             <input name="gender" onChange={this.handleChange}
-                                                   checked={businessOwner.gender === "female" ? true : false}
+                                                   checked={student.gender === "female" ? true : false}
                                                    type="radio"
                                                    value="female"/>{' '}Female </div>
-                                        : businessOwner.gender}</td>
+                                        : student.gender}</td>
+                                </tr>
+                                <tr>
+                                    <td className="fieldsecond">Role Title</td>
+                                    <td className="fieldseconds">{
+                                        isEditing ?
+                                            <div>
+                                                <input className="form-control edittd" type='text' name='roleTitle'
+                                                       value={student.roleTitle && student.roleTitle}
+                                                       onChange={(e) => {
+                                                           this.handleChange(e);
+                                                           this.chkValidation(e);
+                                                       }} required/>
+                                            </div>
+                                            : student.roleTitle && student.roleTitle}</td>
                                 </tr>
                             </table>
                         </fieldset>
@@ -327,7 +327,7 @@ class BusinessProfile extends React.Component {
                 <div className="col-lg-12">
                     <div className="col-sm-4">
                         <fieldset style={{"margin-top": "3%"}}>
-                            <legend style={{"color": "darkgreen"}}>Contact Details</legend>
+                            <legend style={{"color": "darkgreen"}}>School Contact Details</legend>
                         </fieldset>
 
                         <table>
@@ -338,12 +338,12 @@ class BusinessProfile extends React.Component {
                                 <td className="fieldtd">{
                                     isEditing ?
                                         <input className="form-control" maxLength="13" minLength="6" onChange={(e) => {
-                                            this.handlebusinessDetail(e);
+                                            this.handleorganisationDetail(e);
                                             this.chkValidation(e)
-                                        }} value={businessInfo && businessInfo.businessPhone}
-                                               name="businessPhone" type="number" required
+                                        }} value={selectedSchool && selectedSchool.organisationContact}
+                                               name="organisationContact" type="number" required
                                         /> :
-                                        businessInfo &&  businessInfo.businessPhone}</td>
+                                        selectedSchool && selectedSchool.organisationContact}</td>
                             </tr>
 
                             <tr>
@@ -352,9 +352,9 @@ class BusinessProfile extends React.Component {
                             <tr>
                                 <td className="fieldtd">{
                                     isEditing ? <textarea className="form-control" required
-                                                          value={businessInfo && businessInfo.businessAddress}
-                                                          onChange={this.handlebusinessDetail}
-                                                          name="businessAddress"/> :
+                                                          value={selectedSchool && selectedSchool.organisationAddress}
+                                                          onChange={this.handleorganisationDetail}
+                                                          name="organisationAddress"/> :
                                         address && address.map((value, i) => {
                                             return (
                                                 <div>{value}<br/></div>
@@ -368,62 +368,44 @@ class BusinessProfile extends React.Component {
                     </div>
                     <div className="col-sm-8">
                         <fieldset style={{"margin-top": "2%"}}>
-                            <legend style={{"color": "darkgreen"}}>Business Details</legend>
+                            <legend style={{"color": "darkgreen"}}>School Details</legend>
                             <table style={{"width": "100%"}}>
                                 <tr>
-                                    <td className="fieldsecond">Business Name:</td>
+                                    <td className="fieldsecond">School Name:</td>
                                     <td align="left"
                                         className="fieldseconds">{isEditing ?
                                         <input className="form-control"
-                                               value={businessInfo && businessInfo.businessName}
+                                               value={selectedSchool && selectedSchool.schoolName}
                                                onChange={(e) => {
-                                                   this.handlebusinessDetail(e);
+                                                   this.handleorganisationDetail(e);
                                                    this.chkValidation(e);
-                                               }} name="businessName" type="text"
-                                               required/> : businessInfo && businessInfo.businessName || ''}</td>
+                                               }} name="schoolName" type="text"
+                                               required/> : selectedSchool && selectedSchool.schoolName || ''}</td>
                                 </tr>
                                 <tr>
-                                    <td className="fieldsecond">Business Type</td>
-                                    <td align="left"
-                                        className="fieldseconds">{
-                                        isEditing ? <input className="form-control"
-                                                           value={businessInfo && businessInfo.businessType}
-                                                           onChange={(e) => {
-                                                               this.handlebusinessDetail(e);
-                                                               this.chkValidation(e);
-                                                           }} name="businessType" type="text" required/>
-                                            : businessInfo && businessInfo.businessType || ''}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="fieldsecond">Business Hour</td>
-                                    <td align="left"
-                                        className="fieldseconds">{isEditing ? <div className="form-inline">
-                                            Hour:<input value={businessInfo && businessInfo.businessHours.split(":")[0]}
-                                                        className="form-control"
-                                                        style={{"width": "20%"}}
-                                                        onChange={this.handlebusinessDetail} name="businessHour"
-                                                        type="number"
-                                                        min="00" max="24" required/>{'  '}
-                                            Minute:<input value={businessInfo && businessInfo.businessHours.split(":")[1]}
-                                                          className="form-control"
-                                                          style={{"width": "20%"}}
-                                                          onChange={this.handlebusinessDetail} name="businessMinute"
-                                                          type="number"
-                                                          min="00" max="59" required/></div>
-                                        : businessInfo && businessInfo.businessHours || ''}</td>
-                                </tr>
-                                <tr>
-                                    <td className="fieldsecond">Business Email</td>
+                                    <td className="fieldsecond">Organisation Name:</td>
                                     <td align="left"
                                         className="fieldseconds">{isEditing ?
-                                        <input className="form-control" name="businessEmail"
-                                               value={businessInfo && businessInfo.businessEmail}
+                                        <input className="form-control"
+                                               value={selectedSchool && selectedSchool.organisationName}
                                                onChange={(e) => {
-                                                   this.handlebusinessDetail(e);
+                                                   this.handleorganisationDetail(e);
+                                                   this.chkValidation(e);
+                                               }} name="organisationName" type="text"
+                                               required/> : selectedSchool && selectedSchool.organisationName || ''}</td>
+                                </tr>
+
+                                <tr>
+                                    <td className="fieldsecond">Organisation Email</td>
+                                    <td align="left"
+                                        className="fieldseconds">{isEditing ?
+                                        <input className="form-control" name="organisationEmail"
+                                               value={selectedSchool && selectedSchool.organisationEmail}
+                                               onChange={(e) => {
+                                                   this.handleorganisationDetail(e);
                                                    this.chkValidation(e);
                                                }} type="email" required/>
-                                        : businessInfo && businessInfo.businessEmail || ''}</td>
+                                        : selectedSchool && selectedSchool.organisationEmail || ''}</td>
                                 </tr>
                                 {isEditing ? <tr>
                                     <td colSpan="2" align="right"><Button bsStyle="success" onClick={this.updateRecord}>Update</Button>
@@ -435,19 +417,26 @@ class BusinessProfile extends React.Component {
                         </fieldset>
                     </div>
                 </div>
-            </div>:<div>Comming Soon</div>
 
-        );
+
+            </div>
+        )
+
     }
+
 
 }
 
 function mapStateToProps(state) {
-    return {List: state.businesslist}
+    console.log("State", state)
+    return {
+        Student: state.students,
+        School: state.schools
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({listBusiness, updateBusiness}, dispatch);
+    return bindActionCreators({fetchStudent, fetchAllSchoolDetails,updateSchool,updateStudent}, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessProfile)
+export default connect(mapStateToProps, mapDispatchToProps)(StudentProfile);

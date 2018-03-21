@@ -91,7 +91,6 @@ studentSchema.statics.findByToken= function(token){
         console.log("Error : ",err);
         return Promise.reject();
     }
-    console.log("before return",decoded);
     return Student.findOne({
         _id:decoded._id,
         'tokens.token':token,

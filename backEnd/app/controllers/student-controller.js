@@ -94,7 +94,6 @@ exports.authenticate=(req,res,next)=>{
         res.status(401).send({"message":"Please Login First.","error":err});
     })
 }
-
 exports.approveStudent=(req,res)=>{
     var arr=req.body.arr;
     var l=arr.length;
@@ -115,7 +114,6 @@ exports.approveStudent=(req,res)=>{
     }
     res.status(200).send({"message":"success"});
 }
-
 exports.rejectStudent=(req,res)=>{
     var arr=req.body.arr;
     var l=arr.length;
@@ -135,4 +133,41 @@ exports.rejectStudent=(req,res)=>{
         })
     }
     res.status(200).send({"message":"success"});
+}
+exports.UpdateStudent=(req,res)=>{
+    console.log('in edit');
+    let img = '';
+    let body=JSON.parse(req.body.obj);
+    console.log(body);
+    if (req.files && req.files !== null) {
+        img = req.files.photo.name;
+        let sample = req.files.photo;
+        sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
+            if (err) {
+                console.log("Error",err);
+            }
+        });
+    }
+    else {
+        img = req.body.photo;
+    }
+    body.photo=img;
+
+    Student.findByIdAndUpdate(body.id,{$set:body},{new:true})
+        .then((result) => {
+            console.log("result",result);
+            res.send({"message": 'Updated.', 'record': result});
+        }).catch((err) => {
+        console.log('Error in Update', err);
+    })
+}
+exports.updateSchool=(req,res)=>{
+    let body = req.body;
+    console.log("body",req.body)
+    SchoolOrganisation.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
+        console.log("Result",result)
+        res.send({"message": 'Updated.', 'record': result});
+    }).catch((err) => {
+        console.log('Error in record updation', err);
+    })
 }

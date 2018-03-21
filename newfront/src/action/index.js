@@ -20,7 +20,6 @@ export const  businessLogin=(data)=>{
     }
 };
 export const  studentLogin=(data)=>{
-    debugger;
     return (dispatch)=>{
         axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
             if(response){
