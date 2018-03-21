@@ -20,7 +20,6 @@ export const  businessLogin=(data)=>{
     }
 };
 export const  studentLogin=(data)=>{
-    debugger
     return (dispatch)=>{
         axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
             if(response){
@@ -30,6 +29,7 @@ export const  studentLogin=(data)=>{
                 });
                 console.log('slogin',response.data);
                 if(response.data.message==="login successful") {
+
                     console.log('login', response.data);
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"
@@ -75,6 +75,8 @@ export const actionevents=(data)=>{
         })
     }
 };
+
+
 export const eventslist=()=>{
     return(dispatch)=>{
         axiosI({method:'get',url:'api/event'}).then((response)=>{

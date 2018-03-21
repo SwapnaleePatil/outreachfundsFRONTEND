@@ -12,6 +12,7 @@ import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
 import donationReducer from './../donation/reducers/donationReducer';
 import eventReducer from './../donation/reducers/eventReducer';
 import getBusiness from './../donation/reducers/getBusinessId';
+import studentLogged from '../donation/reducers/studentLogged';
 
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
@@ -28,7 +29,8 @@ const rootreducer=combineReducers({
     businessFieldsRed:businessFieldsReducer,
     donation:donationReducer,
     events:eventReducer,
-    businessInfo:getBusiness
+    businessInfo:getBusiness,
+    studentLogged:studentLogged
 });
 
 export default rootreducer;

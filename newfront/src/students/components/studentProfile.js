@@ -23,7 +23,9 @@ class StudentProfile extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             school: nextProps.School,
-            student: nextProps.Student
+            student: nextProps.Student,
+            isEditing: nextProps.location.pathname.includes('edit') ? true : false
+
         }, () => {
             console.log("Props", this.state.school)
             this.getSchool();
@@ -160,6 +162,7 @@ class StudentProfile extends React.Component {
         {
                 let {student,selectedSchool}=this.state;
                 let studentObj={
+                    id:student._id,
                     firstName:student.firstName,
                     lastName:student.lastName,
                     gender:student.gender,
@@ -170,6 +173,7 @@ class StudentProfile extends React.Component {
                     schoolId:student.schoolId
                 };
                 let schoolObj={
+                    id:student.schoolId,
                     schoolName:selectedSchool.schoolName,
                     organisationName:selectedSchool.organisationName,
                     organisationEmail:selectedSchool.organisationEmail,
@@ -184,13 +188,15 @@ class StudentProfile extends React.Component {
             this.props.updateStudent(formData);
             this.setState({
                 isEditing: false,
-            })        }
+            })
+            this.props.history.push('/viewStudentProfile');
+        }
     }
     render() {
         let student = this.state.student;
         let selectedSchool = this.state.selectedSchool;
         let isEditing = this.state.isEditing;
-        let address = this.state.selectedSchool && this.state.selectedSchool.organisationAddress.split(",");
+        let address = this.state.selectedSchool.organisationAddress && this.state.selectedSchool.organisationAddress.split(",");
 
         return (
             <div className="container">

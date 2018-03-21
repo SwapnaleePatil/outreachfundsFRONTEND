@@ -89,7 +89,7 @@ class FourthPage extends React.Component {
 
     }
     chkValidation = (e) => {
-        //this.setState({msg: ""});
+        this.setState({msg: ""});
         let name = e.target.name;
         if (name === "cardNumber") {
             let renum = /^[0-9]{16}$/;

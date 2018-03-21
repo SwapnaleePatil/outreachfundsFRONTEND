@@ -16,6 +16,7 @@ exports.registerStudent=(req,res)=>{
     console.log("after json",body);
     let student=new Student(body);
     student.photo=sample.name;
+    console.log(student);
     if(req.body.schoolId!==undefined) {
         console.log("School Id - ",req.body.schoolId);
         console.log("in if");
@@ -93,7 +94,6 @@ exports.authenticate=(req,res,next)=>{
         res.status(401).send({"message":"Please Login First.","error":err});
     })
 }
-
 exports.approveStudent=(req,res)=>{
     var arr=req.body.arr;
     var l=arr.length;
@@ -114,7 +114,6 @@ exports.approveStudent=(req,res)=>{
     }
     res.status(200).send({"message":"success"});
 }
-
 exports.rejectStudent=(req,res)=>{
     var arr=req.body.arr;
     var l=arr.length;
@@ -135,11 +134,11 @@ exports.rejectStudent=(req,res)=>{
     }
     res.status(200).send({"message":"success"});
 }
-
 exports.UpdateStudent=(req,res)=>{
+    console.log('in edit');
     let img = '';
-    console.log("body",req.body);
     let body=JSON.parse(req.body.obj);
+    console.log(body);
     if (req.files && req.files !== null) {
         img = req.files.photo.name;
         let sample = req.files.photo;
@@ -164,7 +163,9 @@ exports.UpdateStudent=(req,res)=>{
 }
 exports.updateSchool=(req,res)=>{
     let body = req.body;
+    console.log("body",req.body)
     SchoolOrganisation.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
+        console.log("Result",result)
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
         console.log('Error in record updation', err);

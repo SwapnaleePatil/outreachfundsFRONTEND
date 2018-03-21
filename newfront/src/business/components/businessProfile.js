@@ -17,6 +17,7 @@ class BusinessProfile extends React.Component {
             changeimg: false,
             previewFile: ''
         }
+        console.log("Props",props)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -184,6 +185,7 @@ class BusinessProfile extends React.Component {
             this.setState({
                 isEditing: false,
             })
+            this.props.history.push('/viewProfile')
         }
     }
     handleimg = (e) => {

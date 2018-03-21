@@ -2,9 +2,7 @@ let Donation = require('./../models/donation').donation;
 
 exports.addDonation=(req,res)=>{
     let newDonation = new Donation(req.body);
-    console.log('asd',req.body);
     newDonation.save().then((response)=>{
-        console.log('response',response);
         res.send(response);
     }).catch((err)=>{
         console.log(err);

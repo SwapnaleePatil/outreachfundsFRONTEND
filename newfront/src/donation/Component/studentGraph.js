@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import './graph.css'
 import {BarChart} from 'react-easy-chart'
-import {Label} from 'react-bootstrap'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {getDonationAction} from './../actions/addDonationAction'
+import {getDonationAction} from '../actions/index'
+import {FetchAllStudents} from '../../students/action/index'
 
-class Graph extends Component {
+
+class StudentGraph extends Component {
     constructor(){
         super();
         this.state={
@@ -20,21 +21,35 @@ class Graph extends Component {
         };
     }
     componentDidMount(){
-
+        this.props.FetchAllStudents();
         this.props.getDonationAction();
 
     }
     componentWillReceiveProps(nextProps){
-        console.log('Graph',nextProps.donationData);
+        console.log('All Students',nextProps.students);
+        let {graphData} = this.state;
+        graphData=[];
+        // const temp = nextProps.students[0];
+        console.log('asd',nextProps.students[0] && nextProps.students[0].schoolId);
+        nextProps.donationData.forEach((rec)=>{
+            if(rec.organizationId === (nextProps.students[0] && nextProps.students[0].schoolId)){
+                graphData.push(rec);
+            }
+        });
         this.setState({
-            graphData:nextProps.donationData
+            graphData
         },()=>{
+            console.log('graph Data ',this.state.graphData);
             this.changeGraph();
         });
     }
     changeGraph=()=>{
-
         let {totalDonationAmount,confirmAmount,yearAmount,monthAmount,pendingAmount} = this.state;
+        totalDonationAmount=0;
+        confirmAmount=0;
+        yearAmount=0;
+        monthAmount=0;
+        pendingAmount=0;
         this.state.graphData.forEach((value)=>{
             //chartData.push({x:value.eventName,y:value.amount});
             totalDonationAmount = totalDonationAmount + Number(value.amount);
@@ -73,6 +88,8 @@ class Graph extends Component {
             confirmAmount,
             yearAmount,
             monthAmount
+        },()=>{
+            console.log('asdasdasdad',totalDonationAmount);
         });
     };
     render() {
@@ -103,13 +120,16 @@ class Graph extends Component {
 function mapStateToProps(state) {
     return {
         donationData: state.donation,
+        businessInfo:state.businessInfo,
+        students:state.students
     };
 }
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDonationAction
+        getDonationAction,
+        FetchAllStudents
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Graph)
+export default connect(mapStateToProps, matchDispatchToProps)(StudentGraph)

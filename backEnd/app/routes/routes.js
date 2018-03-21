@@ -13,7 +13,7 @@ module.exports=(app,passport)=>{
     //Student Routes
 
     app.post('/api/student/profile',studentController.registerStudent);
-    app.put('/api/student/profile',studentController.updateSchool);
+    app.put('/api/student/profile',studentController.UpdateStudent);
     app.post('/api/student/approve',studentController.approveStudent);
     app.post('/api/student/reject',studentController.rejectStudent);
     app.get('/api/students',studentController.authenticate,studentController.fetchAllStudents);

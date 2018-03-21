@@ -6,13 +6,13 @@ import {Switch,Route,BrowserRouter,Redirect} from 'react-router-dom'
 import MainPage from "./mainpage";
 import Schedule from './schedule'
 import Donation from "./donation";
-import DisplayForm from './../donation/donationComponent/addDonation'
+import DisplayForm from '../donation/Component/addDonation'
 import DashBoard from "./dashboard";
 import BusinessList from './businesslisting'
 import SignUp from './signup'
 import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
-import StudentDonation from './../donation/studentDonation/studentDonation'
+import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
 import StudentProfile from '../students/components/studentProfile';
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
@@ -87,18 +87,18 @@ class Main extends React.Component {
                     <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/studentSignUp" component={StudentSignUpPage}/>
                     <Private exact path="/main/schedule" component={Schedule}/>
-                    <Route exact path="/main/donation" component={Donation}/>
-                    <Route exact path="/main/studentdonation" component={StudentDonation}/>
+                    <Private exact path="/main/donation" component={Donation}/>
+                    <Private exact path="/main/studentdonation" component={StudentDonation}/>
                     <Private exact path="/home" component={BusinessList}/>
 
-                    <Route exact path="/dashboard" component={DashBoard}/>
-                    <Private exact path="/main/requests" component={AcceptSignupRequest}/>
+                    <Private exact path="/dashboard" component={DashBoard}/>
+                      <Private exact path="/main/requests" component={AcceptSignupRequest}/>
 
-                    {/*<Private exact path="/viewProfile" component={BusinessProfile}/>*/}
-                    {/*<Private exact path="/editProfile" component={BusinessProfile}/>*/}
+                    <Private exact path="/viewProfile" component={BusinessProfile}/>
+                    <Private exact path="/editProfile" component={BusinessProfile}/>
 
-                    <Private exact path="/viewProfile" component={StudentProfile}/>
-                    <Private exact path="/editProfile" component={StudentProfile}/>
+                    <Private exact path="/viewStudentProfile" component={StudentProfile}/>
+                    <Private exact path="/editStudentProfile" component={StudentProfile}/>
 
                 </Switch>
             </BrowserRouter>
