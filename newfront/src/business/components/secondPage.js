@@ -11,6 +11,7 @@ class SecondPage extends React.Component {
         super(props);
         this.state = {
             ownerData: [],
+            error:{}
         }
     }
 
@@ -30,36 +31,65 @@ class SecondPage extends React.Component {
         this.setState({ownerData})
     }
     chkValidation = (e) => {
-
-         this.setState({msg: ""});
+        let {error } = this.state;
         let name = e.target.name;
-        if (name === "businessName" || name === "businessType") {
+        if (name === "businessName") {
             let rename = /^([A-Za-z ])*$/;;
             if (!rename.test(e.target.value)) {
-                this.setState({msg: "Do not Enter Number Please"});
+                error.businessName= "Please Enter Valid Name."
+            }
+            else {
+                error.businessName= "";
+            }
+        }
+        if(name === "businessType")
+        {
+            let rename = /^([A-Za-z ])*$/;;
+            if (!rename.test(e.target.value)) {
+                error.businessType= "Do not Enter Number Please"
+            }
+        else {
+                error.businessType= "";
             }
         }
         if (name === "businessEmail") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                this.setState({msg: "Email is InValid"});
+                error.businessEmail= "Email is InValid"
+            }
+            else {
+                error.businessEmail="";
             }
         }
 
        if (name === "businessPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
-                this.setState({msg: "Enter Number between 6 to 13 digit"});
+                error.businessPhone= "Enter Number between 6 to 13 digit";
             }
+            else {
+                error.businessPhone="";
+            }
+        }
+        this.setState({
+            error
+        })
+        if (e.target.value === "") {
+            this.setState({error: ""});
         }
     }
     handlePage = (e) => {
+
         e.preventDefault();
-        if (this.state.msg !== "") {
-            this.setState({
-                msg: "Please Fill Valid Information"
-            })
-        } else {
+        const {error} =this.state;
+       let flag = 0;
+        for(let key in error){
+            console.log(key);
+            if(error[key]!==''){
+                flag=1;
+            }
+        }
+        if (flag===0) {
             this.props.businessSignup(this.props.Page + 1);
             this.handleSubmit();
         }
@@ -84,22 +114,23 @@ class SecondPage extends React.Component {
     }
 
     render() {
-
+        let {error}=this.state;
        const {Fields} = this.props;
- if (Fields !== null)
+        if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header><label>Business
                         Information</label></Modal.Header>
                         <div align="right">
                             <Button onClick={()=>{
                                 window.location="/"}
                             }
                             >Close</Button></div>
-                    <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    </div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>
@@ -109,7 +140,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessName" type="text" required/></td>
+                                           }} name="businessName" type="text" required/>
+                                    {error.businessName && <span style={{"color": "red"}}>{error.businessName}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Business Hours</label></td>
@@ -131,7 +163,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessType" type="text" required/></td>
+                                           }} name="businessType" type="text" required/>
+                                    {error.businessType && <span style={{"color": "red"}}>{error.businessType}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Phone no</label></td>
@@ -140,7 +173,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} required/></td>
+                                           }} required/>
+                                    {error.businessPhone && <span style={{"color": "red"}}>{error.businessPhone}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Business Email</label></td>
@@ -148,7 +182,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} type="email" required/></td>
+                                           }} type="email" required/>
+                                    {error.businessEmail && <span style={{"color": "red"}}>{error.businessEmail}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Address</label></td>
