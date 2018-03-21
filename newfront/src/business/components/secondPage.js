@@ -32,7 +32,7 @@ class SecondPage extends React.Component {
     chkValidation = (e) => {
 
          this.setState({msg: ""});
-let name = e.target.name;
+        let name = e.target.name;
         if (name === "businessName" || name === "businessType") {
             let rename = /^([A-Za-z ])*$/;;
             if (!rename.test(e.target.value)) {

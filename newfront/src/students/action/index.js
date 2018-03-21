@@ -77,7 +77,7 @@ export const fetchStudent=()=>{
             'x-auth':localStorage.getItem('user')
         }
     }
-    return (dispatch=>{
+    return (dispatch)=>{
         axiosI.get(`/api/student`,data).then((user)=>{
             dispatch({
                 type:'FETCH_STUDENT',
@@ -86,7 +86,7 @@ export const fetchStudent=()=>{
         }).catch((error)=>{
             console.log("Error : ",error);
         })
-    })
+    }
 }
 export const fetchSignupRequests = (schoolId) => {
     return (dispatch)=>{
@@ -94,6 +94,25 @@ export const fetchSignupRequests = (schoolId) => {
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests.data
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
+export const FetchAllStudents = () => {
+    let data={
+        mode:'cors',
+        method:'get',
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch)=>{
+        return axiosI.get(`api/students`,data).then((response)=>{
+            dispatch({
+                type:'GET_STUDENTS',
+                payload:response.data
             })
         }).catch = (error) =>{
             console.log("Error in Fetching of Requests..",error)
@@ -138,3 +157,27 @@ export const rejectSignupRequests = (resultSet) => {
             }
         }
 }
+export const updateStudent=(obj)=>{
+    debugger
+    return (dispatch)=>{
+        axiosI.put('api/student/profile',obj).then((result)=>{
+            console.log("Result",result.data.record);
+            dispatch({
+                type:'STUDENT_UPDATE',
+                payload:result.data.record
+            })
+        })
+    }
+};
+export const updateSchool=(obj)=>{
+    debugger
+    return (dispatch)=>{
+        axiosI.put('api/school',obj).then((result)=>{
+
+            dispatch({
+                type:'SCHOOL_UPDATE',
+                payload:result.data.record
+            })
+        })
+    }
+};

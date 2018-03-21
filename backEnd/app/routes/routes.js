@@ -8,9 +8,12 @@ module.exports=(app,passport)=>{
     //School Routes
     app.post('/api/school',studentController.registerSchoolOrganisation);
     app.get('/api/school',studentController.fetchAllSchools);
+    app.put('/api/school',studentController.updateSchool);
 
     //Student Routes
+
     app.post('/api/student/profile',studentController.registerStudent);
+    app.put('/api/student/profile',studentController.UpdateStudent);
     app.post('/api/student/approve',studentController.approveStudent);
     app.post('/api/student/reject',studentController.rejectStudent);
     app.get('/api/students',studentController.authenticate,studentController.fetchAllStudents);
@@ -52,6 +55,7 @@ module.exports=(app,passport)=>{
     app.delete('/api/event', eventcontroller.deleteeventSchedule);
     app.put('/api/event',eventcontroller.updateeventSchedule);
     app.get('/api/event',eventcontroller.fetch);
+    app.post('/api/eventBySponser',eventcontroller.fetchBySponser);
 
     //Donation Routes
     app.post('/addDonation',donationController.addDonation);

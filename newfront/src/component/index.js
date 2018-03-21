@@ -14,7 +14,7 @@ import BusinessFullPage from '../business/components/businessFullPage'
 import StudentSignUpPage from '../students/components/signUpPage'
 import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
-import ProfilePage from "../business/components/profilePage";
+import StudentProfile from '../students/components/studentProfile';
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
 
 class Main extends React.Component {
@@ -87,17 +87,18 @@ class Main extends React.Component {
                     <Public exact path="/main/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/main/studentSignUp" component={StudentSignUpPage}/>
                     <Private exact path="/main/schedule" component={Schedule}/>
-                    <Route exact path="/main/donation" component={Donation}/>
-                    <Route exact path="/main/studentdonation" component={StudentDonation}/>
+                    <Private exact path="/main/donation" component={Donation}/>
+                    <Private exact path="/main/studentdonation" component={StudentDonation}/>
                     <Private exact path="/home" component={BusinessList}/>
 
-                    <Route exact path="/dashboard" component={DashBoard}/>
-                
-                    <Private exact path="/viewProfile" component={BusinessProfile}/>
-
+                    <Private exact path="/dashboard" component={DashBoard}/>
                       <Private exact path="/main/requests" component={AcceptSignupRequest}/>
 
+                    <Private exact path="/viewProfile" component={BusinessProfile}/>
                     <Private exact path="/editProfile" component={BusinessProfile}/>
+
+                    <Private exact path="/viewStudentProfile" component={StudentProfile}/>
+                    <Private exact path="/editStudentProfile" component={StudentProfile}/>
 
                 </Switch>
             </BrowserRouter>

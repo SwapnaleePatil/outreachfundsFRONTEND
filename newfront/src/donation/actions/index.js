@@ -3,7 +3,7 @@ import axiosI from '../../services/axiosInstance';
 
 export const addDonationAction=(data)=>{
     return ((dispatch)=>{
-        axiosI.post('addDonation',{data}).then((response)=>{
+        axiosI.post('addDonation',data).then((response)=>{
             dispatch({
                 type:'ADD_DONATION',
                 payload:response.data
@@ -38,6 +38,7 @@ export const approveDonation=(data)=>{
 
 export const updateDonationAction=(data)=>{
     return ((dispatch)=>{
+        debugger;
         axiosI.patch('updateDonation',data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
@@ -100,11 +101,9 @@ export const FetchStudent=()=>{
         headers:{
             'x-auth':localStorage.getItem('user')
         }
-    }
+    };
     return (dispatch=>{
-        return fetch('api/student',data).then((response)=>{
-            return response.json();
-        }).then((admin)=>{
+        axiosI.get('api/student',data).then((admin)=>{
             dispatch({
                 type:'STUDENT_LOGGED_DATA',
                 payload:admin

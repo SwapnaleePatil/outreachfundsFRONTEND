@@ -17,12 +17,10 @@ let eventSchema = new mongoose.Schema({
     eventTime: {
         type: String
     },
-    businessSponsor:
-        {
+    businessSponsor: {
             type: Array,
             require: true
-
-        },
+    },
     schoolOrganisation: {
         type: mongoose.Schema.ObjectId,
         ref: schoolOrganisation,

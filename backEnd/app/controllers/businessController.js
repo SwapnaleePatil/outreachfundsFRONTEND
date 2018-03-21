@@ -76,7 +76,6 @@ exports.fetchById = (req, res) => {
 };
 exports.fetchByToken=(req,res)=>{
     let token=req.header('x-auth');
-    console.log(token);
     BusinessOwner.findByToken(token).then((result)=>{
         if(!result)
         {
@@ -84,7 +83,7 @@ exports.fetchByToken=(req,res)=>{
         }
         else
         {
-            res.send({"message":"User Found",'User':result});
+            res.send({"message":"User Found",'User':result})
         }
     })
 }

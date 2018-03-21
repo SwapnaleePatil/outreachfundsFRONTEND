@@ -4,12 +4,14 @@ import {connect} from 'react-redux'
 import {Table} from 'react-bootstrap'
 import axios from 'axios'
 import {listBusiness} from '../business/action/index'
+import {fetchStudent} from '../students/action/index'
 import {compose, withProps} from "recompose";
 import {GoogleMap, Marker, withGoogleMap, withScriptjs} from "react-google-maps";
 
 class BusinessList extends React.Component {
     constructor() {
         super();
+
 
         this.state = {
             dataperpage: "3",
@@ -34,6 +36,7 @@ class BusinessList extends React.Component {
     };
     componentWillMount() {
         this.props.listBusiness();
+        this.props.fetchStudent();
     }
     componentDidMount(){
         console.log("rec",this.props.businessrecord);
@@ -149,9 +152,11 @@ class BusinessList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return ({businessrecord: state.businesslist})
+    console.log("State",state)
+    return ({businessrecord: state.businesslist,
+        studentRecord:state.students})
 };
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({listBusiness}, dispatch)
+    return bindActionCreators({listBusiness,fetchStudent}, dispatch)
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessList)
