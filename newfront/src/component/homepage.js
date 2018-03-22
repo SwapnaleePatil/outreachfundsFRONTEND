@@ -1,6 +1,7 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap'
 import {Table, FormControl, Button} from 'react-bootstrap'
+import axios from 'axios';
 import galary from './galary'
 import {businessLogin} from '../action/index'
 import {studentLogin} from '../action/index'
@@ -36,7 +37,6 @@ class HomePage extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        debugger
         this.setState({studlogin:nextProps.studentlogin,buslogin:nextProps.businesslogin},()=> {
             let {error} = this.state;
             if (this.state.role === "student")
@@ -100,6 +100,14 @@ class HomePage extends React.Component {
         };
         this.props.studentLogin(data);
     };
+    forgotPassword=()=>{
+        alert(this.state.email);
+        axios.post('http://localhost:2525/forgotPassword',{'email':this.state.email}).then((response)=>{
+            this.props.history.push(`/forgotPassword/${this.state.email}`);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
     loginbusiness = () => {
         let {error}=this.state;
         let data = {
@@ -228,6 +236,7 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td>
+                                    <a onClick={()=>{this.forgotPassword()}}>Forgot Password?</a>
                                 </td>
                             </tr>
                             <tr>

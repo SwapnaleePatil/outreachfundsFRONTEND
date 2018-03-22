@@ -16,6 +16,7 @@ import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
 import StudentProfile from '../students/components/studentProfile';
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
+import ForgotPassword from './forgotPassword'
 
 class Main extends React.Component {
     render() {
@@ -99,7 +100,7 @@ class Main extends React.Component {
 
                     <Private exact path="/viewStudentProfile" component={StudentProfile}/>
                     <Private exact path="/editStudentProfile" component={StudentProfile}/>
-
+                    <Public exact path="/forgotPassword/:email" component={ForgotPassword}/>
                 </Switch>
             </BrowserRouter>
         );

@@ -48,18 +48,6 @@ export const updateDonationAction=(data)=>{
     });
 };
 
-export const getDonationDataAction=()=>{
-    return ((dispatch)=>{
-        axiosI.get('getDonation').then((response)=>{
-            dispatch({
-                type:'GET_DONATION',
-                payload:response.data
-            });
-        }).catch((err)=>{
-            console.log(err);
-        })
-    });
-};
 export const getEventDataAction=()=>{
     return ((dispatch)=>{
         axiosI.get('api/event').then((response)=>{

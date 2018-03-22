@@ -208,7 +208,7 @@ class Schedule extends React.Component {
 // find school name for event modal
         let schoolname = "";
         this.props.organization.map((value, i) => {
-            debugger;
+
             if (value._id === this.state.student.schoolId) {
                 schoolname = value.organisationName
             }

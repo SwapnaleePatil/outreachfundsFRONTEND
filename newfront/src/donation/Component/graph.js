@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './graph.css'
+
 import {BarChart} from 'react-easy-chart'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
