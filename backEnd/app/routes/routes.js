@@ -29,10 +29,8 @@ module.exports=(app,passport)=>{
         res.send({"message":"login failed"});
     })
 
-
     // Business Routes
-    app.post('/api/businessOwner/loginPassport',
-        passport.authenticate('businessOwner',{
+    app.post('/api/businessOwner/loginPassport',passport.authenticate('businessOwner', {
             successRedirect:'/loginSuccess',
             failureRedirect:'/loginFailure'
         }));

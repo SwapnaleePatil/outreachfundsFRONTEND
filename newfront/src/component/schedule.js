@@ -30,6 +30,7 @@ class Schedule extends React.Component {
             searchdata: [],
             businessNameSelect: [],
             student: [],
+            error: {}
         }
     }
 
@@ -68,13 +69,40 @@ class Schedule extends React.Component {
 
 //event generate and edit time field handle
     onFieldChange = (e) => {
+        //debugger
         let {name, value} = e.target;
-        let {eventData} = this.state;
-        eventData[name] = value;
+        let {eventData, isEditing} = this.state;
+        if (isEditing === true) {
+            if (name === "eventTimeHour") {
+                let hour = eventData.eventTime.split(':');
+                if (value <= 9) {
+                    hour[0] = "0" + value;
+                }
+                else {
+                    hour[0] = value;
+                }
+                eventData.eventTime = hour.join(':');
+            }
+            else if (name === "eventTimeMinute") {
+                let hour = eventData.eventTime.split(':');
+                if (value <= 9) {
+                    hour[1] = "0" + value;
+                }
+                else {
+                    hour[1] = value;
+                }
+                eventData.eventTime = hour.join(':')
+            }
+            else {
+                eventData[name] = value;
+            }
+        }
+        else {
+            eventData[name] = value;
+        }
         this.setState({
             eventData
-        })
-        ;
+        });
     };
 
 //Business Sponsor reject event
@@ -92,27 +120,71 @@ class Schedule extends React.Component {
     };
 //event generate by student and business
     scheduleEvent = () => {
-        if (this.state.businessname !== "") {
-            let data = {
-                businessSponsor: this.state.eventowner,
-                ...this.state.eventData
-            };
-            this.props.scheduleevents(data);
-        } else {
-            let data = {
-                schoolOrganisation:this.state.student.schoolId,
-                businessSponsor: this.state.businessNameSelect,
-                ...this.state.eventData
-            };
-            this.props.scheduleevents(data);
+       // debugger
+        let {eventData, error} = this.state;
+        let flag=0;
+        if (eventData===undefined) {
+            error.form = "Please Fill The Form";
         }
-        this.toggleCalander();
-        this.clearData();
+        else {
+            error.form = "";
+        }
+        if (!eventData.donationOption) {
+            error.donationOption = "Please Select Donation Option";
+        }
+        else {
+            error.donationOption = "";
+        }
+        if (!eventData.schoolOrganisation) {
+            error.schoolOrganisation = "Please Select School";
+        }
+        else {
+            error.schoolOrganisation = "";
+        }
+        this.setState({error});
+        for (let key in error) {
+            if (error[key] !== "") {
+                flag = 1;
+            }
+        }
+
+        if (flag === 0) {
+            if (eventData["eventTimeHour"] < 9) {
+                eventData["eventTimeHour"] = "0" + eventData["eventTimeHour"];
+            } else {
+                eventData["eventTimeHour"] = eventData["eventTimeHour"];
+            }
+            if (eventData["eventTimeMinute"] < 9) {
+                eventData["eventTimeMinute"] = "0" + eventData["eventTimeMinute"];
+            } else {
+                eventData["eventTimeMinute"] = eventData["eventTimeMinute"];
+            }
+            eventData["eventTime"] = eventData["eventTimeHour"] + ":" + eventData["eventTimeMinute"];
+            this.setState({eventData});
+
+            if (this.state.businessname !== "") {
+                let data = {
+                    businessSponsor: this.state.eventowner,
+                    ...this.state.eventData
+                };
+                this.props.scheduleevents(data);
+            } else {
+                let data = {
+                    schoolOrganisation: this.state.student.schoolId,
+                    businessSponsor: this.state.businessNameSelect,
+                    ...this.state.eventData
+                };
+                this.props.scheduleevents(data);
+
+            }
+            this.clearData();
+            this.toggleCalander();
+        }
     };
 
-
     clearData = () => {
-        this.state.eventData = [];
+
+        this.setState({eventData: []});
         this.state.isEditing = false;
     };
 
@@ -127,14 +199,46 @@ class Schedule extends React.Component {
     };
 //edit event by event Sponsor
     editEvent = () => {
-        let data = {
-            id: this.state.eventData._id,
-            ...this.state.eventData
-        };
-        this.toggleCalander();
-        this.props.actionevents(data);
+        //debugger
+        let {eventData, error} = this.state;
+        let flag=0;
+        if (eventData===undefined) {
+            error.form = "Please Fill The Form";
+        }
+        else {
+            error.form = "";
+        }
+        if (!eventData.donationOption) {
+            error.donationOption = "Please Select Donation Option";
+        }
+        else {
+            error.donationOption = "";
+        }
+        if (!eventData.schoolOrganisation) {
+            error.schoolOrganisation = "Please Select School";
+        }
+        else {
+            error.schoolOrganisation = "";
+        }
+        this.setState({error});
+        for (let key in error) {
+            if (error[key] !== "") {
+                flag = 1;
+            }
+        }
 
-        this.clearData();
+        if (flag === 0) {
+            let data = {
+                id: this.state.eventData._id,
+                ...this.state.eventData
+            };
+
+            this.props.actionevents(data);
+            this.clearData();
+            this.toggleCalander();
+
+        }
+
     };
 //pagination
     pageChange = (e) => {
@@ -174,7 +278,34 @@ class Schedule extends React.Component {
     };
 //list of business
     handleChange = (event, index, businessNameSelect) => this.setState({businessNameSelect});
+//Validation
+    checkValidation = (e) => {
+        //debugger;
+        let {error} = this.state;
+        let name = e.target.name;
+        if (name === "eventDate") {
+            let date = new Date();
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            if (month <= 9) {
+                month = "0" + month;
+            }
+            let year = date.getFullYear();
+            let edate = year + '-' + month + '-' + day;
+            if (e.target.value < edate) {
+                error.eventDate = "Please Select Proper Date";
+            }
+            else {
+                error.eventDate = "";
+            }
+        }
+        this.setState({error});
+        if (e.target.value === "") {
+            this.setState({error: ""});
+        }
 
+
+    }
 
 //Searching
     searching = (e) => {
@@ -208,7 +339,7 @@ class Schedule extends React.Component {
 // find school name for event modal
         let schoolname = "";
         this.props.organization.map((value, i) => {
-            debugger;
+            //debugger;
             if (value._id === this.state.student.schoolId) {
                 schoolname = value.organisationName
             }
@@ -222,7 +353,7 @@ class Schedule extends React.Component {
         });
 
 //list of event for logged student
-        let studentEventLenght=0;
+        let studentEventLenght = 0;
         let studentevent = [];
         this.state.data.map((v, i) => {
             if (this.state.student.schoolId === v.schoolOrganisation) {
@@ -249,7 +380,7 @@ class Schedule extends React.Component {
         });
 //event for business
         let eventofOnebusiness = 1;
-        let businessEvent=[]
+        let businessEvent = []
         this.props.events.map((v, i) => {
             if (v.businessSponsor.includes(this.state.eventowner)) {
                 businessEvent.push(v);
@@ -276,7 +407,9 @@ class Schedule extends React.Component {
                 }
             })
         }
+        let {error} = this.state;
         return (
+
             <div className="schedule-class">
 
                 <div className="col-md-9">
@@ -303,7 +436,8 @@ class Schedule extends React.Component {
                                         <option value={20}>20</option>
                                         <option value={50}>50</option>
                                     </select>
-                                </td> <td colSpan={8} align="center"><h4>Events</h4></td>
+                                </td>
+                                <td colSpan={8} align="center"><h4>Events</h4></td>
                             </tr>
                             <tr>
                                 <th>Dates</th>
@@ -315,7 +449,7 @@ class Schedule extends React.Component {
                                 <th>Status</th>
                                 <th>Your Status</th>
                             </tr>
-                            {currentBusinessEventdata.map((v,i)=>{
+                            {currentBusinessEventdata.map((v, i) => {
                                 return <tr>
                                     <td>
                                         {v.eventDate && v.eventDate.split("T")[0]}
@@ -468,167 +602,202 @@ class Schedule extends React.Component {
                         backgroundColor: '#EDEFF7'
                     }
                 }}>
-                    <Table bordered>
-                        <tbody>
-                        <tr>
-                            <td align="right">
-                                <a href="#" onClick={() => {
-                                    this.clearData();
-                                    this.toggleCalander();
-                                }}>X</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">
-                                <ControlLabel> Event Scheduler</ControlLabel>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ControlLabel>Event Name:</ControlLabel>
-                                <FormControl type="text" name="eventName" value={this.state.eventData.eventName}
-                                             placeholder="Enter Event Name"
-                                             onChange={(e) => {
-                                                 this.onFieldChange(e)
-                                             }}/>
-                            </td>
-                        </tr>
-                        <tr>
+                    <form onSubmit={this.scheduleEvent}>
+                        <Table bordered>
+                            <tbody>
+                            <tr>
+                                <td align="right">
+                                    <a href="#" onClick={() => {
+                                        this.clearData();
+                                        this.toggleCalander();
+                                    }}>X</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <label> Event Scheduler</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Event Name:</label>
+                                    <input className="form-control" type="text" name="eventName"
+                                           value={this.state.eventData.eventName}
+                                           placeholder="Enter Event Name"
+                                           required
+                                           onChange={(e) => {
+                                               this.onFieldChange(e);
 
-                            <td><FormGroup controlId="formControlsSelect">
-                                <ControlLabel>School Organization</ControlLabel>
-                                {this.state.student !== "" ?
-                                    <td>{schoolname}</td> :
-                                    <FormControl name="schoolOrganisation" componentClass="select"
-                                                 placeholder="select" onChange={(e) => {
-                                        this.onFieldChange(e)
-                                    }}>
-                                        {
-                                            this.props.organization.map((value, i) => {
-                                                if (value._id === this.state.eventData.schoolOrganisation) {
-                                                    school = value.organisationName
-                                                }
-                                            })
-                                        }
-                                        {this.state.isEditing ?
-                                            <option>{school}</option>
-                                            :
-                                            this.props.organization.map((v, i) => {
-                                                return <option key={i} value={v._id}>{v.organisationName}</option>
-                                            })
-                                        }
-                                    </FormControl>}
-                            </FormGroup>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ControlLabel> Location:</ControlLabel>
-                                <FormControl name="location" type="text" value={this.state.eventData.location}
-                                             placeholder="Address"
-                                             onChange={(e) => {
-                                                 this.onFieldChange(e)
-                                             }}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ControlLabel>Date:</ControlLabel>
-                                <FormControl type="Date" name="eventDate"
-                                             value={this.state.eventData.eventDate && this.state.eventData.eventDate.split("T")[0]}
-                                             onChange={(e) => {
-                                                 this.onFieldChange(e)
-                                             }}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ControlLabel>Time:</ControlLabel>
-                                <FormControl type="text" name="eventTime" value={this.state.eventData.eventTime}
-                                             placeholder="Event Time"
-                                             onChange={(e) => {
-                                                 this.onFieldChange(e)
-                                             }}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><FormGroup controlId="formControlsSelect">
-                                <ControlLabel>Business Sponser</ControlLabel><br/>
+                                           }}/>
+                                </td>
+                            </tr>
+                            <tr>
 
-                                {this.state.businessname !== "" ?
-
-                                    <ControlLabel>{this.state.businessname}</ControlLabel> :
-                                    <MuiThemeProvider>
-                                        <SelectField
-                                            multiple={true}
-                                            hintText="Select a name"
-                                            value={this.state.businessNameSelect}
-                                            onChange={this.handleChange}
-                                        >
+                                <td><FormGroup controlId="formControlsSelect">
+                                    <label>School Organization</label>
+                                    {this.state.student.length !== 0 ?
+                                        <td>{schoolname}</td> :
+                                        <select name="schoolOrganisation" required className="form-control"
+                                                onChange={(e) => {
+                                                    this.onFieldChange(e)
+                                                }}>
                                             {
-                                                this.props.business.map((v, i) => {
-                                                    return <MenuItemMaterial
-                                                        key={i}
-                                                        insetChildren={true}
-                                                        checked={this.state.businessNameSelect && this.state.businessNameSelect.indexOf(v._id) > -1}
-                                                        value={v._id}
-                                                        primaryText={v.businessInfo.businessName}
-                                                    />
+
+                                                this.props.organization.map((value, i) => {
+                                                    if (value._id === this.state.eventData.schoolOrganisation) {
+                                                        school = value.organisationName
+                                                    }
                                                 })
                                             }
-                                        </SelectField>
-                                    </MuiThemeProvider>
-                                }
+                                            {this.state.isEditing ?
+                                                <option>{school}</option>
+                                                :
 
-                            </FormGroup>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><ControlLabel> Donation type:</ControlLabel><br/>
-                                <input type="radio" name="fundraisingOption"
-                                       defaultChecked={this.state.eventData.fundraisingOption === "onsite" ? true : ""}
-                                       value="onsite"
-                                       onChange={(e) => {
-                                           this.onFieldChange(e)
-                                       }}/>:OnSite<br/>
-                                <input type="radio" name="fundraisingOption"
-                                       defaultChecked={this.state.eventData.fundraisingOption === "onsite" ? true : ""}
-                                       value="edonate"
-                                       onChange={(e) => {
-                                           this.onFieldChange(e)
-                                       }}/>: eDonation
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <FormGroup controlId="formControlsSelect">
-                                    <ControlLabel>Donation Option</ControlLabel>
-                                    <FormControl name="donationOption" onChange={(e) => {
-                                        this.onFieldChange(e)
-                                    }} componentClass="select" placeholder="select">
-                                        {this.state.isEditing ?
-                                            <option>{this.state.eventData.donationOption}</option> :
-                                            <option>select option</option>}
-                                        <option value="5%">5% of total sale</option>
-                                        <option value="10%">10% of total sale</option>
-                                        <option value="15%">15% of total sale</option>
-                                        <option value="custom">your choice</option>
-                                    </FormControl>
+                                                this.props.organization.map((v, i) => {
+                                                    <option>==Select School==</option>
+                                                    return <option key={i} value={v._id}>{v.organisationName}</option>
+                                                })
+                                            }
+                                        </select>}
+                                    {error.schoolOrganisation &&
+                                    <span style={{"color": "red"}}>{error.schoolOrganisation}</span>}
+
                                 </FormGroup>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">
-                                {this.state.isEditing ?
-                                    <Button bsStyle="info" style={{width: "40%"}} onClick={this.editEvent}>Edit
-                                        Event</Button> :
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label> Location:</label>
+                                    <input className="form-control" name="location" type="text"
+                                           value={this.state.eventData.location}
+                                           placeholder="Address" required
+                                           onChange={(e) => {
+                                               this.onFieldChange(e)
+                                           }}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Date:</label>
+                                    <input className="form-control" type="Date" name="eventDate" required
+                                           value={this.state.eventData.eventDate && this.state.eventData.eventDate.split("T")[0]}
+                                           onChange={(e) => {
+                                               this.onFieldChange(e);
+                                               this.checkValidation(e);
+                                           }}/>
+                                    {error.eventDate && <span style={{"color": "red"}}>{error.eventDate}</span>}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Time:</label>
+                                    <div className="form-inline">
+                                        Hour:<input
+                                        value={this.state.eventData.eventTime && this.state.eventData.eventTime.split(":")[0]}
+                                        className="form-control"
+                                        style={{"width": "20%"}}
+                                        onChange={this.onFieldChange} name="eventTimeHour"
+                                        type="number"
+                                        min="0" max="24" required/>{'  '}
+                                        Minute:<input
+                                        value={this.state.eventData.eventTime && this.state.eventData.eventTime.split(":")[1]}
+                                        className="form-control"
+                                        style={{"width": "20%"}}
+                                        onChange={this.onFieldChange} name="eventTimeMinute"
+                                        type="number"
+                                        min="0" max="59" required/></div>
+                                </td>
+                            </tr>
 
-                                    <Button bsStyle="info" style={{width: "40%"}} onClick={this.scheduleEvent}>Create
-                                        Event</Button>}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </Table>
+
+                            <tr>
+                                <td><FormGroup controlId="formControlsSelect">
+                                    <label>Business Sponser</label><br/>
+
+                                    {this.state.businessname !== "" ?
+
+                                        <ControlLabel>{this.state.businessname}</ControlLabel> :
+                                        <MuiThemeProvider>
+                                            <SelectField
+                                                multiple={true}
+                                                hintText="Select a name"
+                                                value={this.state.businessNameSelect}
+                                                onChange={this.handleChange}
+                                            >
+                                                {
+                                                    this.props.business.map((v, i) => {
+                                                        return <MenuItemMaterial
+                                                            key={i}
+                                                            insetChildren={true}
+                                                            checked={this.state.businessNameSelect && this.state.businessNameSelect.indexOf(v._id) > -1}
+                                                            value={v._id}
+                                                            primaryText={v.businessInfo.businessName}
+                                                        />
+                                                    })
+                                                }
+                                            </SelectField>
+                                        </MuiThemeProvider>
+                                    }
+
+                                </FormGroup>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label> Donation type:</label><br/>
+                                    <input type="radio" name="fundraisingOption"
+                                           defaultChecked={this.state.eventData.fundraisingOption === "onsite" ? true : ""}
+                                           value="onsite"
+                                           onChange={(e) => {
+                                               this.onFieldChange(e)
+                                           }}/>:OnSite<br/>
+                                    <input type="radio" name="fundraisingOption"
+                                           defaultChecked={this.state.eventData.fundraisingOption === "onsite" ? true : ""}
+                                           value="edonate"
+                                           onChange={(e) => {
+                                               this.onFieldChange(e)
+                                           }}/>: eDonation
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <FormGroup controlId="formControlsSelect">
+                                        <label>Donation Option</label>
+
+                                        <select className="form-control" required name="donationOption"
+                                                onChange={(e) => {
+                                                    this.onFieldChange(e)
+                                                }}>
+                                            {this.state.isEditing ?
+                                                <option>{this.state.eventData.donationOption}</option> :
+                                                <option>==select option==</option>}
+                                            <option value="5%">5% of total sale</option>
+                                            <option value="10%">10% of total sale</option>
+                                            <option value="15%">15% of total sale</option>
+                                            <option value="custom">your choice</option>
+                                        </select>
+
+                                        {error.donationOption &&
+                                        <span style={{"color": "red"}}>{error.donationOption}</span>}
+                                    </FormGroup>
+                                </td>
+                            </tr>
+                            {error.form && <tr>
+                                <td><span style={{"color": "red"}}>{error.form}</span></td>
+                            </tr>}
+
+                            <tr>
+                                <td align="center">
+                                    {this.state.isEditing ?
+                                        <Button bsStyle="info" style={{width: "40%"}} onClick={this.editEvent}>Edit
+                                            Event</Button> :
+
+                                        <Button bsStyle="info" style={{width: "40%"}} onClick={this.scheduleEvent}>
+                                            Create Event</Button>}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </Table>
+                    </form>
                 </Modal>
                 <div className="col-md-3" align="center">
                     <h2> Raise an Event</h2>
