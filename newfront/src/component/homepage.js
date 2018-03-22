@@ -363,8 +363,8 @@ class HomePage extends React.Component {
 const mapStateToProps = (state) => {
     return ({businesslogin: state.blogin,studentlogin:state.slogin})
 
-}
+};
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({businessLogin,studentLogin}, dispatch)
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

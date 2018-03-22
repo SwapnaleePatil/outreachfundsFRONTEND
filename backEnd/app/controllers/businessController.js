@@ -19,6 +19,7 @@ exports.addBusinessOwner = (req, res) => {
        return newBusinessOwner.generateAuthToken();
     })
     .then((token) => {
+        console.log(newBusinessOwner);
         res.header('x-auth',token).send({"message":'Inserted.', 'record': newBusinessOwner});
     })
     .catch((e) => {
