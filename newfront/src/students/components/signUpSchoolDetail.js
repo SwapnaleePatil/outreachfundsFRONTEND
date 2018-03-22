@@ -1,5 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
+import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Button,ButtonToolbar} from 'react-bootstrap'
 import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent,registerSchool} from '../action';
@@ -12,7 +13,8 @@ class SignUpSchool extends React.Component{
             schoolData:[],
             addSchool:false,
             displayErrors:false,
-            errors:[]
+            errors:[],
+            redirect:false
         }
     }
 
@@ -20,7 +22,12 @@ class SignUpSchool extends React.Component{
         if(this.props.Schools.length<=0)
             this.props.fetchAllSchoolDetails();
     }
-
+    componentWillReceiveProps(nextProps){
+        console.log("next - ",nextProps.students);
+        if(nextProps.students.length>0){
+            this.setState({redirect:true})
+        }
+    }
     handleChange=(e)=>{
         const {signupPageFields}=this.props;
         const {name,value}=e.target;
@@ -183,7 +190,9 @@ class SignUpSchool extends React.Component{
         const {signupPageFields,Schools}=this.props;
         if(signupPageFields!==null)
             this.state.schoolData=signupPageFields;
-        const {schoolData,errors,displayErrors,orgName}=this.state;
+        //debugger;
+        const {schoolData,errors,displayErrors,redirect}=this.state;
+        console.log("redirect",redirect);
         return(
             <div className={'modal-dialog'}>
                 <div className={'modal-content'}>
@@ -260,6 +269,9 @@ class SignUpSchool extends React.Component{
                                     <Button bsStyle="primary" onClick={this.previousPage}>Previous</Button>
                                     <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
                                 </ButtonToolbar>
+                                {
+                                    (this.state.redirect)?<Redirect to={'/'}/>:''
+                                }
                             </div>
                         </form>
                     </div>
@@ -272,9 +284,10 @@ const mapStateToProps=(state)=> {
     return{
         signUpPage:state.signupPage,
         signupPageFields:state.signupPageFields,
-        Schools:state.schools
+        Schools:state.schools,
+        students:state.students
     }
-}
+};
 
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({

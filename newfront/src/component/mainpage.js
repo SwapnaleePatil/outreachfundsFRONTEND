@@ -1,14 +1,10 @@
 import React from 'react'
-
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-
 import {listBusiness} from '../business/action/index'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table,Badge,Dropdown,ButtonToolbar} from 'react-bootstrap'
 import '../index.css'
-
-
-import {Route, NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 
 
 class MainPage extends React.Component {
@@ -29,8 +25,8 @@ class MainPage extends React.Component {
 
         this.state.data = nextProps.businessrecord;
         let user = this.state;
-        nextProps.businessrecord.map((v, i) => {
-            v.tokens.map((value, i) => {
+        nextProps.businessrecord.map((v) => {
+            v.tokens.map((value) => {
                 if (value.token === localStorage.getItem('user')) {
                     user = value;
                     this.setState({
@@ -44,9 +40,7 @@ class MainPage extends React.Component {
         });
     }
     logout=()=> {
-
         localStorage.removeItem('user');
-        window.location = "/"
     }
     searching = (e) => {
         this.setState({
@@ -60,7 +54,7 @@ class MainPage extends React.Component {
         });
         let {searchdata} = this.state;
         searchdata = [];
-        this.state.data.map((value, i) => {
+        this.state.data.map((value) => {
             if (value.businessInfo.businessName.includes(e.target.value)) {
                 searchdata.push(value)
             }
@@ -79,7 +73,6 @@ class MainPage extends React.Component {
             <div>
                 <Navbar  fluid={true} staticTop={true} className="navbar-class-main">
                     <Navbar.Header className="imgnav">
-
                         <a href="/home"><img src={require('../images/logo2.png')}
                                              style={{width: 150, height: 100}} alt=""/></a>
                     </Navbar.Header>
@@ -89,15 +82,16 @@ class MainPage extends React.Component {
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={2} className="navclass-item" href="/main/schedule">
-                            <Button bsSize="large" className="navclass-bs">
-                                Schedule <br/> <Glyphicon glyph="glyphicon glyphicon-calendar"/></Button>
+                        <NavItem eventKey={2} className="navclass-item">
+                            <NavLink to={"/main/schedule"}>
+                            <Button bsSize="large" className="navclass-bs">Schedule <br/> <Glyphicon glyph="glyphicon glyphicon-calendar"/></Button>
+                            </NavLink>
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={3} className="navclass-item" href="/main/donation">
-                            <Button bsSize="large" className="navclass-bs">
-                                Donation<br/> <Glyphicon glyph="glyphicon glyphicon-usd"/></Button>
+                        <NavItem eventKey={3} className="navclass-item">
+                            <NavLink to={"/main/donation"}>
+                            <Button bsSize="large" className="navclass-bs">Donation<br/> <Glyphicon glyph="glyphicon glyphicon-usd"/></Button></NavLink>
                         </NavItem>
                     </Nav>
                     <Nav pullRight className="navclass-dropmenu">
@@ -107,10 +101,13 @@ class MainPage extends React.Component {
                                             <Glyphicon glyph="glyphicon glyphicon-user"/>
                                         </Dropdown.Toggle>
                                     <Dropdown.Menu className="super-colors">
-                                        {this.state.user ? <MenuItem eventKey={4.1}><NavLink to="/editProfile">Edit
-                                                Profile</NavLink></MenuItem>
-                                            : <MenuItem eventKey={4.1}><NavLink to="/editStudentProfile">Edit
-                                                Profile</NavLink></MenuItem>
+                                        {this.state.user ?
+                                            <MenuItem eventKey={4.1}>
+                                                <NavLink to="/editProfile">Edit Profile</NavLink>
+                                            </MenuItem>
+                                            : <MenuItem eventKey={4.1}>
+                                                <NavLink to="/editStudentProfile">Edit Profile</NavLink>
+                                            </MenuItem>
                                         }
                                     <MenuItem eventKey={4.2} ><NavLink to="/availability">Availability</NavLink></MenuItem>
                                     <MenuItem eventKey={4.3}><NavLink to="/payment">Payments</NavLink></MenuItem>
@@ -120,8 +117,9 @@ class MainPage extends React.Component {
                                             <MenuItem eventKey={4.4}><NavLink to="/viewStudentProfile">View
                                                 Profile</NavLink></MenuItem>
                                         }
-                                    {/*<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>*/}
-                                    <MenuItem eventKey={4.6} onClick={this.logout}>Logout</MenuItem>
+                                    {(this.props.studentlogin!==null)?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
+                                    <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="/">
+                                        Logout</NavLink></MenuItem>
                                     </Dropdown.Menu>
                                     </Dropdown>
                              </ButtonToolbar>
@@ -132,7 +130,7 @@ class MainPage extends React.Component {
                     <tbody>
                     <tr>
                         <td colspan={5} align="center">
-                            <h4>   business List</h4>
+                            <h4>business List</h4>
                         </td>
                     </tr>
                 <tr>
@@ -162,7 +160,7 @@ class MainPage extends React.Component {
     }
 }
 const mapStateToProps = (state) => {
-    return ({businessrecord: state.businesslist})
+    return ({businessrecord: state.businesslist,studentlogin:state.slogin})
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({listBusiness}, dispatch)

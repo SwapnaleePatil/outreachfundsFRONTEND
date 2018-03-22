@@ -13,7 +13,6 @@ import donationReducer from './../donation/reducers/donationReducer';
 import eventReducer from './../donation/reducers/eventReducer';
 import getBusiness from './../donation/reducers/getBusinessId';
 import studentLogged from '../donation/reducers/studentLogged';
-
 import scheduleEventBySponser from './eventsponser'
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({

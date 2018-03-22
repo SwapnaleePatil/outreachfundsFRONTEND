@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import {Button} from 'react-bootstrap';
+import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {signupPageAction,setSignupPageFieldsAction} from '../action';
 class SignUpPersonal extends React.Component{
@@ -67,7 +68,10 @@ class SignUpPersonal extends React.Component{
             personalData
         })
     }
-
+    handleClose=()=>{
+        // this.props.history.push('/');
+        window.location="/";
+    }
     handleSubmit=(e)=>{
         console.log('submitted');
         const {personalData}=this.state;
@@ -164,9 +168,7 @@ class SignUpPersonal extends React.Component{
                 <div className={'modal-content'}>
                     <div className={'modal-header'}>
                         <h3>Personal Information</h3>
-                        <button className={'close'} onClick={()=>{
-                                 window.location="/"
-                            }}>&times;
+                        <button className={'close'} onClick={this.handleClose}>&times;
                         </button>
                     </div>
                     <div className={'modal-body'}>

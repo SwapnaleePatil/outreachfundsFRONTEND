@@ -7,17 +7,8 @@ import {studentLogin} from '../action/index'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import '../index.css'
-import Modal from 'react-modal'
-import {NavLink} from 'react-router-dom'
-
-import BusinessFullPage from '../business/components/businessFullPage'
-import signUpPage from '../students/components/signUpPage'
-
-import SignUp from './signup'
-import businesslogin from "../reducer/businesslogin";
-// import Login from './login'
-let message = "";
-
+import Modal from 'react-modal';
+import {NavLink} from 'react-router-dom';
 class HomePage extends React.Component {
     constructor() {
         super();
@@ -36,7 +27,7 @@ class HomePage extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        debugger
+        debugger;
         this.setState({studlogin:nextProps.studentlogin,buslogin:nextProps.businesslogin},()=> {
             let {error} = this.state;
             if (this.state.role === "student")
@@ -58,6 +49,19 @@ class HomePage extends React.Component {
             }
             this.setState({error});
         })
+        if(nextProps.studentlogin!==null) {
+            debugger;
+            if (nextProps.studentlogin.data.message === 'login successful') {
+                localStorage.setItem('user', nextProps.studentlogin.data.token);
+                this.props.history.push('/main');
+            }
+        }
+        else{
+            if (nextProps.businesslogin.data.message === 'login successful') {
+                localStorage.setItem('user', nextProps.businesslogin.data.token);
+                this.props.history.push('/main');
+            }
+        }
     }
     onEmailChange = (e) => {
         let {error}=this.state;
@@ -107,12 +111,11 @@ class HomePage extends React.Component {
             password: this.state.password
         };
         this.props.businessLogin(data);
-        if (this.props.businesslogin.data === "User Not Found"){
+        this.props.businesslogin.data === "User Not Found"?
             error.password = "invalid Email Or Password"
-        }
-        else {
-            error.password=""
-        }
+        :
+            error.password="";
+
         this.setState({error});
     };
     toggleModal = () => {
@@ -137,13 +140,19 @@ class HomePage extends React.Component {
         })
     };
 
+    handleSignup=(role)=>{
+        if(role==='student')
+            this.props.history.push('/studentSignUp');
+        else
+            this.props.history.push('/businessSignUp');
+    }
     render() {
         let {error}=this.state;
         return (
             <section>
                 <div>
-
-                    {/*modal for decide role of the user at logintime*/}
+                    {/*<Login/>*/}
+                    {/*/!*modal for decide role of the user at logintime*!/*/}
                     <Modal isOpen={this.state.isRole} ariaHideApp={true} onRequestClose={this.toggleRole}
                            className="role-class">
                         <Table bordered>
@@ -173,10 +182,7 @@ class HomePage extends React.Component {
                             </tbody>
                         </Table>
                     </Modal>
-
-
                     {/*modal for login*/}
-
                     <Modal isOpen={this.state.isActive} className="loginp" ariaHideApp={false}>
                         <Table bordered>
                             <tbody>
@@ -190,10 +196,8 @@ class HomePage extends React.Component {
                                     this.state.role === "business" ? <h3>Business Login</h3> :
                                         <h3>Student Login</h3>
                                 }
-
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>
                                     <h4>Enter Email</h4>
@@ -232,14 +236,8 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td align="center" className="lbtn">
-                                    {this.state.role === "student" ?
                                         <Button className="lbtn" bsStyle="info"
-                                                onClick={this.loginstudent}>Login</Button> :
-                                        <Button className="lbtn" bsStyle="info"
-                                                onClick={this.loginbusiness}>Login</Button>
-                                    }
-
-
+                                                onClick={this.state.role === "student" ?this.loginstudent:this.loginbusiness}>Login</Button>
                                 </td>
                             </tr>
                             <tr>
@@ -249,18 +247,15 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td align="center">
-                                    { this.state.role === "student" ?
-                                    <h3><a href="/main/studentSignUp">Sign Up</a></h3>:
-                                    <h3><a href="/main/businessSignUp">Sign Up</a></h3>
-                                        }
+                                    <h3 onClick={()=>{this.state.role === "student" ?this.handleSignup('student'):this.handleSignup('business')}}>
+                                        <a>Sign Up</a></h3>
                                 </td>
                             </tr>
-
                             </tbody>
                         </Table>
                     </Modal>
-
 {/*sign up pages*/}
+
                     <div>
 
                         <Modal isOpen={this.state.sisRole} ariaHideApp={true} onRequestClose={this.toggleSRole}
@@ -271,18 +266,13 @@ class HomePage extends React.Component {
                                     <td align="center">
                                         <Button bsSize="large" className="rolebtn" type="button" value="student"
                                                 onClick={() => {
-                                                    // this.setState({
-                                                    //     sisRole: false,
-                                                    //     srole: "student"
-                                                    // });
-                                                    // this.toggleSModal()
-                                                    window.location="/main/studentSignUp"
+                                                   this.props.history.push("/studentSignUp")
                                                 }}>I am Student</Button>
                                     </td>
                                     <td>
                                         <Button bsSize="large" className="rolebtn" type="button" value="business"
                                                 onClick={() => {
-                                                window.location="/main/businessSignUp"
+                                                    this.props.history.push("/businessSignUp")
                                                 }}>I am Business Person</Button>
                                     </td>
                                 </tr>
@@ -303,7 +293,7 @@ class HomePage extends React.Component {
                                 <NavItem className="navclassa" eventKey={1} href="#" onClick={this.toggleSRole}>
                                     SignUp
                                 </NavItem>
-                                <NavItem eventKey={2} className="navclassa" href="#" onClick={this.toggleRole}>
+                                <NavItem eventKey={2} className="navclassa" onClick={this.toggleRole}>
                                     Login
                                 </NavItem>
                                 <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown" className="navclassa">
@@ -349,12 +339,9 @@ class HomePage extends React.Component {
                         </tbody>
                     </Table>
                     <div className="outer-gallary-class">
-
                         {galary()}
                     </div>
                 </div>
-
-
             </section>
         )
     }

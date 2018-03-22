@@ -72,11 +72,12 @@ let studentSchema = new mongoose.Schema({
 
 });
 
-studentSchema.methods.generateAuthToken=(stud)=>{
-    var access='auth';
-    var token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
+studentSchema.methods.generateAuthToken=function(){
+    let stud=this;
+    let access='auth';
+    let token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
     stud.tokens.push({access,token});
-    stud.save().then(()=>{
+    return stud.save().then(()=>{
         return token;
     })
 }
