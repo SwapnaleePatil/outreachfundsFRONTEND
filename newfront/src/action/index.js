@@ -2,12 +2,11 @@ import axiosI from '../services/axiosInstance';
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
-
+            dispatch({
+                type:'BUSINESS_LOGIN',
+                payload:response
+            });
            if(response.data.message==="login successful"){
-                dispatch({
-                    type:'BUSINESS_LOGIN',
-                    payload:response
-                });
                 console.log('login', response.data);
                 localStorage.setItem('user', response.data.token);
                 window.location = "/home"
@@ -21,6 +20,7 @@ export const  businessLogin=(data)=>{
 export const  studentLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
+            debugger
             if(response){
                 dispatch({
                     type:'STUDENT_LOGIN',
@@ -33,10 +33,7 @@ export const  studentLogin=(data)=>{
                     localStorage.setItem('user', response.data.token);
                     window.location = "/home"
                 }
-                else{
-                    alert('You are not authorized.');
-                }
-                window.location = "/";
+
             }
         }).catch((e)=>{
             console.log(e);

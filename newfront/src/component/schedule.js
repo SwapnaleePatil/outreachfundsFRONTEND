@@ -316,63 +316,63 @@ class Schedule extends React.Component {
                                 <th>Your Status</th>
                             </tr>
                             {currentBusinessEventdata.map((v,i)=>{
-                                    return <tr>
-                                        <td>
-                                            {v.eventDate && v.eventDate.split("T")[0]}
-                                        </td>
-                                        {
-                                            this.props.organization.map((value, i) => {
-                                                if (value._id === v.schoolOrganisation) {
-                                                    school = value.organisationName
-                                                }
-                                            })
-                                        }
-                                        <td>
-                                            {school}
-                                        </td>
+                                return <tr>
+                                    <td>
+                                        {v.eventDate && v.eventDate.split("T")[0]}
+                                    </td>
+                                    {
+                                        this.props.organization.map((value, i) => {
+                                            if (value._id === v.schoolOrganisation) {
+                                                school = value.organisationName
+                                            }
+                                        })
+                                    }
+                                    <td>
+                                        {school}
+                                    </td>
 
-                                        <td>
-                                            {v.eventName}
-                                        </td>
-                                        <td>
-                                            {v.location}
-                                        </td>
-                                        <td>
-                                            {v.eventTime}
-                                        </td>
-                                        <td>
-                                            {this.getBussiness(this.props.business, v)}
-                                        </td>
-                                        {v.accept.length !== 0 ?
-                                            <td className="approve-class">approved
-                                                by-{this.getBussinessAceepted(this.props.business, v)} </td> :
-                                            <td className="pending-class">pending</td>
-                                        }
+                                    <td>
+                                        {v.eventName}
+                                    </td>
+                                    <td>
+                                        {v.location}
+                                    </td>
+                                    <td>
+                                        {v.eventTime}
+                                    </td>
+                                    <td>
+                                        {this.getBussiness(this.props.business, v)}
+                                    </td>
+                                    {v.accept.length !== 0 ?
+                                        <td className="approve-class">approved
+                                            by-{this.getBussinessAceepted(this.props.business, v)} </td> :
+                                        <td className="pending-class">pending</td>
+                                    }
 
-                                        {
-                                            v.accept.includes(this.state.eventowner) ?
-                                                <td>Comfirmed</td> :
-                                                <td>
-                                                    <DropdownButton title="Action" id="bg-nested-dropdown">
-                                                        <MenuItem eventKey="1" onClick={() => {
-                                                            this.acceptSchedule(v._id, v)
-                                                        }}>Accept</MenuItem>
-                                                        <MenuItem eventKey="2" onClick={() => {
-                                                            this.setState({
-                                                                eventData: v,
-                                                                isEditing: true
-                                                            });
-                                                            this.toggleCalander()
-                                                        }}>Edit Schedule</MenuItem>
-                                                        <MenuItem eventKey="3" onClick={() => {
-                                                            this.rejectEvent(v._id, v)
-                                                        }}>Reject</MenuItem>
-                                                    </DropdownButton>
-                                                </td>
-                                        }
+                                    {
+                                        v.accept.includes(this.state.eventowner) ?
+                                            <td>Comfirmed</td> :
+                                            <td>
+                                                <DropdownButton title="Action" id="bg-nested-dropdown">
+                                                    <MenuItem eventKey="1" onClick={() => {
+                                                        this.acceptSchedule(v._id, v)
+                                                    }}>Accept</MenuItem>
+                                                    <MenuItem eventKey="2" onClick={() => {
+                                                        this.setState({
+                                                            eventData: v,
+                                                            isEditing: true
+                                                        });
+                                                        this.toggleCalander()
+                                                    }}>Edit Schedule</MenuItem>
+                                                    <MenuItem eventKey="3" onClick={() => {
+                                                        this.rejectEvent(v._id, v)
+                                                    }}>Reject</MenuItem>
+                                                </DropdownButton>
+                                            </td>
+                                    }
 
-                                    </tr>
-                                })
+                                </tr>
+                            })
                             }
                             <tr>
                                 <td colSpan="9" className="tbt" align="center">
@@ -382,77 +382,77 @@ class Schedule extends React.Component {
                             </tbody>
                         </Table>
                         :
-// Events of Student
+                        // Events of Student
                         <Table bordered striped>
-                        <tbody>
-                        <tr>
-                        <td colSpan={7} align="center"><h4>Events</h4></td>
-                        </tr>
-                        <tr>
-                        <td>
-                        <select onChange={this.pageChange}>
-                        <option value={3}>--Record Per Page</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                        </select>
-                        </td>
-                        <td colSpan={2} align="center">Total No Of Event:-<b>{studentEventLenght}</b></td>
-                        <td colSpan={2} align="center">Canceled Events:<b>{cancelEvents}</b></td>
-                        </tr>
-                        <tr>
-                        <th>Dates</th>
-                        <th>Organization Name</th>
-                        <th>Event Name</th>
-                        <th>Location</th>
-                        <th>Time</th>
-                        <th>Event Sponsor</th>
-                        <th>Status</th>
-                        </tr>
-                        {currentdata.map((v, i) => {
-                            return <tr key={i}>
-                                <td>
-                                    {v.eventDate && v.eventDate.split("T")[0]}
-                                </td>
-                                {
-                                    this.props.organization.map((value, i) => {
-                                        if (value._id === v.schoolOrganisation) {
-                                            school = value.organisationName
-                                        }
-                                    })
-                                }
-                                <td> {school}</td>
-                                <td>
-                                    {v.eventName}
-                                </td>
-                                <td>
-                                    {v.location}
-                                </td>
-                                <td>
-                                    {v.eventTime}
-                                </td>
-                                <td>
-                                    {this.getBussiness(this.props.business, v)}
-                                </td>
-                                {v.accept.length !== 0 ?
-                                    <td className="approve-class">approved
-                                        by-{this.getBussinessAceepted(this.props.business, v)} </td> :
-                                    <td className="pending-class">pending</td>
-                                }
+                            <tbody>
+                            <tr>
+                                <td colSpan={7} align="center"><h4>Events</h4></td>
                             </tr>
-                        })
-                        }
-                        <tr>
-                        <td colSpan="9" className="tbt" align="center">
-                        {renderpage}
-                        </td>
-                        </tr>
-                        </tbody>
+                            <tr>
+                                <td>
+                                    <select onChange={this.pageChange}>
+                                        <option value={3}>--Record Per Page</option>
+                                        <option value={1}>1</option>
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={4}>4</option>
+                                        <option value={5}>5</option>
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </td>
+                                <td colSpan={2} align="center">Total No Of Event:-<b>{studentEventLenght}</b></td>
+                                <td colSpan={2} align="center">Canceled Events:<b>{cancelEvents}</b></td>
+                            </tr>
+                            <tr>
+                                <th>Dates</th>
+                                <th>Organization Name</th>
+                                <th>Event Name</th>
+                                <th>Location</th>
+                                <th>Time</th>
+                                <th>Event Sponsor</th>
+                                <th>Status</th>
+                            </tr>
+                            {currentdata.map((v, i) => {
+                                return <tr key={i}>
+                                    <td>
+                                        {v.eventDate && v.eventDate.split("T")[0]}
+                                    </td>
+                                    {
+                                        this.props.organization.map((value, i) => {
+                                            if (value._id === v.schoolOrganisation) {
+                                                school = value.organisationName
+                                            }
+                                        })
+                                    }
+                                    <td> {school}</td>
+                                    <td>
+                                        {v.eventName}
+                                    </td>
+                                    <td>
+                                        {v.location}
+                                    </td>
+                                    <td>
+                                        {v.eventTime}
+                                    </td>
+                                    <td>
+                                        {this.getBussiness(this.props.business, v)}
+                                    </td>
+                                    {v.accept.length !== 0 ?
+                                        <td className="approve-class">approved
+                                            by-{this.getBussinessAceepted(this.props.business, v)} </td> :
+                                        <td className="pending-class">pending</td>
+                                    }
+                                </tr>
+                            })
+                            }
+                            <tr>
+                                <td colSpan="9" className="tbt" align="center">
+                                    {renderpage}
+                                </td>
+                            </tr>
+                            </tbody>
                         </Table>
                     }
                 </div>

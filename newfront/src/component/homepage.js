@@ -10,6 +10,12 @@ import '../index.css'
 import Modal from 'react-modal'
 import {NavLink} from 'react-router-dom'
 
+import BusinessFullPage from '../business/components/businessFullPage'
+import signUpPage from '../students/components/signUpPage'
+
+import SignUp from './signup'
+import businesslogin from "../reducer/businesslogin";
+// import Login from './login'
 let message = "";
 
 class HomePage extends React.Component {
@@ -24,36 +30,70 @@ class HomePage extends React.Component {
             role: "",
             sisRole:false,
             srole:'',
-            message: ""
+            error:{},
+            studlogin:'',
+            buslogin:''
         }
     }
-
+    componentWillReceiveProps(nextProps){
+        debugger
+        this.setState({studlogin:nextProps.studentlogin,buslogin:nextProps.businesslogin},()=> {
+            let {error} = this.state;
+            if (this.state.role === "student")
+            {
+                if (this.state.studlogin.data.message === "login failed") {
+                    error.password = "invalid Email Or Password"
+                }
+                else {
+                    error.password = "";
+                }
+             }
+            else {
+                if (this.state.buslogin.data === "User Not Found") {
+                    error.password = "invalid Email Or Password"
+                }
+                else {
+                    error.password = "";
+                }
+            }
+            this.setState({error});
+        })
+    }
     onEmailChange = (e) => {
-        message = "";
+        let {error}=this.state;
         this.setState({
             email: e.target.value
         });
         let re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.edu$/;
         if (this.state.role === "student") {
             if (!re.test(e.target.value)) {
-                message = "Student Email is not valid";
+                error.email = "Email is not valid";
+            }
+            else {
+                error.email="";
             }
         } else {
             re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!re.test(e.target.value)) {
-                message = "Email is not Valid";
+                error.email = "Email is not Valid";
+            }
+            else {
+                error.email="";
             }
         }
+        this.setState({error})
 
     };
     onPassChange = (e) => {
-        message = ""
+        // message = ""
         this.setState({
             password: e.target.value
         });
-        e.target.value.length < 6 ? message = "password should be greater than 6 character" : message = "";
+        // e.target.value.length < 6 ? message = "password should be greater than 6 character" : message = "";
     };
     loginstudent = () => {
+        let {error}=this.state;
+
         let data = {
             email: this.state.email,
             password: this.state.password
@@ -61,14 +101,19 @@ class HomePage extends React.Component {
         this.props.studentLogin(data);
     };
     loginbusiness = () => {
+        let {error}=this.state;
         let data = {
             username: this.state.email,
             password: this.state.password
         };
         this.props.businessLogin(data);
         if (this.props.businesslogin.data === "User Not Found"){
-            message = "invalid Email Or Password"
+            error.password = "invalid Email Or Password"
         }
+        else {
+            error.password=""
+        }
+        this.setState({error});
     };
     toggleModal = () => {
         this.setState({
@@ -93,6 +138,7 @@ class HomePage extends React.Component {
     };
 
     render() {
+        let {error}=this.state;
         return (
             <section>
                 <div>
@@ -147,11 +193,7 @@ class HomePage extends React.Component {
 
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <span className="error-message">{message}</span>
-                                </td>
-                            </tr>
+
                             <tr>
                                 <td>
                                     <h4>Enter Email</h4>
@@ -165,6 +207,7 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td>
+                                    {error.email && <span style={{"color": "red"}}>{error.email}</span>}
                                 </td>
                             </tr>
                             <tr>
@@ -180,7 +223,7 @@ class HomePage extends React.Component {
                                 <td>
                                     <FormControl type="password" name="password" onChange={this.onPassChange}
                                                  placeholder="Enter Password"/>
-
+                                    {error.password && <span style={{"color": "red"}}>{error.password}</span>}
                                 </td>
                             </tr>
                             <tr>

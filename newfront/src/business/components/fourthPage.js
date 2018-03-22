@@ -13,7 +13,7 @@ class FourthPage extends React.Component {
         super(props);
         this.state = {
             ownerData: [],
-
+            error: {},
         }
     }
 
@@ -31,72 +31,86 @@ class FourthPage extends React.Component {
     }
     submitData = (e) => {
         e.preventDefault();
-        if(this.state.msg!=="")
-        {
-            this.setState({
-                msg:"Please Fill Valid Information"
-            })
+        debugger;
+        const {ownerData,error} = this.state;
+        if (!ownerData.country) {
+            error.country="Please Select Country"
+            this.setState({error})
         }
-        else
-        {
-            const {businessSignup, businessFields} = this.props;
-            businessSignup(1);
-            businessFields();
-            let {ownerData} = this.state;
-            if (ownerData["expireMonth"] < 9) {
-                ownerData["expireMonth"] = "0" + ownerData["expireMonth"];
-            } else {
-                ownerData["expireMonth"] = ownerData["expireMonth"];
-            }
-            ownerData["expiresOn"] = ownerData["expireMonth"] + "/" + ownerData["expireYear"]
-            let obj = {
-
-                firstName: ownerData.firstName,
-                lastName: ownerData.lastName,
-                gender: ownerData.gender,
-                dob: ownerData.dob,
-                email: ownerData.email,
-                password: ownerData.password,
-                phone: ownerData.phone,
-                businessInfo: {
-                    businessName: ownerData.businessName,
-                    businessType: ownerData.businessType,
-                    businessHours: ownerData.businessHours,
-                    businessAddress: ownerData.businessAddress,
-                    businessPhone: ownerData.businessPhone,
-                    businessEmail: ownerData.email,
-                    taxPayerId: ownerData.taxPayerId
-                },
-                subscription: {
-                    pricing: ownerData.pricing,
-                    subscriptionDate: Date.now(),
-                    cardDetail: {
-                        cardType: ownerData.cardType,
-                        cardNumber: ownerData.cardNumber,
-                        expiresOn: ownerData.expiresOn,
-                        securityCode: ownerData.securityCode,
-                        postalCode: ownerData.postalCode,
-                        country: ownerData.country
-                    }
+        else {
+            error.country="";
+            let flag = 0;
+            for (let key in error) {
+                console.log(key);
+                if (error[key] !== '') {
+                    flag = 1;
                 }
             }
-            let formData = new FormData();
-            formData.append('obj', JSON.stringify(obj));
-            formData.append('photo', ownerData.photo);
-            this.props.addBusiness(formData);
+            if (flag === 0) {
 
+                const {businessSignup, businessFields} = this.props;
+                businessSignup(1);
+                businessFields();
+                //let {ownerData} = this.state;
+                if (ownerData["expireMonth"] < 9) {
+                    ownerData["expireMonth"] = "0" + ownerData["expireMonth"];
+                } else {
+                    ownerData["expireMonth"] = ownerData["expireMonth"];
+                }
+                ownerData["expiresOn"] = ownerData["expireMonth"] + "/" + ownerData["expireYear"]
+                let obj = {
+
+                    firstName: ownerData.firstName,
+                    lastName: ownerData.lastName,
+                    gender: ownerData.gender,
+                    dob: ownerData.dob,
+                    email: ownerData.email,
+                    password: ownerData.password,
+                    phone: ownerData.phone,
+                    businessInfo: {
+                        businessName: ownerData.businessName,
+                        businessType: ownerData.businessType,
+                        businessHours: ownerData.businessHours,
+                        businessAddress: ownerData.businessAddress,
+                        businessPhone: ownerData.businessPhone,
+                        businessEmail: ownerData.email,
+                        taxPayerId: ownerData.taxPayerId
+                    },
+                    subscription: {
+                        pricing: ownerData.pricing,
+                        subscriptionDate: Date.now(),
+                        cardDetail: {
+                            cardType: ownerData.cardType,
+                            cardNumber: ownerData.cardNumber,
+                            expiresOn: ownerData.expiresOn,
+                            securityCode: ownerData.securityCode,
+                            postalCode: ownerData.postalCode,
+                            country: ownerData.country
+                        }
+                    }
+                }
+                let formData = new FormData();
+                formData.append('obj', JSON.stringify(obj));
+                formData.append('photo', ownerData.photo);
+                this.props.addBusiness(formData);
+
+
+            }
+            this.setState({error})
         }
+
 
     }
     chkValidation = (e) => {
-        this.setState({msg: ""});
+        let {error} = this.state;
         let name = e.target.name;
         if (name === "cardNumber") {
             let renum = /^[0-9]{16}$/;
             if (!renum.test(e.target.value)) {
-                this.setState({
-                    msg: "Enter 16 digit Number"
-                })
+                error.cardNumber = "Enter 16 digit Number";
+            }
+            else {
+                error.cardNumber = "";
             }
         }
         if (name === "securityCode") {
@@ -104,22 +118,25 @@ class FourthPage extends React.Component {
 
             if (!rescode.test(e.target.value)) {
 
-                this.setState({
-                    msg: "Enter 3 digit Number"
-                })
+                error.securityCode = "Enter 3 digit Number"
+            }else {
+                error.securityCode = "";
             }
-
         }
         if (name === "postalCode") {
             let repcode = /^[0-9]{6}$/;
 
             if (!repcode.test(e.target.value)) {
-
-                this.setState({
-                    msg: "Enter 6 digit Number"
-                })
+                error.postalCode = "Enter 6 digit Number"
+            }else {
+                error.postalCode = "";
             }
-
+        }
+        this.setState({
+            error
+        })
+        if (e.target.value === "") {
+            this.setState({error: ""});
         }
     }
     handlePreviousPage = (e) => {
@@ -130,6 +147,7 @@ class FourthPage extends React.Component {
     }
 
     render() {
+        let {error}=this.state;
         const {Fields} = this.props;
         if (Fields !== null)
             this.state.ownerData = Fields;
@@ -143,8 +161,9 @@ class FourthPage extends React.Component {
                         <span style={{"color": "red"}}>{this.state.msg}</span></div>
                     <div>
                         <div align="right">
-                            <Button onClick={()=>{
-                                window.location="/"}
+                            <Button onClick={() => {
+                                window.location = "/"
+                            }
                             }
                             >Close</Button></div>
                         <Table hover bordered responsive style={{"background-color": "white"}}>
@@ -159,7 +178,8 @@ class FourthPage extends React.Component {
                                 <td><input value={ownerData.cardNumber} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} name="cardNumber" className="form-control" type="number" required/></td>
+                                }} name="cardNumber" className="form-control" type="number" required/>
+                                    {error.cardNumber && <span style={{"color": "red"}}>{error.cardNumber}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Expires On:</label></td>
@@ -180,14 +200,17 @@ class FourthPage extends React.Component {
                                 <td><input value={ownerData.securityCode} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} required name="securityCode" className="form-control" type="number"/></td>
+                                }} required name="securityCode" className="form-control" type="number"/>
+                                    {error.securityCode && <span style={{"color": "red"}}>{error.securityCode}</span>}
+                                </td>
                             </tr>
                             <tr>
                                 <td><label>Postal Code:</label></td>
                                 <td><input value={ownerData.postalCode} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} name="postalCode" required className="form-control" type="number"/></td>
+                                }} name="postalCode" required className="form-control" type="number"/>
+                                    {error.postalCode && <span style={{"color": "red"}}>{error.postalCode}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Country:</label></td>
@@ -200,7 +223,8 @@ class FourthPage extends React.Component {
                                         <option value="USA">USA</option>
                                         <option value="China">China</option>
                                         <option value="Japan">Japan</option>
-                                    </select></td>
+                                    </select>{this.state.error.country &&
+                                <span style={{"color": "red"}}>{this.state.error.country}</span>}</td>
                             </tr>
                             <tr>
                                 <td><Button active type="button" bsStyle="info" onClick={this.handlePreviousPage}>

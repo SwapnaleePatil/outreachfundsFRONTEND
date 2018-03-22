@@ -209,7 +209,7 @@ class StudentProfile extends React.Component {
                                                             style={{"width": "100%", "height": "100%"}}/>
                                     :
                                     <img className="image"
-                                         src={"http://localhost:3000/uploads/" + student.photo}
+                                         src={"http://192.168.200.80:3005/uploads/" + student.photo}
                                          style={{"width": "100%", "height": "100%"}}/>
 
                             }

@@ -222,7 +222,7 @@ class BusinessProfile extends React.Component {
                                                             style={{"width": "100%", "height": "100%"}}/>
                                     :
                                     <img className="image"
-                                         src={"http://localhost:3000/uploads/" + businessOwner.photo}
+                                         src={"http://192.168.200.80:3005/uploads/" + businessOwner.photo}
                                          style={{"width": "100%", "height": "100%"}}/>
 
                             }
@@ -404,13 +404,13 @@ class BusinessProfile extends React.Component {
                                                         style={{"width": "20%"}}
                                                         onChange={this.handlebusinessDetail} name="businessHour"
                                                         type="number"
-                                                        min="00" max="24" required/>{'  '}
+                                                        min="0" max="24" required/>{'  '}
                                             Minute:<input value={businessInfo && businessInfo.businessHours.split(":")[1]}
                                                           className="form-control"
                                                           style={{"width": "20%"}}
                                                           onChange={this.handlebusinessDetail} name="businessMinute"
                                                           type="number"
-                                                          min="00" max="59" required/></div>
+                                                          min="0" max="59" required/></div>
                                         : businessInfo && businessInfo.businessHours || ''}</td>
                                 </tr>
                                 <tr>
