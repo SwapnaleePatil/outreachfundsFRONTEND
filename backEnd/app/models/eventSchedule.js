@@ -33,8 +33,7 @@ let eventSchema = new mongoose.Schema({
         type: String
     },
     accept: {
-        type: Boolean,
-        default: false
+        type: Array
     },
     status: {
         type: Boolean,

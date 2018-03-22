@@ -16,7 +16,7 @@ export const businessFields=(obj=[])=>{
 };
 export const addBusiness=(obj)=>{
     return (dispatch)=>{
-        axiosI.post('/api/business/profile',obj).then((result)=>{
+        axiosI.post('api/business/profile',obj).then((result)=>{
            dispatch({
                 type:'BUSINESS_ADD',
                 payload:result.data

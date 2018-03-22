@@ -10,11 +10,6 @@ import '../index.css'
 import Modal from 'react-modal'
 import {NavLink} from 'react-router-dom'
 
-import BusinessFullPage from '../business/components/businessFullPage'
-import signUpPage from '../students/components/signUpPage'
-
-import SignUp from './signup'
-// import Login from './login'
 let message = "";
 
 class HomePage extends React.Component {
@@ -96,21 +91,7 @@ class HomePage extends React.Component {
             sisRole: !this.state.sisRole
         })
     };
-    about=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
-    contactus=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
-    fundideas=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
+
     render() {
         return (
             <section>
@@ -155,7 +136,7 @@ class HomePage extends React.Component {
                             <tbody>
                             <tr>
                                 <td align="right">
-                                    <a href="#" onClick={this.toggleModal}>X</a>
+                                    <a onClick={this.toggleModal}>X</a>
                                 </td>
                             </tr>
                             <tr>
