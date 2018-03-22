@@ -95,7 +95,7 @@ class MainPage extends React.Component {
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={3} className="navclass-item" href="/main/donation">
+                        -<NavItem eventKey={3} className="navclass-item" href="/main/donation">
                             <Button bsSize="large" className="navclass-bs">
                                 Donation<br/> <Glyphicon glyph="glyphicon glyphicon-usd"/></Button>
                         </NavItem>

@@ -15,7 +15,7 @@ class StudentProfile extends React.Component {
             school: [],
             selectedSchool: '',
             isEditing: false,
-            msg: '',
+            error: {},
             changeimg: false,
             previewFile: ''
         }
@@ -82,40 +82,82 @@ class StudentProfile extends React.Component {
         this.setState({selectedSchool})
     }
     chkValidation = (e) => {
-        this.setState({msg: ""});
+        let {error}=this.state;
         let name = e.target.name;
         if (name === "email") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                this.setState({msg: "Email is InValid"});
+                error.email= "Email is InValid"
+            }
+            else
+            {
+                error.email=""
             }
         }
         if (name === "organisationEmail") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                this.setState({msg: "Email is InValid"});
+                error.organisationEmail= "Email is InValid"
+            }
+            else {
+                error.organisationEmail="";
             }
         }
         //
         if (name === "phone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
-                this.setState({msg: "Enter Number between 6 to 13 digit"});
+                error.phone= "Enter Number between 6 to 13 digit";
+            }
+            else
+            {
+                error.phone="";
             }
         }
         if (name === "organisationPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
-                this.setState({msg: "Enter Number between 6 to 13 digit"});
+                error.organisationPhone= "Enter Number between 6 to 13 digit";
+            }
+            else {
+                error.organisationPhone="";
             }
         }
-        if (name === "firstName" || name === "lastName" || name === "organisationName" || name === "schoolName" || name === "roleTitle") {
+        if (name === "firstName") {
             let rename = /^([A-Za-z ])*$/;
-            ;
             if (!rename.test(e.target.value)) {
-                this.setState({msg: "Can't be Number"});
+                error.firstName= "Enter Valid First Name"
+            }
+            else {error.firstName=""};
+        }
+        if (name === "lastName") {
+            let rename = /^([A-Za-z ])*$/;
+            if (!rename.test(e.target.value)) {
+                error.lastName= "Enter Valid Last Name"
+            }
+            else {error.lastName=""};
+        }
+        if (name === "organisationName") {
+            let rename = /^([A-Za-z ])*$/;
+            if (!rename.test(e.target.value)) {
+                error.organisationName= "Enter Valid Organisation Name"
+            }
+            else {error.organisationName=""};
+        }
+        if (name === "schoolName") {
+            let rename = /^([A-Za-z ])*$/;
+            if (!rename.test(e.target.value)) {
+                error.schoolName= "Enter Valid School Name"
+            }
+            else {error.schoolName=""};
+        }
+        if (name === "roleTitle") {
+            let rename = /^([A-Za-z ])*$/;
+            if (!rename.test(e.target.value)) {
+                this.setState({msg: "Enter Valid Role Title"});
             }
         }
+
         if (name === "dob") {
             let date = new Date();
             let day = date.getDate();
@@ -126,40 +168,48 @@ class StudentProfile extends React.Component {
             let year = date.getFullYear() - 15;
             let dobdate = year + '-' + month + '-' + day;
             if (e.target.value > dobdate) {
-                this.setState({
-                    msg: "Please Select Proper Birth Date"
-                })
+                error.dob="Please Select Proper Birth Date";
+            }
+            else {
+                error.dob="";
             }
         }
+        this.setState({error});
+
         if (e.target.value === "") {
-            this.setState({msg: ""});
+            this.setState({error: ""});
         }
     }
     handleimg = (e) => {
-        e.preventDefault();
-        this.setState({
-            changeimg: true
-        })
-        let reader = new FileReader();
-        let file = e.target.files[0];
-        reader.onloadend = () => {
+        if(e.target.files.length){
+            let {student}=this.state;
             this.setState({
-                photo: file,
-                previewFile: reader.result
-            });
-        };
-        reader.readAsDataURL(file);
+                changeimg: true
+            })
+            let reader = new FileReader();
+            let file = e.target.files[0];
+            reader.onloadend = () => {
+                student["photo"]=file;
+                this.setState({
+                    student,
+                    previewFile: reader.result
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     }
     updateRecord = (e) => {
-        debugger
+        //debugger
         e.preventDefault();
-        if (this.state.msg !== "") {
-            this.setState({
-                msg: "Please Fill Valid Information"
-            })
+        const {error}=this.state;
+        let flag = 0;
+        for (let key in error) {
+            console.log(key);
+            if (error[key] !== '') {
+                flag = 1;
+            }
         }
-        else
-        {
+        if (flag === 0) {
                 let {student,selectedSchool}=this.state;
                 let studentObj={
                     id:student._id,
@@ -193,9 +243,7 @@ class StudentProfile extends React.Component {
         }
     }
     render() {
-        let student = this.state.student;
-        let selectedSchool = this.state.selectedSchool;
-        let isEditing = this.state.isEditing;
+        let {student,selectedSchool,isEditing,error}=this.state;
         let address = this.state.selectedSchool.organisationAddress && this.state.selectedSchool.organisationAddress.split(",");
 
         return (
@@ -216,7 +264,7 @@ class StudentProfile extends React.Component {
                             {isEditing && <div className="middle">
                                 <input type="file" ref="img" id="fileLoader" name="photo" title="Load File"
                                        onChange={(e) => {
-                                           this.handleChange(e);
+                                           // this.handleChange(e);
                                            this.handleimg(e);
                                        }}/>
                                 <div className="text btn-lg" onClick={(e) => this.refs.img.click()}>
@@ -247,8 +295,12 @@ class StudentProfile extends React.Component {
                                                     this.chkValidation(e);
                                                 }}/>
                                             </div>
+
                                             : student.firstName + " " + student.lastName
                                     }
+                                        {error.firstName && <span style={{"color": "red"}}>{error.firstName}</span>}
+                                        {error.lastName && <span style={{"color": "red"}}>{error.lastName}</span>}
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -262,7 +314,10 @@ class StudentProfile extends React.Component {
                                                     this.chkValidation(e);
                                                 }}/>
                                             </div>
-                                            : student.email}</td>
+                                            : student.email}
+                                        {error.email && <span style={{"color": "red"}}>{error.email}</span>}
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Date Of Birth</td>
@@ -276,7 +331,10 @@ class StudentProfile extends React.Component {
                                                            this.chkValidation(e);
                                                        }} required/>
                                             </div>
-                                            : student.dob && student.dob.split("T")[0]}</td>
+                                            : student.dob && student.dob.split("T")[0]}
+                                        {error.dob && <span style={{"color": "red"}}>{error.dob}</span>}
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Phone</td>
@@ -290,7 +348,10 @@ class StudentProfile extends React.Component {
                                                            this.chkValidation(e);
                                                        }} required/>
                                             </div>
-                                            : student.phone && student.phone}</td>
+                                            : student.phone && student.phone}
+                                        {error.phone && <span style={{"color": "red"}}>{error.phone}</span>}
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Gender</td>
@@ -319,6 +380,8 @@ class StudentProfile extends React.Component {
                                                        }} required/>
                                             </div>
                                             : student.roleTitle && student.roleTitle}</td>
+                                    {error.roleTitle && <span style={{"color": "red"}}>{error.roleTitle}</span>}
+
                                 </tr>
                             </table>
                         </fieldset>
@@ -343,7 +406,10 @@ class StudentProfile extends React.Component {
                                         }} value={selectedSchool && selectedSchool.organisationContact}
                                                name="organisationContact" type="number" required
                                         /> :
-                                        selectedSchool && selectedSchool.organisationContact}</td>
+                                        selectedSchool && selectedSchool.organisationContact}
+                                    {error.organisationContact && <span style={{"color": "red"}}>{error.organisationContact}</span>}
+
+                                </td>
                             </tr>
 
                             <tr>
@@ -361,7 +427,8 @@ class StudentProfile extends React.Component {
 
                                             )
                                         })
-                                }</td>
+                                }
+                                </td>
                             </tr>
 
                         </table>
@@ -380,7 +447,10 @@ class StudentProfile extends React.Component {
                                                    this.handleorganisationDetail(e);
                                                    this.chkValidation(e);
                                                }} name="schoolName" type="text"
-                                               required/> : selectedSchool && selectedSchool.schoolName || ''}</td>
+                                               required/> : selectedSchool && selectedSchool.schoolName || ''}
+                                        {error.schoolName && <span style={{"color": "red"}}>{error.schoolName}</span>}
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="fieldsecond">Organisation Name:</td>
@@ -392,7 +462,11 @@ class StudentProfile extends React.Component {
                                                    this.handleorganisationDetail(e);
                                                    this.chkValidation(e);
                                                }} name="organisationName" type="text"
-                                               required/> : selectedSchool && selectedSchool.organisationName || ''}</td>
+                                               required/> : selectedSchool && selectedSchool.organisationName || ''}
+                                        {error.organisationName && <span style={{"color": "red"}}>{error.organisationName}</span>}
+
+                                    </td>
+
                                 </tr>
 
                                 <tr>
@@ -405,7 +479,10 @@ class StudentProfile extends React.Component {
                                                    this.handleorganisationDetail(e);
                                                    this.chkValidation(e);
                                                }} type="email" required/>
-                                        : selectedSchool && selectedSchool.organisationEmail || ''}</td>
+                                        : selectedSchool && selectedSchool.organisationEmail || ''}
+                                        {error.organisationEmail && <span style={{"color": "red"}}>{error.organisationEmail}</span>}
+
+                                    </td>
                                 </tr>
                                 {isEditing ? <tr>
                                     <td colSpan="2" align="right"><Button bsStyle="success" onClick={this.updateRecord}>Update</Button>

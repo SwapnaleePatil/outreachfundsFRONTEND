@@ -1,5 +1,7 @@
 let BusinessOwner = require('../models/businessOwner').businessOwner;
 const _=require('lodash')
+
+//Add new Business Owner And Business Detail
 exports.addBusinessOwner = (req, res) => {
     if (!req.files)
         return res.status(400).send('No files were uploaded.');
@@ -24,6 +26,7 @@ exports.addBusinessOwner = (req, res) => {
         console.log('error in inserting record.',e);
     })
 }
+//Delete Business Owner And Business Detail
 exports.deleteBusinessOwner = (req, res) => {
     BusinessOwner.findByIdAndUpdate(req.body.id,{ $set:{status: 'true'}},{new:true}).then((result) => {
         if (result) {
@@ -36,6 +39,7 @@ exports.deleteBusinessOwner = (req, res) => {
         console.log('Error in deletion');
     })
 }
+//Update Business Owner And Business Detail
 exports.updateBusinessOwner = (req, res) => {
     let img = '';
     let body=JSON.parse(req.body.obj);
@@ -61,6 +65,7 @@ exports.updateBusinessOwner = (req, res) => {
         console.log('Error in Update', err);
     })
 }
+//Fetch All Record
 exports.fetch = (req, res) => {
     BusinessOwner.find().then((data) => {
         res.send({"message":'All Record.', 'record': data});
@@ -68,6 +73,7 @@ exports.fetch = (req, res) => {
         console.log('Error in retrieving data.', err);
     })
 }
+//Fetch Record By Id
 exports.fetchById = (req, res) => {
     BusinessOwner.findById({_id:req.body.id}).then((data) => {
         res.send(data.businessInfo.businessName);
@@ -75,6 +81,7 @@ exports.fetchById = (req, res) => {
         console.log('Error in retrieving data.');
     })
 };
+//Fetch Record By Token
 exports.fetchByToken=(req,res)=>{
     let token=req.header('x-auth');
     BusinessOwner.findByToken(token).then((result)=>{

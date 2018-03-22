@@ -35,7 +35,7 @@ module.exports=(passport)=>{
     })
     )
 
-    //Business
+    //Passport Authentication For Business Owner
     passport.use('businessOwner',new LocalStrategy((username, password, done) => {
         businessOwner.findOne({email: username}, (err, user) => {
             if (err) {

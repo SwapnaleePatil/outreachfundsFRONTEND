@@ -6,11 +6,11 @@ import FirstPage from './firstPage';
 import SecondPage from './secondPage';
 import ThirdPage from './thirdPage';
 import FourthPage from './fourthPage';
-import {businessSignup} from '../action';
+import {businessPage} from '../action';
 class BusinessFullPage extends React.Component{
-        componentWillMount(){
+    componentWillMount(){
         if(this.props.Page===0)
-            this.props.businessSignup();
+            this.props.businessPage();
     }
     render(){
         return(
@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 }
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        businessSignup
+        businessPage
     },dispatch)
 }
 export default connect(mapStateToProps,matchDispatchToProps)(BusinessFullPage);
