@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from 'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {bindActionCreators} from 'redux';
 
 class FirstPage extends React.Component {
@@ -16,7 +16,7 @@ class FirstPage extends React.Component {
             error: {}
         }
     }
-
+    //Handle The Change in State
     handleChange = (e) => {
         const {name, value} = e.target;
         const {ownerData} = this.state;
@@ -31,6 +31,7 @@ class FirstPage extends React.Component {
         })
 
     }
+    //Validation
     chkValidation = (e) => {
         let {error } = this.state;
          let name = e.target.name;
@@ -94,7 +95,7 @@ class FirstPage extends React.Component {
             this.setState({error: ""});
         }
     }
-
+    //To Redirect On Next Page
     handlePage = (e) => {
         e.preventDefault();
         const {error} =this.state;
@@ -108,10 +109,11 @@ class FirstPage extends React.Component {
         }
        // debugger;
         if (flag===0) {
-            this.props.businessSignup(this.props.Page + 1);
+            this.props.businessPage(this.props.Page + 1);
             this.handleSubmit();
         }
     }
+    //Maintain Field Data
     handleSubmit = () => {
         this.props.businessFields(this.state.ownerData);
     }
@@ -199,7 +201,7 @@ class FirstPage extends React.Component {
                                            minLength="8"
                                            maxLength="32"
                                            name="password" type="password" required
-                                />{error.password && <span style={{"color": "red"}}>{error.password}</span>}</td>
+                                /></td>
                             </tr>
                             <tr>
                                 <td><label>Phone:</label></td>
@@ -233,7 +235,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields, businessSignup}, dispatch)
+    return bindActionCreators({businessFields, businessPage}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FirstPage)

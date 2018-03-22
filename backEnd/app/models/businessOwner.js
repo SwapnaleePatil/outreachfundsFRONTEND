@@ -2,6 +2,7 @@ let mongoose = require('mongoose');
 let validator = require('validator');
 let bcrypt=require('bcryptjs');
 let jwt=require('jsonwebtoken');
+//Schema For Business Owner With Business Detail
 let businessOwnerSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -120,6 +121,7 @@ let businessOwnerSchema = new mongoose.Schema({
         token:String
     }]
 });
+//Password Hashing
 businessOwnerSchema.pre('save',function (next) {
     let businessOwner=this;
     if(businessOwner.isModified('password'))
@@ -142,7 +144,7 @@ businessOwnerSchema.pre('save',function (next) {
         next();
     }
 });
-
+//Generate Token For New BusinessOwner
 businessOwnerSchema.methods.generateAuthToken=function(){
     let businessOwner=this;
     let access='auth';
@@ -158,6 +160,7 @@ businessOwnerSchema.methods.generateAuthToken=function(){
         return token;
     })
 }
+//Find Business Owner By Token
 businessOwnerSchema.statics.findByToken=function(token) {
     let businessOwner=this;
     let decoded='';
