@@ -1,5 +1,4 @@
 import axiosI from '../services/axiosInstance';
-import axios from 'axios';
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
@@ -80,6 +79,21 @@ export const eventslist=()=>{
             if(response){
                 dispatch({
                     type:'EVENT_LIST',
+                    payload:response.data.record
+                })
+            }
+        }).catch((e)=>{
+            console.log(e);
+        })
+    }
+};
+
+export const eventslistbysposer=(data)=>{
+    return(dispatch)=>{
+        axiosI({method:'post',url:'/api/eventBySponser',data}).then((response)=>{
+            if(response){
+                dispatch({
+                    type:'EVENTS_SPONSER',
                     payload:response.data.record
                 })
             }

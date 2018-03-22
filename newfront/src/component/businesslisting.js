@@ -96,9 +96,14 @@ class BusinessList extends React.Component {
         return (
             <div>
                 <div className="col-sm-8">
-                    <h2 align="center">Business List</h2>
+
                     <Table hover striped bordered>
                         <tbody>
+                        <tr>
+                            <td colSpan={5}>
+                            <h2 align="center">Business List</h2>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 Total No of Busines:-{this.state.data.length}

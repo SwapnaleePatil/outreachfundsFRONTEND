@@ -99,7 +99,6 @@ class HomePage extends React.Component {
             password: this.state.password
         };
         this.props.studentLogin(data);
-
     };
     loginbusiness = () => {
         let {error}=this.state;
@@ -137,21 +136,7 @@ class HomePage extends React.Component {
             sisRole: !this.state.sisRole
         })
     };
-    about=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
-    contactus=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
-    fundideas=()=>(
-        <div>
-            Comming Soon...
-        </div>
-    )
+
     render() {
         let {error}=this.state;
         return (
@@ -197,7 +182,7 @@ class HomePage extends React.Component {
                             <tbody>
                             <tr>
                                 <td align="right">
-                                    <a href="#" onClick={this.toggleModal}>X</a>
+                                    <a onClick={this.toggleModal}>X</a>
                                 </td>
                             </tr>
                             <tr>
@@ -230,7 +215,10 @@ class HomePage extends React.Component {
                                     <h4> Enter Password</h4>
                                 </td>
                             </tr>
-
+                            <tr>
+                                <td>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
                                     <FormControl type="password" name="password" onChange={this.onPassChange}
@@ -373,7 +361,6 @@ class HomePage extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("state",state);
     return ({businesslogin: state.blogin,studentlogin:state.slogin})
 
 }
