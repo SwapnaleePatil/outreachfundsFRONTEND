@@ -9,7 +9,7 @@ import {scheduleevents, eventslist, actionevents} from '../action/index'
 import {fetchAllSchoolDetails, fetchStudent} from '../students/action/index';
 import {eventslistbysposer} from '../action/index'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
+import '../index.css'
 let school = "";
 
 class Schedule extends React.Component {
@@ -30,8 +30,15 @@ class Schedule extends React.Component {
             searchdata: [],
             businessNameSelect: [],
             student: [],
+            rejectModal:false
         }
     }
+//reject modal
+    toggleReject=()=>{
+        this.setState({
+            rejectModal:!this.state.rejectModal
+        })
+    };
 
 //open & close  event modal
     toggleCalander = () => {
@@ -88,6 +95,7 @@ class Schedule extends React.Component {
         };
         this.props.actionevents(data)
         this.clearData();
+        this.toggleReject();
 
     };
 //event generate by student and business
@@ -351,7 +359,7 @@ class Schedule extends React.Component {
 
                                     {
                                         v.accept.includes(this.state.eventowner) ?
-                                            <td>Comfirmed</td> :
+                                            <td className="confirm-class">Comfirmed</td> :
                                             <td>
                                                 <DropdownButton title="Action" id="bg-nested-dropdown">
                                                     <MenuItem eventKey="1" onClick={() => {
@@ -364,9 +372,21 @@ class Schedule extends React.Component {
                                                         });
                                                         this.toggleCalander()
                                                     }}>Edit Schedule</MenuItem>
-                                                    <MenuItem eventKey="3" onClick={() => {
-                                                        this.rejectEvent(v._id, v)
-                                                    }}>Reject</MenuItem>
+                                                    <MenuItem eventKey="3" onClick={this.toggleReject}>Reject</MenuItem>
+                                                    <Modal isOpen={this.state.rejectModal} style={{
+                                                        content: {
+                                                        },overlay:{
+                                                            margin: '15%',
+                                                            marginLeft: '35%',
+                                                            marginRight: '35%',
+                                                            opacity: '.7'
+                                                        }
+                                                    }}>
+                                                        Are You sure You Want to Reject This Event<br/><br/><br/>
+
+                                                        <Button className="reject-bs-class" bsStyle="primary" onClick={()=>{this.rejectEvent(v._id, v)}}>Reject</Button>
+                                                        <Button bsStyle="danger" onClick={this.toggleReject}>No</Button>
+                                                    </Modal>
                                                 </DropdownButton>
                                             </td>
                                     }
@@ -440,8 +460,8 @@ class Schedule extends React.Component {
                                         {this.getBussiness(this.props.business, v)}
                                     </td>
                                     {v.accept.length !== 0 ?
-                                        <td className="approve-class">approved
-                                            by-{this.getBussinessAceepted(this.props.business, v)} </td> :
+                                        <td className="approve-class"><span className="confirm-class">approved by-</span>
+                                            {this.getBussinessAceepted(this.props.business, v)} </td> :
                                         <td className="pending-class">pending</td>
                                     }
                                 </tr>
@@ -497,7 +517,7 @@ class Schedule extends React.Component {
 
                             <td><FormGroup controlId="formControlsSelect">
                                 <ControlLabel>School Organization</ControlLabel>
-                                {this.state.student !== "" ?
+                                {this.state.student.length!==0 ?
                                     <td>{schoolname}</td> :
                                     <FormControl name="schoolOrganisation" componentClass="select"
                                                  placeholder="select" onChange={(e) => {

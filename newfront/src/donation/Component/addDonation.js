@@ -157,6 +157,7 @@ class DisplayForm extends Component {
             <div>
                 <h1>Donate Amount</h1>
                 <Table>
+                    <tbody>
                     <tr>
                         <th>Event Name :</th>
                         <FormGroup>
@@ -203,9 +204,11 @@ class DisplayForm extends Component {
                             this.onSubmit()
                         }}>Donate</Button></th>
                     </tr>
+                    </tbody>
                 </Table>
                 <center><h2>Donation Requests</h2></center>
-                <Table>
+                <Table bordered striped>
+                    <tbody>
                     <tr>
                         <th>Event Date</th>
                         <th>Event Name</th>
@@ -244,6 +247,7 @@ class DisplayForm extends Component {
                             </tr>
                         })
                     }
+                    </tbody>
                 </Table>
             </div>
         )

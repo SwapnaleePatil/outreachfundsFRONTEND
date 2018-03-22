@@ -185,6 +185,7 @@ class SignUpSchool extends React.Component{
             this.state.schoolData=signupPageFields;
         const {schoolData,errors,displayErrors,orgName}=this.state;
         return(
+            <div className="registration-school-wrapper-class">
             <div className={'modal-dialog'}>
                 <div className={'modal-content'}>
                     <div className={'modal-header'}>
@@ -264,6 +265,7 @@ class SignUpSchool extends React.Component{
                         </form>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

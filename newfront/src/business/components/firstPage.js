@@ -128,7 +128,7 @@ class FirstPage extends React.Component {
                     <div style={{"background-color": "white"}}><Modal.Header><label>Business
                         Information</label></Modal.Header>
                         </div>
-                    <div align="right">
+                    <div style={{"background-color": "white"}} align="right">
                         <Button onClick={() => {
                             window.location = "/"
                         }

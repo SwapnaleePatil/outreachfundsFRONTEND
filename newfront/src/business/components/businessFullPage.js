@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../index.css'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FirstPage from './firstPage';
@@ -13,7 +14,7 @@ class BusinessFullPage extends React.Component{
     }
     render(){
         return(
-            <div>
+            <div className="registration-business-class">
                 {(this.props.Page===1)?<FirstPage/>:<span></span>}
                 {(this.props.Page===2)?<SecondPage/>:<span></span>}
                 {(this.props.Page===3)?<ThirdPage/>:<span></span>}

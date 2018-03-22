@@ -57,7 +57,8 @@ class StudentDonation extends Component{
                 <center><h1>Donation Information</h1></center>
                 <div className="col-sm-6">
                     <h2>Donation Information</h2>
-                    <Table>
+                    <Table bordered striped>
+                        <tbody>
                         <tr>
                             <th>Donation Date</th>
                             <th>Event Name</th>
@@ -65,6 +66,7 @@ class StudentDonation extends Component{
                             {/*<th>Business Name</th>*/}
                             <th>Location</th>
                             <th>Amount</th>
+                            <th>Status</th>
                         </tr>
                         {
                             this.state.donationData.map((value,index)=>{
@@ -104,6 +106,7 @@ class StudentDonation extends Component{
                                 </tr>
                             })
                         }
+                        </tbody>
                     </Table>
                 </div>
                 <div className="col-sm-6">

@@ -16,7 +16,6 @@ exports.registerStudent=(req,res)=>{
     console.log("after json",body);
     let student=new Student(body);
     student.photo=sample.name;
-    console.log(student);
     if(req.body.schoolId!==undefined) {
         console.log("School Id - ",req.body.schoolId);
         console.log("in if");
@@ -25,9 +24,9 @@ exports.registerStudent=(req,res)=>{
     console.log(student);
     student.save().then(() => {
             console.log("in then");
-            return student.generateAuthToken(student);
-        }).then((student) => {
-            console.log("in 2nd then");
+            return student.generateAuthToken();
+        }).then(() => {
+            console.log("in 2nd then",student);
             res.status(200).send(student);
         }).catch((err) => {
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
