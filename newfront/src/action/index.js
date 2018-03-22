@@ -1,4 +1,5 @@
 import axiosI from '../services/axiosInstance';
+//Action For Business Login
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
@@ -11,6 +12,7 @@ export const  businessLogin=(data)=>{
         })
     }
 };
+//Action For Student Login
 export const  studentLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
@@ -26,7 +28,7 @@ export const  studentLogin=(data)=>{
         })
     }
 };
-
+//Action For Schedule Event
 export const scheduleevents=(data)=>{
     return(dispatch)=>{
         axiosI({method:'post',url:'api/event',data}).then((response)=>{
@@ -41,7 +43,7 @@ export const scheduleevents=(data)=>{
         })
     }
 };
-
+//Action For Accept and Reject Event
 export const actionevents=(data)=>{
     return(dispatch)=>{
         debugger;
@@ -57,8 +59,7 @@ export const actionevents=(data)=>{
         })
     }
 };
-
-
+//Action For EventList
 export const eventslist=()=>{
     return(dispatch)=>{
         axiosI({method:'get',url:'api/event'}).then((response)=>{
@@ -73,7 +74,7 @@ export const eventslist=()=>{
         })
     }
 };
-
+//Action For Event Sponser By Business Owner
 export const eventslistbysposer=(data)=>{
     return(dispatch)=>{
         axiosI({method:'post',url:'/api/eventBySponser',data}).then((response)=>{

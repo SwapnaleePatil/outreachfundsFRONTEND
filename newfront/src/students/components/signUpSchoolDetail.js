@@ -194,6 +194,7 @@ class SignUpSchool extends React.Component{
         const {schoolData,errors,displayErrors,redirect}=this.state;
         console.log("redirect",redirect);
         return(
+            <div className="registration-school-wrapper-class">
             <div className={'modal-dialog'}>
                 <div className={'modal-content'}>
                     <div className={'modal-header'}>
@@ -276,6 +277,7 @@ class SignUpSchool extends React.Component{
                         </form>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

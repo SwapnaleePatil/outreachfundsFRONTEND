@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import {Button} from 'react-bootstrap';
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
+import '../../index.css'
 import {signupPageAction,setSignupPageFieldsAction} from '../action';
 class SignUpPersonal extends React.Component{
 
@@ -164,6 +165,7 @@ class SignUpPersonal extends React.Component{
             this.state.personalData=signupPageFields;
         const {days,months,years,personalData,errors,displayErrors}=this.state;
         return(
+            <div className="registration-school-wrapper-class">
             <div className={'modal-dialog'}>
                 <div className={'modal-content'}>
                     <div className={'modal-header'}>
@@ -252,6 +254,7 @@ class SignUpPersonal extends React.Component{
                         </form>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

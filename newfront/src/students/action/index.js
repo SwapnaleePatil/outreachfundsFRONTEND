@@ -110,7 +110,7 @@ export const FetchAllStudents = () => {
     return (dispatch)=>{
         return axiosI.get(`api/students`,data).then((response)=>{
             dispatch({
-                type:'GET_STUDENTS',
+                type:'FETCH_STUDENT',
                 payload:response.data
             })
         }).catch = (error) =>{
