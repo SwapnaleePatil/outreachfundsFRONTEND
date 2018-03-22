@@ -1,9 +1,9 @@
-const studentlogin=(state=[],action)=>{
-    debugger
+const studentlogin=(state=null,action)=>{
     switch (action.type){
-
         case 'STUDENT_LOGIN':
-            return action.payload
+            debugger;
+            console.log(action.payload);
+            return action.payload;
         default:
             return state
     }

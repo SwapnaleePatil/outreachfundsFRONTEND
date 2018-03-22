@@ -7,13 +7,7 @@ export const  businessLogin=(data)=>{
                 type:'BUSINESS_LOGIN',
                 payload:response
             });
-           if(response.data.message==="login successful"){
-                console.log('login', response.data);
-                localStorage.setItem('user', response.data.token);
-                window.location = "/home"
-            }
-
-        }).catch((e)=>{
+          }).catch((e)=>{
             console.log(e);
         })
     }
@@ -28,14 +22,6 @@ export const  studentLogin=(data)=>{
                     type:'STUDENT_LOGIN',
                     payload:response
                 });
-                console.log('slogin',response.data);
-                if(response.data.message==="login successful") {
-
-                    console.log('login', response.data);
-                    localStorage.setItem('user', response.data.token);
-                    window.location = "/home"
-                }
-
             }
         }).catch((e)=>{
             console.log(e);

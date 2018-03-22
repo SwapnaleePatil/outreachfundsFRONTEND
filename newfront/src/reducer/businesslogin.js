@@ -1,4 +1,4 @@
-const businesslogin=(state=[],action)=>{
+const businesslogin=(state={},action)=>{
     switch (action.type){
         case 'BUSINESS_LOGIN':
             return action.payload;

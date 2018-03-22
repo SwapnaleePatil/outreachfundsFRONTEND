@@ -34,8 +34,6 @@ export const registerStudent = (obj) => {
                 type:'REGISTER_STUDENT',
                 payload:student.data
             })
-            window.location = "/"
-
         }).catch = (error) =>{
             console.log("Error in Registeration of Student..",error)
         }
