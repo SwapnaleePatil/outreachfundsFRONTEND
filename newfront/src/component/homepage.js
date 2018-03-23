@@ -149,8 +149,21 @@ class HomePage extends React.Component {
                         </Table>
                     </Modal>
                     {/*modal for login*/}
-                    <Modal isOpen={this.state.isActive} className="loginp" ariaHideApp={false}>
-                        <Table bordered>
+                    <Modal isOpen={this.state.isActive}  ariaHideApp={false} style={{
+                        content:{
+                            paddingTop: '.5%',
+                        paddingBottom: '1%',
+                        marginTop: '5%',
+                        marginLeft: '35%',
+                        marginRight: '35%',
+
+                        backgroundColor: '#EDEFF7'
+                        },
+                        overlay:{
+
+                        }
+                    }}>
+                        <Table>
                             <tbody>
                             <tr>
                                 <td align="right">
