@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from 'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {addBusiness} from "../action/index";
 
 import {bindActionCreators} from 'redux';
@@ -16,7 +16,7 @@ class FourthPage extends React.Component {
             error: {},
         }
     }
-
+    //handle change of state
     handleChange = (e) => {
         const {Fields} = this.props;
         const {name, value} = e.target;
@@ -29,6 +29,7 @@ class FourthPage extends React.Component {
         })
 
     }
+    //Register New Record
     submitData = (e) => {
         e.preventDefault();
         debugger;
@@ -48,8 +49,8 @@ class FourthPage extends React.Component {
             }
             if (flag === 0) {
 
-                const {businessSignup, businessFields} = this.props;
-                businessSignup(1);
+                const {businessPage, businessFields} = this.props;
+                businessPage(1);
                 businessFields();
                 //let {ownerData} = this.state;
                 if (ownerData["expireMonth"] < 9) {
@@ -93,14 +94,11 @@ class FourthPage extends React.Component {
                 formData.append('obj', JSON.stringify(obj));
                 formData.append('photo', ownerData.photo);
                 this.props.addBusiness(formData);
-
-
             }
             this.setState({error})
         }
-
-
     }
+    //Validation
     chkValidation = (e) => {
         let {error} = this.state;
         let name = e.target.name;
@@ -139,10 +137,11 @@ class FourthPage extends React.Component {
             this.setState({error: ""});
         }
     }
+    //Maintain Paging
     handlePreviousPage = (e) => {
         e.preventDefault();
-        const {businessSignup, businessFields, Page} = this.props;
-        businessSignup(Page - 1);
+        const {businessPage, businessFields, Page} = this.props;
+        businessPage(Page - 1);
         businessFields(this.state.ownerData);
     }
 
@@ -251,7 +250,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields, businessSignup, addBusiness}, dispatch)
+    return bindActionCreators({businessFields, businessPage, addBusiness}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FourthPage)

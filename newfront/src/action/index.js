@@ -1,52 +1,38 @@
 import axiosI from '../services/axiosInstance';
-import axios from 'axios';
-
-export const businessLogin = (data) => {
-    return (dispatch) => {
-        axiosI({method: 'post', url: 'api/businessOwner/loginPassport', data}).then((response) => {
+//Action For Business Login
+export const  businessLogin=(data)=>{
+    return (dispatch)=>{
+        axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
             dispatch({
                 type: 'BUSINESS_LOGIN',
                 payload: response
             });
-            if (response.data.message === "login successful") {
-                console.log('login', response.data);
-                localStorage.setItem('user', response.data.token);
-                window.location = "/home"
-            }
-
-        }).catch((e) => {
+          }).catch((e)=>{
             console.log(e);
         })
     }
 };
-export const studentLogin = (data) => {
-    return (dispatch) => {
-        axiosI({method: 'post', url: 'api/student/login', data}).then((response) => {
+//Action For Student Login
+export const  studentLogin=(data)=>{
+    return (dispatch)=>{
+        axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
             debugger
             if (response) {
                 dispatch({
                     type: 'STUDENT_LOGIN',
                     payload: response
                 });
-                console.log('slogin', response.data);
-                if (response.data.message === "login successful") {
-
-                    console.log('login', response.data);
-                    localStorage.setItem('user', response.data.token);
-                    window.location = "/home"
-                }
-
             }
         }).catch((e) => {
             console.log(e);
         })
     }
 };
-
-export const scheduleevents = (data) => {
-    return (dispatch) => {
-        axiosI({method: 'post', url: 'api/event', data}).then((response) => {
-            if (response) {
+//Action For Schedule Event
+export const scheduleevents=(data)=>{
+    return(dispatch)=>{
+        axiosI({method:'post',url:'api/event',data}).then((response)=>{
+            if(response){
                 dispatch({
                     type: 'SCHEDULE_EVENT',
                     payload: response.data.record
@@ -57,9 +43,9 @@ export const scheduleevents = (data) => {
         })
     }
 };
-
-export const actionevents = (data) => {
-    return (dispatch) => {
+//Action For Accept and Reject Event
+export const actionevents=(data)=>{
+    return(dispatch)=>{
         debugger;
         axiosI({method: 'put', url: 'api/event', data}).then((response) => {
             if (response) {
@@ -73,12 +59,11 @@ export const actionevents = (data) => {
         })
     }
 };
-
-
-export const eventslist = () => {
-    return (dispatch) => {
-        axiosI({method: 'get', url: 'api/event'}).then((response) => {
-            if (response) {
+//Action For EventList
+export const eventslist=()=>{
+    return(dispatch)=>{
+        axiosI({method:'get',url:'api/event'}).then((response)=>{
+            if(response){
                 dispatch({
                     type: 'EVENT_LIST',
                     payload: response.data.record
@@ -89,11 +74,11 @@ export const eventslist = () => {
         })
     }
 };
-
-export const eventslistbysposer = (data) => {
-    return (dispatch) => {
-        axiosI({method: 'post', url: '/api/eventBySponser', data}).then((response) => {
-            if (response) {
+//Action For Event Sponser By Business Owner
+export const eventslistbysposer=(data)=>{
+    return(dispatch)=>{
+        axiosI({method:'post',url:'/api/eventBySponser',data}).then((response)=>{
+            if(response){
                 dispatch({
                     type: 'EVENTS_SPONSER',
                     payload: response.data.record
@@ -104,12 +89,26 @@ export const eventslistbysposer = (data) => {
         })
     }
 };
-export const updatePassword = (pswrd, uid) => {
+export const StudentUpdatePassword = (pswrd, uid) => {
     return (dispatch => {
-        axios.post('http://localhost:2525/updatePassword', pswrd, uid).then((response) => {
+        axiosI.post('http://localhost:2525/studentUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
             if (response) {
                 dispatch({
-                    type: 'UPDATE_PASSWORD',
+                    type: 'STUDENT_UPDATE',
+                    payload: response.data
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+}
+export const BusinessUpdatePassword = (pswrd, uid) => {
+    return (dispatch => {
+        axiosI.post('http://localhost:2525/businessUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
+            if (response) {
+                dispatch({
+                    type: 'BUSINESS_UPDATE',
                     payload: response.data
                 });
             }

@@ -1,5 +1,4 @@
-import studentlogin from './studentlogin'
-import businesslogin from './businesslogin'
+import loginReducer from './reducer-login'
 import {combineReducers} from 'redux'
 import studentReducer from '../students/reducers/reducer-student';
 import signupPageReducer from '../students/reducers/reducer-signUpPaging';
@@ -13,12 +12,10 @@ import donationReducer from './../donation/reducers/donationReducer';
 import eventReducer from './../donation/reducers/eventReducer';
 import getBusiness from './../donation/reducers/getBusinessId';
 import studentLogged from '../donation/reducers/studentLogged';
-
 import scheduleEventBySponser from './eventsponser'
 import scheduleEvent from './scheduleevent'
 const rootreducer=combineReducers({
-    blogin:businesslogin,
-    slogin:studentlogin,
+    loginResponse:loginReducer,
     businesslist:businesslist,
     signupPage:signupPageReducer,
     signupPageFields:signupPageFieldsReducer,

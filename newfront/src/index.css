@@ -3,10 +3,13 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.signupText{
+  cursor: hand;
+}
 .loginp{
   padding-top: .5%;
   padding-bottom: 1%;
-  margin-top: 5%;
+  margin-top:5%;
   /*margin-bottom: 10%;*/
   margin-left: 35%;
   margin-right: 35%;
@@ -65,7 +68,7 @@ position: fixed;
   background-color: white;
 }
 .navbar-class-main{
-  background-color: #6B6B6B;
+  background-color: gainsboro;
 
 }
 .navclassa{
@@ -132,6 +135,9 @@ height: 43%;
 .approve-class{
   color:green;
 }
+.confirm-class{
+  color:cornflowerblue;
+}
 .pending-class{
   color: red;
 }
@@ -157,4 +163,19 @@ height: 43%;
   box-sizing: border-box;
   border: 2px solid green;
   border-radius: 4px;
+}
+.registration-school-class{
+  padding: 1%;
+  background-image: url("./images/Schoolregistration.jpg");
+
+}
+.registration-school-wrapper-class {
+opacity: 0.9;
+}
+.registration-business-class{
+  padding: 5%;
+  background-image: url("./images/Schoolregistration.jpg");
+}
+.reject-bs-class{
+  margin: 3%;
 }

@@ -33,10 +33,9 @@ class DisplayForm extends Component {
     }
 
     componentDidMount() {
-        this.props.FetchByToken();
+        // this.props.FetchByToken();
         this.props.getEventDataAction();
         this.props.fetchAllSchoolDetails();
-        this.props.getDonationAction();
         // this.props.getOrganizationAndSchool();
     }
 
@@ -129,12 +128,10 @@ class DisplayForm extends Component {
         });
         if (status) {
             this.props.updateDonationAction(Udata);
-            console.log(this.props.donationData);
             status = false;
         }
         else {
             this.props.addDonationAction(data);
-            console.log(this.props.donationData);
         }
     };
     displayEvents = () => {
@@ -316,17 +313,6 @@ class DisplayForm extends Component {
             </div>
         )
     }
-
-    /*donate = (value, index) => {
-
-        this.setState({
-            date: value.eventDate,
-            eventName: value.eventName,
-            organizationName: this.state.organizationNameArr[index],
-            location: value.location
-        });
-    };*/
-
 }
 
 function mapStateToProps(state) {
@@ -343,9 +329,8 @@ function matchDispatchToProps(dispatch) {
         getEventDataAction,
         fetchAllSchoolDetails,
         addDonationAction,
-        getDonationAction,
         updateDonationAction,
-        FetchByToken
+        // FetchByToken
     }, dispatch);
 }
 

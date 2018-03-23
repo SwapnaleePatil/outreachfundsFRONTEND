@@ -11,8 +11,6 @@ export const setSignupPageFieldsAction=(obj=[])=>{
         payload:obj
     }
 }
-
-
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
         axiosI.get(`api/school`).then((schools)=>{
@@ -34,8 +32,6 @@ export const registerStudent = (obj) => {
                 type:'REGISTER_STUDENT',
                 payload:student.data
             })
-            window.location = "/"
-
         }).catch = (error) =>{
             console.log("Error in Registeration of Student..",error)
         }

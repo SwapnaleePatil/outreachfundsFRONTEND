@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from 'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {bindActionCreators} from 'redux';
 
 class SecondPage extends React.Component {
@@ -14,13 +14,14 @@ class SecondPage extends React.Component {
             error:{}
         }
     }
-
+    //Maintain Paging
     handlePreviousPage = (e) => {
         e.preventDefault();
-        const {businessSignup, businessFields, Page} = this.props;
-        businessSignup(Page - 1);
+        const {businessPage, businessFields, Page} = this.props;
+        businessPage(Page - 1);
         businessFields(this.state.ownerData);
     }
+    //Handle change in state
     handleChange = (e) => {
         const {Fields} = this.props;
         const {name, value} = e.target;
@@ -30,6 +31,7 @@ class SecondPage extends React.Component {
         ownerData[name] = value;
         this.setState({ownerData})
     }
+    //Validation
     chkValidation = (e) => {
         let {error } = this.state;
         let name = e.target.name;
@@ -78,6 +80,7 @@ class SecondPage extends React.Component {
             this.setState({error: ""});
         }
     }
+    //Manage Paging
     handlePage = (e) => {
 
         e.preventDefault();
@@ -90,10 +93,11 @@ class SecondPage extends React.Component {
             }
         }
         if (flag===0) {
-            this.props.businessSignup(this.props.Page + 1);
+            this.props.businessPage(this.props.Page + 1);
             this.handleSubmit();
         }
     }
+    //Managing Data In Form
     handleSubmit = () => {
         let {ownerData}=this.state;
         if(ownerData["businessHour"]<9)
@@ -220,7 +224,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields, businessSignup}, dispatch)
+    return bindActionCreators({businessFields, businessPage}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SecondPage)

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap'
 import {Table, FormControl, Button} from 'react-bootstrap'
-import axios from 'axios';
+import axiosI from '../services/axiosInstance';
 import galary from './galary'
 import {businessLogin} from '../action/index'
 import {studentLogin} from '../action/index'
@@ -10,14 +10,15 @@ import {connect} from 'react-redux'
 import '../index.css'
 import Modal from 'react-modal'
 import {NavLink} from 'react-router-dom'
-
-import BusinessFullPage from '../business/components/businessFullPage'
-import signUpPage from '../students/components/signUpPage'
-
-import SignUp from './signup'
-import businesslogin from "../reducer/businesslogin";
-// import Login from './login'
-let message = "";
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import 'react-s-alert/dist/s-alert-css-effects/flip.css';
+import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 
 class HomePage extends React.Component {
     constructor() {
@@ -32,32 +33,29 @@ class HomePage extends React.Component {
             sisRole:false,
             srole:'',
             error:{},
-            studlogin:'',
-            buslogin:''
+            loginResponse:''
         }
     }
     componentWillReceiveProps(nextProps){
-        this.setState({studlogin:nextProps.studentlogin,buslogin:nextProps.businesslogin},()=> {
+        debugger;
+        this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
-            if (this.state.role === "student")
-            {
-                if (this.state.studlogin.data.message === "login failed") {
+                if (this.state.loginResponse.data.message === "login failed") {
                     error.password = "invalid Email Or Password"
                 }
                 else {
                     error.password = "";
                 }
+                this.setState({error});
              }
-            else {
-                if (this.state.buslogin.data === "User Not Found") {
-                    error.password = "invalid Email Or Password"
-                }
-                else {
-                    error.password = "";
-                }
+        )
+        if(nextProps.loginResponse.hasOwnProperty('data')) {
+            debugger;
+            if (nextProps.loginResponse.data.message === 'login successful') {
+                localStorage.setItem('user', nextProps.loginResponse.data.token);
+                this.props.history.push('/main');
             }
-            this.setState({error});
-        })
+        }
     }
     onEmailChange = (e) => {
         let {error}=this.state;
@@ -92,20 +90,81 @@ class HomePage extends React.Component {
         // e.target.value.length < 6 ? message = "password should be greater than 6 character" : message = "";
     };
     loginstudent = () => {
-        let {error}=this.state;
-
         let data = {
             email: this.state.email,
             password: this.state.password
         };
         this.props.studentLogin(data);
     };
+    //Forgot Password
     forgotPassword=()=>{
-        alert(this.state.email);
-        axios.post('http://localhost:2525/forgotPassword',{'email':this.state.email}).then((response)=>{
-            this.props.history.push(`/forgotPassword/${this.state.email}`);
-        }).catch((err)=>{
-            console.log(err);
+
+        if(this.state.email.length===0){
+            this.unsuccess("Please enter your Email ID...");
+        }
+        else if(this.state.role==='business')
+        {
+            axiosI.post('http://localhost:2525/businessforgotPassword',{'email':this.state.email}).then((response)=>{
+                console.log('response is : ',response.data);
+                if(response.data === "failed"){
+                    //alert('Invalid Email...');
+                    this.unsuccess("Invalid Email...");
+                }
+                else if(response.data === "Invalid"){
+                    this.unsuccess("Enter Correct Email...");
+                }
+                else
+                {
+                    // alert('Message Sent...');
+                    this.success("Email Sent...");
+                }
+                // this.props.history.push(`/businessforgotPassword/${this.state.email}`);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+        else
+        {
+            axiosI.post('http://localhost:2525/studentforgotPassword',{'email':this.state.email}).then((response)=>{
+                console.log('response is : ',response);
+                if(response.data === "failed"){
+                    //alert('Invalid Email...');
+                    this.unsuccess("Invalid Email...");
+                }
+                else if(response.data === "Invalid"){
+                    this.unsuccess("Enter Correct Email...");
+                }
+                else
+                {
+                    // alert('Message Sent...');
+                    this.success("Email Sent...");
+                }
+                //this.props.history.push(`/studentforgotPassword/${this.state.email}`);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+    };
+    //Forgot Password
+    success=(msg)=>{
+        //e.preventDefault();
+        Alert.success(msg, {
+            position: 'top-right',
+            effect: 'scale',
+            beep: true,
+            timeout: 1500,
+            offset: 100
+        });
+    };
+    //Forgot Password
+    unsuccess=(msg)=>{
+        // e.preventDefault();
+        Alert.error(msg,{
+            position:'top-right',
+            effect:'bouncyflip',
+            beep:true,
+            timeout:1500,
+            offset:100
         })
     }
     loginbusiness = () => {
@@ -128,12 +187,6 @@ class HomePage extends React.Component {
             isActive: !this.state.isActive
         })
     };
-
-    toggleSModal = () => {
-        this.setState({
-            isSActive: !this.state.isSActive
-        })
-    };
     toggleRole = () => {
         this.setState({
             isRole: !this.state.isRole
@@ -144,14 +197,18 @@ class HomePage extends React.Component {
             sisRole: !this.state.sisRole
         })
     };
-
+    handleSignup=(role)=>{
+        if(role==='student')
+            this.props.history.push('/studentSignUp');
+        else
+            this.props.history.push('/businessSignUp');
+    }
     render() {
         let {error}=this.state;
         return (
             <section>
                 <div>
-
-                    {/*modal for decide role of the user at logintime*/}
+                    {/*/!*modal for decide role of the user at logintime*!/*/}
                     <Modal isOpen={this.state.isRole} ariaHideApp={true} onRequestClose={this.toggleRole}
                            className="role-class">
                         <Table bordered>
@@ -181,10 +238,7 @@ class HomePage extends React.Component {
                             </tbody>
                         </Table>
                     </Modal>
-
-
                     {/*modal for login*/}
-
                     <Modal isOpen={this.state.isActive} className="loginp" ariaHideApp={false}>
                         <Table bordered>
                             <tbody>
@@ -198,10 +252,8 @@ class HomePage extends React.Component {
                                     this.state.role === "business" ? <h3>Business Login</h3> :
                                         <h3>Student Login</h3>
                                 }
-
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>
                                     <h4>Enter Email</h4>
@@ -258,18 +310,15 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td align="center">
-                                    { this.state.role === "student" ?
-                                    <h3><a href="/main/studentSignUp">Sign Up</a></h3>:
-                                    <h3><a href="/main/businessSignUp">Sign Up</a></h3>
-                                        }
+                                    <h3 onClick={()=>{this.state.role === "student" ?this.handleSignup('student'):this.handleSignup('business')}}>
+                                        <NavLink to={''}>Sign Up</NavLink></h3>
                                 </td>
                             </tr>
-
                             </tbody>
                         </Table>
                     </Modal>
-
 {/*sign up pages*/}
+
                     <div>
 
                         <Modal isOpen={this.state.sisRole} ariaHideApp={true} onRequestClose={this.toggleSRole}
@@ -280,18 +329,13 @@ class HomePage extends React.Component {
                                     <td align="center">
                                         <Button bsSize="large" className="rolebtn" type="button" value="student"
                                                 onClick={() => {
-                                                    // this.setState({
-                                                    //     sisRole: false,
-                                                    //     srole: "student"
-                                                    // });
-                                                    // this.toggleSModal()
-                                                    window.location="/main/studentSignUp"
+                                                   this.props.history.push("/studentSignUp")
                                                 }}>I am Student</Button>
                                     </td>
                                     <td>
                                         <Button bsSize="large" className="rolebtn" type="button" value="business"
                                                 onClick={() => {
-                                                window.location="/main/businessSignUp"
+                                                    this.props.history.push("/businessSignUp")
                                                 }}>I am Business Person</Button>
                                     </td>
                                 </tr>
@@ -305,14 +349,14 @@ class HomePage extends React.Component {
                         <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class">
                             <Navbar.Header className="imgnav">
 
-                                <a href="/"><img src={require('../images/logo2.png')}
-                                                 style={{width: 150, height: 100}} alt=""/></a>
+                                <NavLink to={'/'}><img src={require('../images/logo2.png')}
+                                              style={{width: 150, height: 100}} alt=""/></NavLink>
                             </Navbar.Header>
                             <Nav pullRight>
                                 <NavItem className="navclassa" eventKey={1} href="#" onClick={this.toggleSRole}>
                                     SignUp
                                 </NavItem>
-                                <NavItem eventKey={2} className="navclassa" href="#" onClick={this.toggleRole}>
+                                <NavItem eventKey={2} className="navclassa" onClick={this.toggleRole}>
                                     Login
                                 </NavItem>
                                 <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown" className="navclassa">
@@ -358,22 +402,19 @@ class HomePage extends React.Component {
                         </tbody>
                     </Table>
                     <div className="outer-gallary-class">
-
                         {galary()}
                     </div>
                 </div>
-
-
             </section>
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    return ({businesslogin: state.blogin,studentlogin:state.slogin})
+    return ({loginResponse:state.loginResponse})
 
-}
+};
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({businessLogin,studentLogin}, dispatch)
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -18,8 +18,8 @@ class Donation extends React.Component {
 
     componentWillMount() {
         this.props.FetchByToken();
-        this.props.getEventDataAction();
-        this.props.fetchAllSchoolDetails();
+        // this.props.getEventDataAction();
+        // this.props.fetchAllSchoolDetails();
         this.props.getDonationAction();
     }
 
@@ -67,18 +67,18 @@ class Donation extends React.Component {
 function mapStateToProps(state) {
     return {
         donationData: state.donation,
-        organizationData: state.schools,
-        eventsData: state.events,
+        // organizationData: state.schools,
+        // eventsData: state.events,
         businessInfo: state.businessInfo
     };
 }
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchAllSchoolDetails,
+        // fetchAllSchoolDetails,
         getDonationAction,
         FetchByToken,
-        getEventDataAction
+        // getEventDataAction
     }, dispatch);
 }
 

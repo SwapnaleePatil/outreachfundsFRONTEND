@@ -26,10 +26,10 @@ class StudentDonation extends Component {
 
     componentDidMount() {
         // this.props.FetchAllStudents();
-        this.props.getDonationAction();
+        // this.props.getDonationAction();
         this.props.FetchStudent();
-        this.props.getEventDataAction();
-        this.props.fetchAllSchoolDetails();
+        // this.props.getEventDataAction();
+        // this.props.fetchAllSchoolDetails();
     };
 
     componentWillReceiveProps(nextProps) {
@@ -128,6 +128,7 @@ class StudentDonation extends Component {
                             {/*<th>Business Name</th>*/}
                             <th>Location</th>
                             <th>Amount</th>
+                            <th>Status</th>
                         </tr>
                         {
                             currentTodo.map((value, index) => {
@@ -204,11 +205,11 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDonationAction,
+        // getDonationAction,
         approveDonation,
         FetchStudent,
-        getEventDataAction,
-        fetchAllSchoolDetails,
+        // getEventDataAction,
+        // fetchAllSchoolDetails,
     }, dispatch);
 }
 

@@ -26,9 +26,6 @@ db.once('open',()=>{
     console.log('Successfully connected to database.');
 })
 
-// app.get('/',(req,res)=>{
-//     res.sendFile(__dirname + '/');
-// })
 require('./app/config/passport')(passport);
 require('./app/routes/routes')(app,passport);
 

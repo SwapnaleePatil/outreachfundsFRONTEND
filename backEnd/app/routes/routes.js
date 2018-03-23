@@ -24,24 +24,22 @@ module.exports=(app,passport)=>{
         failureRedirect:'/failure'
     }))
     app.get('/success',(req,res)=>{
-        res.send({"message":"login successful","token":studentToken});
+        res.send({"message":"login successful","userType":"S","token":studentToken});
     })
     app.get('/failure',(req,res)=>{
         res.send({"message":"login failed"});
     })
 
-
     // Business Routes
-    app.post('/api/businessOwner/loginPassport',
-        passport.authenticate('businessOwner',{
+    app.post('/api/businessOwner/loginPassport',passport.authenticate('businessOwner', {
             successRedirect:'/loginSuccess',
             failureRedirect:'/loginFailure'
         }));
     app.get('/loginSuccess',(req,res)=>{
-        res.send({"message":"login successful","token":token});
+        res.send({"message":"login successful","userType":"B","token":token});
     });
     app.get('/loginFailure',(req,res)=>{
-        res.send("User Not Found");
+        res.send({"message":"login failed"});
     });
     app.post('/api/business/profile', businesscontroller.addBusinessOwner);
     app.delete('/api/business/profile', businesscontroller.deleteBusinessOwner);
@@ -64,7 +62,9 @@ module.exports=(app,passport)=>{
     app.patch('/updateDonation',donationController.updateDonation);
 
     //Forgot Password
-    app.post('/forgotPassword',fetchPassword.forgotPassword);
-    app.post('/findByEmail',fetchPassword.GetIdFromEmail);
-    app.post('/updatePassword',fetchPassword.updatePassword);
+    app.post('/studentforgotPassword',fetchPassword.StudentforgotPassword);
+    app.post('/businessforgotPassword',fetchPassword.BusinessforgotPassword);
+    app.post('/studentUpdatePassword',fetchPassword.GetStudentIdFromEmail);
+    app.post('/businessUpdatePassword',fetchPassword.GetBusinessIdFromEmail);
+    // app.post('/updatePassword',fetchPassword.updatePassword);
 }
