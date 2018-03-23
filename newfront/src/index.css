@@ -149,6 +149,21 @@ height: 43%;
   height:200px;
   width:450px;
 }
+.dv{
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;
+  margin: 10% auto;
+  width: 35%;
+}
+.inputtext {
+  width: 300px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid green;
+  border-radius: 4px;
+}
 .registration-school-class{
   padding: 1%;
   background-image: url("./images/Schoolregistration.jpg");

@@ -18,7 +18,9 @@ import StudentDonation from '../donation/Component/studentDonation'
 import BusinessProfile from '../business/components/businessProfile'
 import StudentProfile from '../students/components/studentProfile';
 import AcceptSignupRequest from '../students/components/AcceptSignupRequest';
-import '../index.css'
+import StudentForgotPassword from './forgotPassword'
+import BusinessForgotPassword from './businessforgotPassword'
+
 class Main extends React.Component {
     render() {
         const logout=()=>{
@@ -45,7 +47,8 @@ class Main extends React.Component {
                     <Private exact path="/availability" component={Availability}/>
                     <Private exact path="/viewStudentProfile" component={StudentProfile}/>
                     <Private exact path="/editStudentProfile" component={StudentProfile}/>
-                    <Private exact path="/logout" component={logout} />
+                    <Public exact path="/studentforgotPassword/:email" component={StudentForgotPassword}/>
+                    <Public exact path="/businessforgotPassword/:email" component={BusinessForgotPassword}/>
                 </Switch>
             </BrowserRouter>
         );

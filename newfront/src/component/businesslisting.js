@@ -42,6 +42,7 @@ class BusinessList extends React.Component {
         this.setState({
             data:nextProps.businessrecord
         })
+      this.getAddress(nextProps.businessrecord[0]);
   }
     pageChange = (e) => {
         this.setState({

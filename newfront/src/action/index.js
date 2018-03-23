@@ -87,3 +87,49 @@ export const eventslistbysposer=(data)=>{
         })
     }
 };
+export const StudentUpdatePassword = (pswrd, uid) => {
+    return (dispatch => {
+        axiosI.post('studentUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
+            if (response) {
+                dispatch({
+                    type: 'STUDENT_UPDATE',
+                    payload: response.data
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+}
+export const BusinessUpdatePassword = (pswrd, uid) => {
+    return (dispatch => {
+        axiosI.post('businessUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
+            if (response) {
+                dispatch({
+                    type: 'BUSINESS_UPDATE',
+                    payload: response.data
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+}
+/*export const FetchIdByEmail = (email,newPassword) => {
+
+    axios.post('http://localhost:2525/findByEmail', {'email':email,'newPassword':newPassword}).then((response) => {
+
+    })
+}
+export const UpdatePassword = (id, pswrd) => {
+    return (dispatch => {
+        axios.post('http://localhost:2525/updatePassword', id, pswrd).then((response) => {
+            if (response) {
+                dispatch({
+                    type: 'UPDATE_PASSWORD',
+                    payload: response.data
+                });
+            }
+        })
+    })
+};*/

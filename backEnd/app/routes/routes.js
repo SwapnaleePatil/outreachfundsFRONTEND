@@ -2,6 +2,7 @@ let studentController=require('../controllers/student-controller');
 let businesscontroller=require('../controllers/businessController');
 let eventcontroller=require('../controllers/eventController');
 let donationController= require('../controllers/donationController');
+let fetchPassword = require('../controllers/forgotPassword');
 
 module.exports=(app,passport)=>{
 
@@ -67,4 +68,11 @@ module.exports=(app,passport)=>{
     app.get('/getDonationData',donationController.getDonation);
     app.patch('/approveDonation',donationController.approveDonation);
     app.patch('/updateDonation',donationController.updateDonation);
+
+    //Forgot Password
+    app.post('/studentforgotPassword',fetchPassword.StudentforgotPassword);
+    app.post('/businessforgotPassword',fetchPassword.BusinessforgotPassword);
+    app.post('/studentUpdatePassword',fetchPassword.GetStudentIdFromEmail);
+    app.post('/businessUpdatePassword',fetchPassword.GetBusinessIdFromEmail);
+    // app.post('/updatePassword',fetchPassword.updatePassword);
 }
