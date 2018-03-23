@@ -26,11 +26,9 @@ class StudentGraph extends Component {
 
     }
     componentWillReceiveProps(nextProps){
-        console.log('All Students',nextProps.students);
         let {graphData} = this.state;
         graphData=[];
         // const temp = nextProps.students[0];
-        console.log('asd',nextProps.students[0] && nextProps.students[0].schoolId);
         nextProps.donationData.forEach((rec)=>{
             if(rec.organizationId === (nextProps.students[0] && nextProps.students[0].schoolId)){
                 graphData.push(rec);
@@ -38,9 +36,7 @@ class StudentGraph extends Component {
         });
         this.setState({
             graphData
-        },()=>{
-            console.log('graph Data ',this.state.graphData);
-            this.changeGraph();
+        },()=>{this.changeGraph();
         });
     }
     changeGraph=()=>{
@@ -51,34 +47,29 @@ class StudentGraph extends Component {
         monthAmount=0;
         pendingAmount=0;
         this.state.graphData.forEach((value)=>{
-            //chartData.push({x:value.eventName,y:value.amount});
             totalDonationAmount = totalDonationAmount + Number(value.amount);
         });
 
         this.state.graphData.forEach((value)=>{
             if(value.status){
-                // chartData.push({x:value.eventName,y:value.amount});
-                confirmAmount = confirmAmount + Number(value.amount);
+               confirmAmount = confirmAmount + Number(value.amount);
             }
         });
 
         this.state.graphData.forEach((value)=>{
             if(!value.status){
-                // chartData.push({x:value.eventName,y:value.amount});
                 pendingAmount = pendingAmount + Number(value.amount);
             }
         });
 
         this.state.graphData.forEach((value)=>{
             if(Number(value.donationDate.slice(-4)) === Number(new Date().getFullYear())){
-                // chartData.push({x:value.eventName,y:value.amount});
                 yearAmount = yearAmount + Number(value.amount);
             }
         });
 
         this.state.graphData.forEach((value)=>{
             if(Number(value.donationDate.slice(3,-5)) === Number(new Date().getMonth())){
-                // chartData.push({x:value.eventName,y:value.amount});
                 monthAmount = monthAmount + Number(value.amount);
             }
         });

@@ -5,7 +5,6 @@ export default (state=[],action)=>{
         case 'ADD_DONATION':
             let temp = state;
             temp.push(action.payload);
-            console.log(temp);
             return _.cloneDeep(temp);
         case 'GET_DONATION':
             return _.cloneDeep(action.payload);

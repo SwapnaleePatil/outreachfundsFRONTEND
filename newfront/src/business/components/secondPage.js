@@ -25,7 +25,7 @@ class SecondPage extends React.Component {
     handleChange = (e) => {
         const {Fields} = this.props;
         const {name, value} = e.target;
-        var {ownerData} = this.state;
+        let {ownerData} = this.state;
         if (ownerData.length <= 0)
             ownerData = Fields;
         ownerData[name] = value;
@@ -77,7 +77,7 @@ class SecondPage extends React.Component {
             error
         })
         if (e.target.value === "") {
-            this.setState({error: ""});
+            this.setState({error: {}});
         }
     }
     //Manage Paging
@@ -87,7 +87,6 @@ class SecondPage extends React.Component {
         const {error} =this.state;
        let flag = 0;
         for(let key in error){
-            console.log(key);
             if(error[key]!==''){
                 flag=1;
             }
@@ -127,13 +126,15 @@ class SecondPage extends React.Component {
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
                     <div style={{"background-color": "white"}}>
-                        <Modal.Header><label>Business
-                        Information</label></Modal.Header>
-                        <div align="right">
-                            <Button onClick={()=>{
-                                window.location="/"}
-                            }
-                            >Close</Button></div>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                            <div className="closecss col-sm-2" align="right" onClick={() => {
+                                window.location = "/" }}>
+                                <a href="#" >
+                                    <span className="glyphicon glyphicon-remove"/>
+                                </a>
+                            </div>
+                        </Modal.Header>
                     </div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
@@ -144,7 +145,7 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessName" type="text" required/>
+                                           }} name="businessName" type="text" placeholder="Enter Business Name" required/>
                                     {error.businessName && <span style={{"color": "red"}}>{error.businessName}</span>}</td>
                             </tr>
                             <tr>
@@ -153,12 +154,12 @@ class SecondPage extends React.Component {
                                     <div className="form-inline">
                                         Hour:<input value={ownerData.businessHour} className="form-control"
                                                     style={{"width": "20%"}}
-                                                    onChange={this.handleChange} name="businessHour" type="number"
-                                                    min="00" max="24" required/>{'  '}
+                                                    onChange={this.handleChange}  name="businessHour" type="number"
+                                                    min="0" max="24" required/>{'  '}
                                         Minute:<input value={ownerData.businessMinute} className="form-control"
                                                       style={{"width": "20%"}}
-                                                      onChange={this.handleChange} name="businessMinute" type="number"
-                                                      min="00" max="59" required/></div>
+                                                      onChange={this.handleChange}  name="businessMinute" type="number"
+                                                      min="0" max="59" required/></div>
                                 </td>
                             </tr>
                             <tr>
@@ -167,7 +168,7 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessType" type="text" required/>
+                                           }} name="businessType" type="text" placeholder="Enter Business Type" required/>
                                     {error.businessType && <span style={{"color": "red"}}>{error.businessType}</span>}</td>
                             </tr>
                             <tr>
@@ -177,7 +178,7 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} required/>
+                                           }} placeholder="Enter Phone Number" required/>
                                     {error.businessPhone && <span style={{"color": "red"}}>{error.businessPhone}</span>}</td>
                             </tr>
                             <tr>
@@ -186,7 +187,7 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} type="email" required/>
+                                           }} type="email" required placeholder="Enter Email"/>
                                     {error.businessEmail && <span style={{"color": "red"}}>{error.businessEmail}</span>}</td>
                             </tr>
                             <tr>
@@ -197,7 +198,7 @@ class SecondPage extends React.Component {
                             <tr>
                                 <td><label>Tax Payer Id</label></td>
                                 <td><input className="form-control" value={ownerData.taxPayerId}
-                                           onChange={this.handleChange} name="taxPayerId" type="number" required/></td>
+                                           onChange={this.handleChange} name="taxPayerId" placeholder="Enter Tax Payer Id" type="number" required/></td>
                             </tr>
                             <tr>
                                 <td><Button active type="button" bsStyle="info" onClick={this.handlePreviousPage}>

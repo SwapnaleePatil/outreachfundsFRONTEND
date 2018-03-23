@@ -25,7 +25,6 @@ export const getDonationAction=()=>{
     });
 };
 export const approveDonation=(data)=>{
-    console.log(data)
     return ((dispatch)=>{
         axiosI.patch('approveDonation',data).then((response)=>{
             dispatch({
@@ -38,7 +37,6 @@ export const approveDonation=(data)=>{
 
 export const updateDonationAction=(data)=>{
     return ((dispatch)=>{
-        debugger;
         axiosI.patch('updateDonation',data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
@@ -67,7 +65,6 @@ export const getEventDataAction=()=>{
                 type:'GET_EVENTS',
                 payload:response.data.record
             });
-            console.log('event',response.data.record)
         }).catch((err)=>{
             console.log(err);
         })

@@ -26,7 +26,6 @@ class HomePage extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        debugger;
         this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
                 if (this.state.loginResponse.data.message === "login failed") {
@@ -54,7 +53,7 @@ class HomePage extends React.Component {
         let re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.edu$/;
         if (this.state.role === "student") {
             if (!re.test(e.target.value)) {
-                error.email = "Email is not valid";
+                error.email = "Enter Valid Email";
             }
             else {
                 error.email="";
@@ -62,7 +61,7 @@ class HomePage extends React.Component {
         } else {
             re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!re.test(e.target.value)) {
-                error.email = "Email is not Valid";
+                error.email = "Enter Valid Email";
             }
             else {
                 error.email="";
@@ -118,7 +117,8 @@ class HomePage extends React.Component {
         return (
             <section>
                 <div>
-                    {/*/!*modal for decide role of the user at logintime*!/*/}
+
+                    {/*modal for decide role of the user at logintime*/}
                     <Modal isOpen={this.state.isRole} ariaHideApp={true} onRequestClose={this.toggleRole}
                            className="role-class">
                         <Table bordered>

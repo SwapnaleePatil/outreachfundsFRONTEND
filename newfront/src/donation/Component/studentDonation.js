@@ -32,7 +32,6 @@ class StudentDonation extends Component{
         editable=false;
         nextProps.donationData.forEach((rec,index)=>{
             if(rec.organizationId === (nextProps.studentLogged.data && nextProps.studentLogged.data.schoolId)){
-                console.log('Logged In Student',nextProps.studentLogged.data.roleTitle);
                 if(nextProps.studentLogged.data.roleTitle === 'Admin'){
                     editable=true;
                 }

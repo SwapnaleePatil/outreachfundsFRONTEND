@@ -146,7 +146,6 @@ class SignUpSchool extends React.Component{
 
     validate=(e)=>{
         const {name,value}=e.target;
-        console.log(value);
         const {errors}=this.state;
         if(name==='school'||name==='organisationName'||name==='roleTitle'){
             if(!value)
@@ -181,7 +180,6 @@ class SignUpSchool extends React.Component{
             else
                 errors[name]='';
         }
-        console.log(errors);
         this.setState({
             errors
         })
@@ -190,9 +188,7 @@ class SignUpSchool extends React.Component{
         const {signupPageFields,Schools}=this.props;
         if(signupPageFields!==null)
             this.state.schoolData=signupPageFields;
-        //debugger;
         const {schoolData,errors,displayErrors,redirect}=this.state;
-        console.log("redirect",redirect);
         return(
             <div className="registration-school-wrapper-class">
             <div className={'modal-dialog'}>

@@ -26,20 +26,18 @@ class FirstPage extends React.Component {
         else {
             ownerData[name] = value;
         }
-        this.setState({ownerData}, () => {
-            console.log("Data", ownerData);
-        })
+        this.setState({ownerData})
 
     }
     //Validation
     chkValidation = (e) => {
-        let {error } = this.state;
-         let name = e.target.name;
+        let {error} = this.state;
+        let name = e.target.name;
         if (name === "email") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                error.email = "Email Is Invalid";
-                         }
+                error.email = "Enter valid Email";
+            }
             else {
                 error.email="";
             }
@@ -49,7 +47,7 @@ class FirstPage extends React.Component {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
                 error.phone = "Enter Number between 6 to 13 digit";
-                        }
+            }
             else {
                 error.phone="";
             }
@@ -58,7 +56,7 @@ class FirstPage extends React.Component {
             let rename = /^([A-Za-z ])*$/;
             if (!rename.test(e.target.value)) {
                 error.firstName = "Enter Valid First Name";
-                  }
+            }
             else {
                 error.firstName="";
             }
@@ -67,7 +65,7 @@ class FirstPage extends React.Component {
             let rename = /^([A-Za-z ])*$/;
             if (!rename.test(e.target.value)) {
                 error.lastName = "Enter Valid Last Name";
-                 }
+            }
             else {
                 error.lastName="";
             }
@@ -89,10 +87,10 @@ class FirstPage extends React.Component {
             }
         }
         this.setState({
-           error
+            error
         })
-       if (e.target.value === "") {
-            this.setState({error: ""});
+        if (e.target.value === "") {
+            this.setState({error: {}});
         }
     }
     //To Redirect On Next Page
@@ -107,8 +105,7 @@ class FirstPage extends React.Component {
                 flag=1;
             }
         }
-       // debugger;
-        if (flag===0) {
+        if (flag === 0) {
             this.props.businessPage(this.props.Page + 1);
             this.handleSubmit();
         }
@@ -127,15 +124,18 @@ class FirstPage extends React.Component {
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header>
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                        <div className="closecss col-sm-2" align="right" onClick={() => {
+                            window.location = "/" }}>
+                            <a href="#" >
+                                <span className="glyphicon glyphicon-remove"/>
+                            </a>
                         </div>
-                    <div style={{"background-color": "white"}} align="right">
-                        <Button onClick={() => {
-                            window.location = "/"
-                        }
-                        }
-                        >Close</Button></div>
+                        </Modal.Header>
+                    </div>
+
                     <div>
                         <Table hover bordered condensed responsive style={{"background-color": "white"}}>
                             <tbody>
@@ -151,7 +151,7 @@ class FirstPage extends React.Component {
                                                {(e) => {
                                                    this.handleChange(e);
                                                    this.chkValidation(e);
-                                               }} required/>
+                                               }} required placeholder="Enter First Name"/>
                                     {error.firstName && <span style={{"color": "red"}}>{error.firstName}</span>}</td>
                             </tr>
                             <tr>
@@ -160,7 +160,7 @@ class FirstPage extends React.Component {
                                            value={ownerData.lastName} minLength="3" onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} required/>
+                                }} required placeholder="Enter Last Name"/>
                                     {error.lastName && <span style={{"color": "red"}}>{error.lastName}</span>}</td>
                             </tr>
                             <tr>
@@ -191,7 +191,7 @@ class FirstPage extends React.Component {
                                     }
                                 } value={ownerData.email}
                                            name="email" type="email"
-                                           required/>
+                                           required placeholder="Enter Valid Email"/>
                                     {error.email && <span style={{"color": "red"}}>{error.email}</span>}</td>
                             </tr>
                             <tr>
@@ -200,7 +200,7 @@ class FirstPage extends React.Component {
                                            value={ownerData.password}
                                            minLength="8"
                                            maxLength="32"
-                                           name="password" type="password" required
+                                           name="password" type="password" required placeholder="Enter Password"
                                 /></td>
                             </tr>
                             <tr>
@@ -209,7 +209,7 @@ class FirstPage extends React.Component {
                                     this.handleChange(e);
                                     this.chkValidation(e)
                                 }} value={ownerData.phone}
-                                           name="phone" type="number" required
+                                           name="phone" type="number" required placeholder="Enter Phone Number"
                                 />{error.phone && <span style={{"color": "red"}}>{error.phone}</span>}</td>
                             </tr>
                             <tr>
@@ -219,6 +219,7 @@ class FirstPage extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
+
                     </div>
                 </div>
             </form>

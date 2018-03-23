@@ -1,4 +1,4 @@
-var studentController=require('../controllers/student-controller');
+let studentController=require('../controllers/student-controller');
 let businesscontroller=require('../controllers/businessController');
 let eventcontroller=require('../controllers/eventController');
 let donationController= require('../controllers/donationController');
@@ -46,6 +46,14 @@ module.exports=(app,passport)=>{
     app.get('/api/business/profile',businesscontroller.fetch);
     app.post('/api/business/profile/fetchById',businesscontroller.fetchById);
     app.get('/api/business/profile/fetchByToken',businesscontroller.fetchByToken);
+
+    //Google Login
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    app.get('/auth/google/callback',passport.authenticate('google', {
+            successRedirect : 'http://localhost:3001/home',
+            failureRedirect : '/'
+        }));
+
 
     //Event Routes
     app.post('/api/event', eventcontroller.addeventSchedule);

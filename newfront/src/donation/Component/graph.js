@@ -28,7 +28,6 @@ class Graph extends Component {
 
         let {graphData} = this.state;
         graphData=[];
-        console.log('a',this.props.businessInfo.User && this.props.businessInfo.User._id);
         nextProps.donationData.forEach((rec)=>{
             if(rec.businessId === (this.props.businessInfo.User && this.props.businessInfo.User._id)){
                 graphData.push(rec);
@@ -37,8 +36,7 @@ class Graph extends Component {
         this.setState({
             graphData
         },()=>{
-            console.log('graph Data ',this.state.graphData);
-            this.changeGraph();
+             this.changeGraph();
         });
     }
     changeGraph=()=>{

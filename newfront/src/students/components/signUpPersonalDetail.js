@@ -25,7 +25,7 @@ class SignUpPersonal extends React.Component{
         this.createYears();
     }
     createDays=()=>{
-        var days=[];
+        let days=[];
         for(let i=1;i<=31;i++){
             days.push(i);
         }
@@ -34,7 +34,7 @@ class SignUpPersonal extends React.Component{
         })
     }
     createMonths=()=>{
-        var months=[];
+        let months=[];
         for(let i=1;i<=12;i++){
             months.push(i);
         }
@@ -43,8 +43,8 @@ class SignUpPersonal extends React.Component{
         })
     }
     createYears=()=>{
-        var d=new Date();
-        var years=[];
+        let d=new Date();
+        let years=[];
         for(let i=d.getFullYear()-50;i<=d.getFullYear();i++){
             years.push(i);
         }
@@ -61,7 +61,6 @@ class SignUpPersonal extends React.Component{
             this.state.errors[5]='';
         }
         else {
-            console.log(value);
             personalData[name] = value;
             this.state.errors[6]='';
         }
@@ -74,7 +73,6 @@ class SignUpPersonal extends React.Component{
         window.location="/";
     }
     handleSubmit=(e)=>{
-        console.log('submitted');
         const {personalData}=this.state;
         let date=(personalData.month|| 1) + "/" + (personalData.day || 1) + "/" + (personalData.year || new Date().getFullYear()-50);
         personalData['dob']=date;
@@ -85,7 +83,6 @@ class SignUpPersonal extends React.Component{
     nextPage=(e)=>{
         e.preventDefault();
         const {errors,personalData}=this.state;
-        console.log(personalData);
         if(personalData.photo===undefined){
             errors[5] = 'Please select a profile pic.';
             this.setState({errors});
@@ -114,7 +111,6 @@ class SignUpPersonal extends React.Component{
     }
     validate=(e)=>{
         const {name,value}=e.target;
-        console.log(name);
         const {errors}=this.state;
         if(name==='firstName'||name==='lastName'){
             if(!value)
@@ -151,8 +147,7 @@ class SignUpPersonal extends React.Component{
                 errors[name]='';
         }
         if(name==='photo') {
-            console.log(value);
-            if(value===undefined)
+             if(value===undefined)
                 errors[name] = 'Please Select a profile pic.';
         }
         this.setState({
