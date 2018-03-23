@@ -1,7 +1,7 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap'
 import {Table, FormControl, Button} from 'react-bootstrap'
-import axiosI from '../services/axiosInstance';
+import axios from 'axios';
 import galary from './galary'
 import {businessLogin} from '../action/index'
 import {studentLogin} from '../action/index'
@@ -104,7 +104,8 @@ class HomePage extends React.Component {
         }
         else if(this.state.role==='business')
         {
-            axiosI.post('http://localhost:2525/businessforgotPassword',{'email':this.state.email}).then((response)=>{
+            debugger;
+            axios.post('http://localhost:2525/businessforgotPassword',{'email':this.state.email}).then((response)=>{
                 console.log('response is : ',response.data);
                 if(response.data === "failed"){
                     //alert('Invalid Email...');
@@ -125,7 +126,7 @@ class HomePage extends React.Component {
         }
         else
         {
-            axiosI.post('http://localhost:2525/studentforgotPassword',{'email':this.state.email}).then((response)=>{
+            axios.post('http://localhost:2525/studentforgotPassword',{'email':this.state.email}).then((response)=>{
                 console.log('response is : ',response);
                 if(response.data === "failed"){
                     //alert('Invalid Email...');
@@ -174,13 +175,7 @@ class HomePage extends React.Component {
             password: this.state.password
         };
         this.props.businessLogin(data);
-        if (this.props.businesslogin.data === "User Not Found"){
-            error.password = "invalid Email Or Password"
-        }
-        else {
-            error.password=""
-        }
-        this.setState({error});
+        
     };
     toggleModal = () => {
         this.setState({
@@ -401,6 +396,7 @@ class HomePage extends React.Component {
                         </tr>
                         </tbody>
                     </Table>
+                    <Alert stack={{limit: 3}} html={true} />
                     <div className="outer-gallary-class">
                         {galary()}
                     </div>

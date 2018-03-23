@@ -20,9 +20,7 @@ class Graph extends Component {
         };
     }
     componentDidMount(){
-
-        // this.props.getDonationAction();
-
+        this.props.getDonationAction();
     }
     componentWillReceiveProps(nextProps){
 
@@ -124,7 +122,7 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        // getDonationAction,
+        getDonationAction,
     }, dispatch);
 }
 

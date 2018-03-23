@@ -1,4 +1,5 @@
 import axiosI from '../services/axiosInstance';
+import axios from 'axios';
 //Action For Business Login
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
@@ -91,7 +92,7 @@ export const eventslistbysposer=(data)=>{
 };
 export const StudentUpdatePassword = (pswrd, uid) => {
     return (dispatch => {
-        axiosI.post('http://localhost:2525/studentUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
+        axios.post('http://localhost:2525/studentUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
             if (response) {
                 dispatch({
                     type: 'STUDENT_UPDATE',
@@ -105,7 +106,7 @@ export const StudentUpdatePassword = (pswrd, uid) => {
 }
 export const BusinessUpdatePassword = (pswrd, uid) => {
     return (dispatch => {
-        axiosI.post('http://localhost:2525/businessUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
+        axios.post('http://localhost:2525/businessUpdatePassword',{'email':uid,'newPassword':pswrd}).then((response) => {
             if (response) {
                 dispatch({
                     type: 'BUSINESS_UPDATE',
