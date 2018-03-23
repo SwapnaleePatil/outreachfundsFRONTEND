@@ -25,14 +25,14 @@ class SignUpSchool extends React.Component{
     componentWillReceiveProps(nextProps){
         console.log("next - ",nextProps.students);
         if(nextProps.students.length>0){
-            this.setState({redirect:true})
+             this.setState({redirect:true})
         }
     }
     handleChange=(e)=>{
         const {signupPageFields}=this.props;
         const {name,value}=e.target;
 
-        var {schoolData,orgName}=this.state;
+        var {schoolData}=this.state;
         if(schoolData.length<=0)
             schoolData = signupPageFields;
         if(name==='selectedSchool') {

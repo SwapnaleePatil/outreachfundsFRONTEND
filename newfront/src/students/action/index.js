@@ -11,8 +11,6 @@ export const setSignupPageFieldsAction=(obj=[])=>{
         payload:obj
     }
 }
-
-
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
         axiosI.get(`api/school`).then((schools)=>{

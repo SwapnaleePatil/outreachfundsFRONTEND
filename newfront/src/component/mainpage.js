@@ -73,8 +73,8 @@ class MainPage extends React.Component {
             <div>
                 <Navbar  fluid={true} staticTop={true} className="navbar-class-main">
                     <Navbar.Header className="imgnav">
-                        <a href="/home"><img src={require('../images/logo2.png')}
-                                             style={{width: 150, height: 100}} alt=""/></a>
+                        <NavLink to={"/main"}><img src={require('../images/logo2.png')}
+                                             style={{width: 150, height: 100}} alt=""/></NavLink>
                     </Navbar.Header>
                     <Nav bsStyle="tabs">
                         <NavItem className="navclassb" eventKey={1}>
@@ -117,7 +117,7 @@ class MainPage extends React.Component {
                                             <MenuItem eventKey={4.4}><NavLink to="/viewStudentProfile">View
                                                 Profile</NavLink></MenuItem>
                                         }
-                                    {(this.props.studentlogin!==null)?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
+                                    {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='S')?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
                                     <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="/">
                                         Logout</NavLink></MenuItem>
                                     </Dropdown.Menu>
@@ -160,7 +160,7 @@ class MainPage extends React.Component {
     }
 }
 const mapStateToProps = (state) => {
-    return ({businessrecord: state.businesslist,studentlogin:state.slogin})
+    return ({businessrecord: state.businesslist,loginResponse:state.loginResponse})
 };
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({listBusiness}, dispatch)

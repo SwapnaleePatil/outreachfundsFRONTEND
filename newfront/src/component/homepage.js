@@ -22,43 +22,26 @@ class HomePage extends React.Component {
             sisRole:false,
             srole:'',
             error:{},
-            studlogin:'',
-            buslogin:''
+            loginResponse:''
         }
     }
     componentWillReceiveProps(nextProps){
         debugger;
-        this.setState({studlogin:nextProps.studentlogin,buslogin:nextProps.businesslogin},()=> {
+        this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
-            if (this.state.role === "student")
-            {
-                if (this.state.studlogin.data.message === "login failed") {
+                if (this.state.loginResponse.data.message === "login failed") {
                     error.password = "invalid Email Or Password"
                 }
                 else {
                     error.password = "";
                 }
+                this.setState({error});
              }
-            else {
-                if (this.state.buslogin.data === "User Not Found") {
-                    error.password = "invalid Email Or Password"
-                }
-                else {
-                    error.password = "";
-                }
-            }
-            this.setState({error});
-        })
-        if(nextProps.studentlogin!==null) {
+        )
+        if(nextProps.loginResponse.hasOwnProperty('data')) {
             debugger;
-            if (nextProps.studentlogin.data.message === 'login successful') {
-                localStorage.setItem('user', nextProps.studentlogin.data.token);
-                this.props.history.push('/main');
-            }
-        }
-        else{
-            if (nextProps.businesslogin.data.message === 'login successful') {
-                localStorage.setItem('user', nextProps.businesslogin.data.token);
+            if (nextProps.loginResponse.data.message === 'login successful') {
+                localStorage.setItem('user', nextProps.loginResponse.data.token);
                 this.props.history.push('/main');
             }
         }
@@ -96,8 +79,6 @@ class HomePage extends React.Component {
         // e.target.value.length < 6 ? message = "password should be greater than 6 character" : message = "";
     };
     loginstudent = () => {
-        let {error}=this.state;
-
         let data = {
             email: this.state.email,
             password: this.state.password
@@ -105,28 +86,15 @@ class HomePage extends React.Component {
         this.props.studentLogin(data);
     };
     loginbusiness = () => {
-        let {error}=this.state;
         let data = {
             username: this.state.email,
             password: this.state.password
         };
         this.props.businessLogin(data);
-        this.props.businesslogin.data === "User Not Found"?
-            error.password = "invalid Email Or Password"
-        :
-            error.password="";
-
-        this.setState({error});
     };
     toggleModal = () => {
         this.setState({
             isActive: !this.state.isActive
-        })
-    };
-
-    toggleSModal = () => {
-        this.setState({
-            isSActive: !this.state.isSActive
         })
     };
     toggleRole = () => {
@@ -139,7 +107,6 @@ class HomePage extends React.Component {
             sisRole: !this.state.sisRole
         })
     };
-
     handleSignup=(role)=>{
         if(role==='student')
             this.props.history.push('/studentSignUp');
@@ -151,7 +118,6 @@ class HomePage extends React.Component {
         return (
             <section>
                 <div>
-                    {/*<Login/>*/}
                     {/*/!*modal for decide role of the user at logintime*!/*/}
                     <Modal isOpen={this.state.isRole} ariaHideApp={true} onRequestClose={this.toggleRole}
                            className="role-class">
@@ -248,7 +214,7 @@ class HomePage extends React.Component {
                             <tr>
                                 <td align="center">
                                     <h3 onClick={()=>{this.state.role === "student" ?this.handleSignup('student'):this.handleSignup('business')}}>
-                                        <a>Sign Up</a></h3>
+                                        <NavLink to={''}>Sign Up</NavLink></h3>
                                 </td>
                             </tr>
                             </tbody>
@@ -286,8 +252,8 @@ class HomePage extends React.Component {
                         <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class">
                             <Navbar.Header className="imgnav">
 
-                                <a href="/"><img src={require('../images/logo2.png')}
-                                                 style={{width: 150, height: 100}} alt=""/></a>
+                                <NavLink to={'/'}><img src={require('../images/logo2.png')}
+                                              style={{width: 150, height: 100}} alt=""/></NavLink>
                             </Navbar.Header>
                             <Nav pullRight>
                                 <NavItem className="navclassa" eventKey={1} href="#" onClick={this.toggleSRole}>
@@ -348,7 +314,7 @@ class HomePage extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return ({businesslogin: state.blogin,studentlogin:state.slogin})
+    return ({loginResponse:state.loginResponse})
 
 };
 const mapDispatchToProps = (dispatch) => {
