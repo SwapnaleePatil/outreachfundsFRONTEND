@@ -58,7 +58,7 @@ export const fetchAdmin=()=>{
         }
     }
     return (dispatch=>{
-        axiosI.get(`api/student`,data).then((user)=>{
+        axiosI.get('api/student',data).then((user)=>{
             if(user.data.roleTitle==='Admin')
                 dispatch(fetchSignupRequests(user.data.schoolId));
         }).catch((error)=>{
