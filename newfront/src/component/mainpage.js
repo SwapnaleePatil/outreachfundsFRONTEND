@@ -124,7 +124,8 @@ class MainPage extends React.Component {
                              </ButtonToolbar>
                     </Nav>
                 </Navbar>
-                {this.state.isNull && <Redirect to="/main"/>}
+                {this.state.isNull && <div><Redirect to="/main"/> {this.state.isNull=false}</div>}
+
                 {this.state.isSearching &&
                     <div>
                     <Redirect to="/search"/>
