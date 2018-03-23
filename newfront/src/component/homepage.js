@@ -39,7 +39,7 @@ class HomePage extends React.Component {
     componentWillReceiveProps(nextProps){
         this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
-                if (this.state.loginResponse.data.message === "login failed") {
+                if (this.state.loginResponse.hasOwnProperty('data')&&this.state.loginResponse.data.message === "login failed") {
                     error.password = "invalid Email Or Password"
                 }
                 else {

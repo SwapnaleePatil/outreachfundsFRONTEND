@@ -17,6 +17,7 @@
     "react-modal": "^3.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
+    "react-s-alert": "^1.4.1",
     "react-scripts": "1.1.1",
     "react-strap": "0.0.1",
     "react-toggle-button": "^2.2.0",
