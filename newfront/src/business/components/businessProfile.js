@@ -17,7 +17,6 @@ class BusinessProfile extends React.Component {
             changeimg: false,
             previewFile: ''
         }
-        console.log("Props", props)
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -205,7 +204,6 @@ class BusinessProfile extends React.Component {
         let flag = 0;
         const {error} = this.state;
         for (let key in error) {
-            console.log(key);
             if (error[key] !== '') {
                 flag = 1;
             }
@@ -243,19 +241,21 @@ class BusinessProfile extends React.Component {
     }
     //Handle The Image
     handleimg = (e) => {
-        e.preventDefault();
-        this.setState({
-            changeimg: true
-        })
-        let reader = new FileReader();
-        let file = e.target.files[0];
-        reader.onloadend = () => {
+        if (e.target.files.length) {
+
             this.setState({
-                photo: file,
-                previewFile: reader.result
-            });
-        };
-        reader.readAsDataURL(file);
+                changeimg: true
+            })
+            let reader = new FileReader();
+            let file = e.target.files[0];
+            reader.onloadend = () => {
+                this.setState({
+                    photo: file,
+                    previewFile: reader.result
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     render() {
@@ -274,7 +274,7 @@ class BusinessProfile extends React.Component {
                                                                 style={{"width": "100%", "height": "100%"}}/>
                                         :
                                         <img className="image"
-                                             src={"http://192.168.200.80:3005/uploads/" + businessOwner.photo}
+                                             src={"http://192.168.200.33:3005/uploads/" + businessOwner.photo}
                                              style={{"width": "100%", "height": "100%"}}/>
 
                                 }
@@ -296,6 +296,7 @@ class BusinessProfile extends React.Component {
                                 <legend style={{"color": "darkgreen"}}>Owner Details{' '}<span
                                     style={{"color": "red"}}>{this.state.msg}</span></legend>
                                 <table style={{"width": "100%"}}>
+                                    <tbody>
                                     <tr>
                                         <td className="fieldsecond">Name</td>
                                         <td className="fieldseconds">{
@@ -382,6 +383,7 @@ class BusinessProfile extends React.Component {
                                                        value="female"/>{' '}Female </div>
                                             : businessOwner.gender}</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </fieldset>
                         </div>
@@ -393,6 +395,7 @@ class BusinessProfile extends React.Component {
                             </fieldset>
 
                             <table>
+                                <tbody>
                                 <tr>
                                     <td className="field">Phone Number</td>
                                 </tr>
@@ -430,13 +433,14 @@ class BusinessProfile extends React.Component {
                                             })
                                     }</td>
                                 </tr>
-
+                                </tbody>
                             </table>
                         </div>
                         <div className="col-sm-8">
                             <fieldset style={{"margin-top": "2%"}}>
                                 <legend style={{"color": "darkgreen"}}>Business Details</legend>
                                 <table style={{"width": "100%"}}>
+                                    <tbody>
                                     <tr>
                                         <td className="fieldsecond">Business Name:</td>
                                         <td align="left"
@@ -507,7 +511,7 @@ class BusinessProfile extends React.Component {
                                         </td>
                                     </tr> : ''
                                     }
-
+                                    </tbody>
                                 </table>
                             </fieldset>
                         </div>

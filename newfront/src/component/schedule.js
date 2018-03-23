@@ -31,7 +31,9 @@ class Schedule extends React.Component {
             businessNameSelect: [],
             student: [],
             rejectModal:false,
-            error:{}
+            error:{},
+            businessOwnerList:[],
+            rejectingEvent:[],
         }
     }
 //reject modal
@@ -57,6 +59,7 @@ class Schedule extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({data: nextProps.events});
         this.setState({student: nextProps.Student});
+        this.setState({businessOwnerList:nextProps.business});
         let {businessname, eventowner} = this.state;
         nextProps.business.map((v, i) => {
             v.tokens.map((value, i) => {
@@ -69,7 +72,6 @@ class Schedule extends React.Component {
                         eventowner
                     })
                 }
-                console.log(this.state.eventowner)
             });
         });
     }
@@ -112,13 +114,15 @@ class Schedule extends React.Component {
     };
 
 //Business Sponsor reject event
-    rejectEvent = (did, v) => {
-        let businessno = v.businessSponsor.indexOf(this.state.eventowner);
-        v.businessSponsor.splice(businessno, 1);
+    rejectEvent = () => {
+    debugger;
+    let {rejectingEvent}=this.state
+        let businessno = rejectingEvent.businessSponsor.indexOf(this.state.eventowner);
+        rejectingEvent.businessSponsor.splice(businessno, 1);
 
         let data = {
-            id: did,
-            businessSponsor: v.businessSponsor
+            id: rejectingEvent._id,
+            businessSponsor: rejectingEvent.businessSponsor
         };
         this.props.actionevents(data)
         this.clearData();
@@ -127,7 +131,6 @@ class Schedule extends React.Component {
     };
 //event generate by student and business
     scheduleEvent = () => {
-       // debugger
         let {eventData, error} = this.state;
         let flag=0;
         if (eventData===undefined) {
@@ -207,7 +210,6 @@ class Schedule extends React.Component {
     };
 //edit event by event Sponsor
     editEvent = () => {
-        //debugger
         let {eventData, error} = this.state;
         let flag=0;
         if (eventData===undefined) {
@@ -288,7 +290,6 @@ class Schedule extends React.Component {
     handleChange = (event, index, businessNameSelect) => this.setState({businessNameSelect});
 //Validation
     checkValidation = (e) => {
-        //debugger;
         let {error} = this.state;
         let name = e.target.name;
         if (name === "eventDate") {
@@ -347,8 +348,7 @@ class Schedule extends React.Component {
 // find school name for event modal
         let schoolname = "";
         this.props.organization.map((value, i) => {
-
-            if (value._id === this.state.student.schoolId) {
+             if (value._id === this.state.student.schoolId) {
                 schoolname = value.organisationName
             }
         });
@@ -484,14 +484,13 @@ class Schedule extends React.Component {
                                         {this.getBussiness(this.props.business, v)}
                                     </td>
                                     {v.accept.length !== 0 ?
-                                        <td className="approve-class">approved
-                                            by-{this.getBussinessAceepted(this.props.business, v)} </td> :
+                                        <td className="approve-class"><span className="confirm-class">approved by-</span>{this.getBussinessAceepted(this.props.business, v)} </td> :
                                         <td className="pending-class">pending</td>
                                     }
 
                                     {
                                         v.accept.includes(this.state.eventowner) ?
-                                            <td>Comfirmed</td> :
+                                            <td className="confirm-class">Comfirmed</td> :
                                             <td>
                                                 <DropdownButton title="Action" id="bg-nested-dropdown">
                                                     <MenuItem eventKey="1" onClick={() => {
@@ -504,21 +503,25 @@ class Schedule extends React.Component {
                                                         });
                                                         this.toggleCalander()
                                                     }}>Edit Schedule</MenuItem>
-                                                    <MenuItem eventKey="3" onClick={this.toggleReject}>Reject</MenuItem>
+
                                                     <Modal isOpen={this.state.rejectModal} style={{
                                                         content: {
                                                         },overlay:{
                                                             margin: '15%',
                                                             marginLeft: '35%',
-                                                            marginRight: '35%',
-                                                            opacity: '.7'
+                                                            marginRight: '35%'
                                                         }
                                                     }}>
                                                         Are You sure You Want to Reject This Event<br/><br/><br/>
 
-                                                        <Button className="reject-bs-class" bsStyle="primary" onClick={()=>{this.rejectEvent(v._id, v)}}>Reject</Button>
+                                                        <Button className="reject-bs-class" bsStyle="primary" onClick={this.rejectEvent}>Reject</Button>
                                                         <Button bsStyle="danger" onClick={this.toggleReject}>No</Button>
                                                     </Modal>
+                                                    <MenuItem eventKey="3" onClick={()=>{this.toggleReject()
+                                                                                          this.setState({
+                                                                                              rejectingEvent:v
+                                                                                          })
+                                                                                         }}>Reject</MenuItem>
                                                 </DropdownButton>
                                             </td>
                                     }
@@ -612,28 +615,30 @@ class Schedule extends React.Component {
                 <Modal isOpen={this.state.isCalender} ariaHideApp={false} style={{
                     content: {
                         height: "90%",
-                        marginTop: '5%',
+                        marginTop: '3%',
                         marginLeft: '33%',
                         marginRight: '33%',
                         paddingLeft: '1.5%',
-                        opacity: '.8',
                         backgroundColor: '#EDEFF7'
+                    },
+                    overlay:{
+
                     }
                 }}>
                     <form onSubmit={this.scheduleEvent}>
-                        <Table bordered>
+                        <Table responsive>
                             <tbody>
                             <tr>
-                                <td align="right">
-                                    <a href="#" onClick={() => {
-                                        this.clearData();
-                                        this.toggleCalander();
-                                    }}>X</a>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td align="center">
-                                    <label> Event Scheduler</label>
+
+                                    <div className="col-sm-11"><label> Event Scheduler</label></div>
+                                    <div className="col-sm-1">
+                                        <a  href="#" onClick={() => {
+                                            this.clearData();
+                                            this.toggleCalander();
+                                        }}>X</a>
+                                    </div>
+
                                 </td>
                             </tr>
                             <tr>
@@ -743,7 +748,7 @@ class Schedule extends React.Component {
                                                 onChange={this.handleChange}
                                             >
                                                 {
-                                                    this.props.business.map((v, i) => {
+                                                    this.state.businessOwnerList.map((v, i) => {
                                                         return <MenuItemMaterial
                                                             key={i}
                                                             insetChildren={true}

@@ -6,7 +6,6 @@ export default (state=[],action)=>{
             let approvedArr=action.payload;
             let len=approvedArr.length;
             let st=[...state];
-            debugger;
             for(let i=0;i<len;i++){
                 st=st.filter((req)=>req._id!==approvedArr[i])
             }
@@ -15,7 +14,6 @@ export default (state=[],action)=>{
             let rejectedArr=action.payload;
             let l=rejectedArr.length;
             let str=[...state];
-            debugger;
             for(let i=0;i<l;i++){
                 str=str.filter((req)=>req._id!==rejectedArr[i])
             }

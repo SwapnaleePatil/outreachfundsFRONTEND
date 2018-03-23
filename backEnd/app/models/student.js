@@ -83,9 +83,9 @@ studentSchema.methods.generateAuthToken=function(){
 }
 
 studentSchema.statics.findByToken= function(token){
-    var Student =this;
-    var access='auth';
-    var decoded;
+    let Student =this;
+    let access='auth';
+    let decoded;
     try{
        decoded=jwt.verify(token,'outreachfunds');
       }catch(err) {

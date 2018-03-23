@@ -1,6 +1,7 @@
 let Student=require('../models/student').student;
 let businessOwner=require('../models/businessOwner').businessOwner;
 let LocalStrategy=require('passport-local').Strategy;
+
 let bcrypt=require('bcryptjs');
 module.exports=(passport)=>{
 

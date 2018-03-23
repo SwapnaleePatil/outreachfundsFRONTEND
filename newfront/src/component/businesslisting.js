@@ -38,10 +38,6 @@ class BusinessList extends React.Component {
         this.props.listBusiness();
         this.props.fetchStudent();
     }
-    componentDidMount(){
-        console.log("rec",this.props.businessrecord);
-        // this.getAddress();
-    }
   componentWillReceiveProps(nextProps){
         this.setState({
             data:nextProps.businessrecord
@@ -158,7 +154,6 @@ class BusinessList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("State",state)
     return ({businessrecord: state.businesslist,
         studentRecord:state.students})
 };

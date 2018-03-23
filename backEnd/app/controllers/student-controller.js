@@ -1,5 +1,5 @@
-var Student=require('../models/student').student;
-var SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisation;
+let Student=require('../models/student').student;
+let SchoolOrganisation=require('../models/schoolOrganisation').schoolOrganisation;
 
 //REGISTER STUDENT
 exports.registerStudent=(req,res)=>{
@@ -11,22 +11,15 @@ exports.registerStudent=(req,res)=>{
                 console.log(err);
             }
         });
-    console.log("before json",req.body);
-    var body=JSON.parse(req.body.data);
-    console.log("after json",body);
+    let body=JSON.parse(req.body.data);
     let student=new Student(body);
     student.photo=sample.name;
     if(req.body.schoolId!==undefined) {
-        console.log("School Id - ",req.body.schoolId);
-        console.log("in if");
         student.schoolId = req.body.schoolId;
     }
-    console.log(student);
     student.save().then(() => {
-            console.log("in then");
             return student.generateAuthToken();
         }).then(() => {
-            console.log("in 2nd then",student);
             res.status(200).send(student);
         }).catch((err) => {
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
@@ -34,8 +27,7 @@ exports.registerStudent=(req,res)=>{
 }
 //REGISTER SCHOOL ORGANISATION
 exports.registerSchoolOrganisation=(req,res)=>{
-    console.log("school - ",req.body);
-    var schoolOrganisation=new SchoolOrganisation(req.body);
+    let schoolOrganisation=new SchoolOrganisation(req.body);
     schoolOrganisation.save().then((school)=>{
         res.status(200).send({"school":school});
     }).catch((err)=>{
@@ -45,7 +37,6 @@ exports.registerSchoolOrganisation=(req,res)=>{
 
 //FETCH ALL STUDENTS LIST
 exports.fetchAllStudents=(req,res)=>{
-    console.log(req.stud);
     Student.find().then((students)=>{
         res.status(200).send(students);
     }).catch((err)=>{
@@ -62,7 +53,7 @@ exports.fetchAllStudentsRequest=(req,res)=>{
 }
 
 exports.fetchStudent=(req,res)=>{
-    var token=req.header('x-auth');
+    let token=req.header('x-auth');
     Student.findByToken(token).then((student)=>{
         if(!student)
             res.status(401).send({"message":"Student Not Found."});
@@ -81,7 +72,7 @@ exports.fetchAllSchools=(req,res)=>{
 
 };
 exports.authenticate=(req,res,next)=>{
-    var token=req.header('x-auth');
+    let token=req.header('x-auth');
     Student.findByToken(token).then((stud)=>{
         if(!stud)
             return Promise.reject();
@@ -94,10 +85,9 @@ exports.authenticate=(req,res,next)=>{
     })
 }
 exports.approveStudent=(req,res)=>{
-    var arr=req.body.arr;
-    var l=arr.length;
-    console.log(l);
-    for(var i=0;i<l;i++) {
+    let arr=req.body.arr;
+    let l=arr.length;
+    for(let i=0;i<l;i++) {
         Student.findById(arr[i]).then((stud)=>{
             if(stud) {
                 stud.roleStatus=true;
@@ -114,10 +104,9 @@ exports.approveStudent=(req,res)=>{
     res.status(200).send({"message":"success"});
 }
 exports.rejectStudent=(req,res)=>{
-    var arr=req.body.arr;
-    var l=arr.length;
-    console.log(l);
-    for(var i=0;i<l;i++) {
+    let arr=req.body.arr;
+    let l=arr.length;
+    for(let i=0;i<l;i++) {
         Student.findById(arr[i]).then((stud)=>{
             if(stud) {
                 stud.status=true;
@@ -134,11 +123,9 @@ exports.rejectStudent=(req,res)=>{
     res.status(200).send({"message":"success"});
 }
 exports.UpdateStudent=(req,res)=>{
-    console.log('in edit');
     let img = '';
     let body=JSON.parse(req.body.obj);
-    console.log(body);
-    if (req.files && req.files !== null) {
+     if (req.files && req.files !== null) {
         img = req.files.photo.name;
         let sample = req.files.photo;
         sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
@@ -154,7 +141,6 @@ exports.UpdateStudent=(req,res)=>{
 
     Student.findByIdAndUpdate(body.id,{$set:body},{new:true})
         .then((result) => {
-            console.log("result",result);
             res.send({"message": 'Updated.', 'record': result});
         }).catch((err) => {
         console.log('Error in Update', err);
@@ -162,9 +148,7 @@ exports.UpdateStudent=(req,res)=>{
 }
 exports.updateSchool=(req,res)=>{
     let body = req.body;
-    console.log("body",req.body)
     SchoolOrganisation.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
-        console.log("Result",result)
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
         console.log('Error in record updation', err);

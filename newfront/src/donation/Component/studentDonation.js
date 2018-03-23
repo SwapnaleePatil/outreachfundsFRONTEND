@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
+import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import './addDonation.css'
 import _ from 'lodash'
 import {Button} from 'react-bootstrap';
 import {bindActionCreators} from 'redux'
-import ToggleButton from 'react-toggle-button'
-
-import {approveDonation, getDonationAction, getEventDataAction} from '../actions/index'
+import {getDonationAction} from '../actions/index'
+import {approveDonation} from '../actions/index'
 import {FetchStudent} from './../actions/index'
 import {fetchAllSchoolDetails} from '../../students/action/index'
 import StudentGraph from './studentGraph'
@@ -23,8 +22,7 @@ class StudentDonation extends Component {
             isAsc: true
         }
     }
-
-    componentDidMount() {
+    componentDidMount(){
         // this.props.FetchAllStudents();
         // this.props.getDonationAction();
         this.props.FetchStudent();
@@ -49,6 +47,7 @@ class StudentDonation extends Component {
             donationData,
             editable
         })
+
     }
 
     Approved = (id) => {
@@ -202,8 +201,7 @@ function mapStateToProps(state) {
         students: state.students
     };
 }
-
-function matchDispatchToProps(dispatch) {
+function matchDispatchToProps(dispatch){
     return bindActionCreators({
         // getDonationAction,
         approveDonation,
@@ -212,5 +210,4 @@ function matchDispatchToProps(dispatch) {
         // fetchAllSchoolDetails,
     }, dispatch);
 }
-
-export default connect(mapStateToProps, matchDispatchToProps)(StudentDonation)
+export default connect(mapStateToProps,matchDispatchToProps)(StudentDonation)

@@ -27,7 +27,6 @@ class StudentProfile extends React.Component {
             isEditing: nextProps.location.pathname.includes('edit') ? true : false
 
         }, () => {
-            console.log("Props", this.state.school)
             this.getSchool();
         })
 
@@ -41,7 +40,6 @@ class StudentProfile extends React.Component {
                 school: this.props.School
             }, () => {
                 this.getSchool();
-                console.log("School in mount", this.props.School);
             })
         }
         else {
@@ -59,9 +57,7 @@ class StudentProfile extends React.Component {
                 selectedSchool = value;
             }
         })
-        this.setState({selectedSchool}, () => {
-            console.log("School", this.state.selectedSchool)
-        })
+        this.setState({selectedSchool})
     }
     handleChange = (e) => {
         let {name, value} = e.target;
@@ -199,12 +195,10 @@ class StudentProfile extends React.Component {
         }
     }
     updateRecord = (e) => {
-        //debugger
         e.preventDefault();
         const {error}=this.state;
         let flag = 0;
         for (let key in error) {
-            console.log(key);
             if (error[key] !== '') {
                 flag = 1;
             }
@@ -257,7 +251,7 @@ class StudentProfile extends React.Component {
                                                             style={{"width": "100%", "height": "100%"}}/>
                                     :
                                     <img className="image"
-                                         src={"http://192.168.200.80:3005/uploads/" + student.photo}
+                                         src={"http://192.168.200.33:3005/uploads/" + student.photo}
                                          style={{"width": "100%", "height": "100%"}}/>
 
                             }
@@ -278,6 +272,7 @@ class StudentProfile extends React.Component {
                             <legend style={{"color": "darkgreen"}}>Student Details{' '}<span
                                 style={{"color": "red"}}>{this.state.msg}</span></legend>
                             <table style={{"width": "100%"}}>
+                                <tbody>
                                 <tr>
                                     <td className="fieldsecond">Name</td>
                                     <td className="fieldseconds">{
@@ -383,6 +378,7 @@ class StudentProfile extends React.Component {
                                     {error.roleTitle && <span style={{"color": "red"}}>{error.roleTitle}</span>}
 
                                 </tr>
+                                </tbody>
                             </table>
                         </fieldset>
                     </div>
@@ -394,6 +390,7 @@ class StudentProfile extends React.Component {
                         </fieldset>
 
                         <table>
+                            <tbody>
                             <tr>
                                 <td className="field">Phone Number</td>
                             </tr>
@@ -430,13 +427,14 @@ class StudentProfile extends React.Component {
                                 }
                                 </td>
                             </tr>
-
+                            </tbody>
                         </table>
                     </div>
                     <div className="col-sm-8">
                         <fieldset style={{"margin-top": "2%"}}>
                             <legend style={{"color": "darkgreen"}}>School Details</legend>
                             <table style={{"width": "100%"}}>
+                                <tbody>
                                 <tr>
                                     <td className="fieldsecond">School Name:</td>
                                     <td align="left"
@@ -489,7 +487,7 @@ class StudentProfile extends React.Component {
                                     </td>
                                 </tr> : ''
                                 }
-
+                                </tbody>
                             </table>
                         </fieldset>
                     </div>
@@ -505,8 +503,7 @@ class StudentProfile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("State", state)
-    return {
+   return {
         Student: state.students,
         School: state.schools
     }

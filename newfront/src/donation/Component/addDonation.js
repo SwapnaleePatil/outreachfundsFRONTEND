@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import './addDonation.css'
 import {Button,FormControl,FormGroup,HelpBlock,Table} from 'react-bootstrap';
 import _ from 'lodash';
 import {connect} from 'react-redux';
@@ -40,7 +40,6 @@ class DisplayForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.donationData);
         //display
         let {eventsData,donationData} = this.state;
         eventsData=[];
@@ -59,6 +58,7 @@ class DisplayForm extends Component {
             eventsData,
             donationData
         });
+
         let arr = nextProps.organizationData;
         let newarr;
         let final = [];
@@ -71,7 +71,9 @@ class DisplayForm extends Component {
             organizationNameArr: final
         });
     }
+
     onChange = (e) => {
+
         this.setState({
             [e.target.id]: Math.abs(e.target.value)
         });
@@ -94,6 +96,7 @@ class DisplayForm extends Component {
         let Udata = {};
         let eventId = "";
         let organizationId="";
+        debugger;
         this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
                 eventId = value._id;
@@ -197,6 +200,7 @@ class DisplayForm extends Component {
             <div>
                 <h1>Donate Amount</h1>
                 <Table>
+                    <tbody>
                     <tr>
                         <th>Event Name :</th>
                         <FormGroup>
@@ -244,6 +248,7 @@ class DisplayForm extends Component {
                             this.onSubmit()
                         }}>Donate</Button></th>
                     </tr>
+                    </tbody>
                 </Table>
                 <center><h2>Donation Requests</h2></center>
 

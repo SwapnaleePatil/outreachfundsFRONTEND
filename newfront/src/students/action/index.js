@@ -14,7 +14,6 @@ export const setSignupPageFieldsAction=(obj=[])=>{
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
         axiosI.get(`api/school`).then((schools)=>{
-            console.log("School",schools);
             dispatch({
                 type:'FETCH_SCHOOLS',
                 payload:schools.data
@@ -39,7 +38,6 @@ export const registerStudent = (obj) => {
 };
 
 export const registerSchool = (schoolObj,personalObj) => {
-    console.log("in school",schoolObj);
     return (dispatch)=>{
         axiosI.post("api/school",schoolObj).then((school)=>{
             personalObj.append('schoolId',school.data.school._id)
@@ -60,7 +58,7 @@ export const fetchAdmin=()=>{
         }
     }
     return (dispatch=>{
-        axiosI.get(`api/student`,data).then((user)=>{
+        axiosI.get('api/student',data).then((user)=>{
             if(user.data.roleTitle==='Admin')
                 dispatch(fetchSignupRequests(user.data.schoolId));
         }).catch((error)=>{
@@ -117,7 +115,6 @@ export const FetchAllStudents = () => {
     }
 }
 export const approveSignupRequests = (resultSet) => {
-    console.log(resultSet);
     let arr=[...resultSet];
     let obj={
         "arr":arr
@@ -144,7 +141,6 @@ export const rejectSignupRequests = (resultSet) => {
 
         return (dispatch) => {
             axiosI.post(url, obj).then(() => {
-                debugger;
                 dispatch({
                     type: 'REJECT_REQUEST',
                     payload: arr
@@ -155,10 +151,8 @@ export const rejectSignupRequests = (resultSet) => {
         }
 }
 export const updateStudent=(obj)=>{
-    debugger
     return (dispatch)=>{
         axiosI.put('api/student/profile',obj).then((result)=>{
-            console.log("Result",result.data.record);
             dispatch({
                 type:'STUDENT_UPDATE',
                 payload:result.data.record
@@ -167,7 +161,6 @@ export const updateStudent=(obj)=>{
     }
 };
 export const updateSchool=(obj)=>{
-    debugger
     return (dispatch)=>{
         axiosI.put('api/school',obj).then((result)=>{
 

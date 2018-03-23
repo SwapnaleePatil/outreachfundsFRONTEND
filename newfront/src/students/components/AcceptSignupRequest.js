@@ -11,8 +11,7 @@ class AcceptSignupRequest extends React.Component {
     }
 
     toggleApproveCheckbox = (e) => {
-        var val = e.target.value;
-        console.log("Value - ", val);
+        let val = e.target.value;
         if (this.approvedCheckboxes.has(val)) {
             this.approvedCheckboxes.delete(val)
             this.rejectedCheckboxes.add(val);
@@ -21,13 +20,10 @@ class AcceptSignupRequest extends React.Component {
             this.approvedCheckboxes.add(val);
             this.rejectedCheckboxes.delete(val);
         }
-        console.log(this.approvedCheckboxes);
-        console.log(this.rejectedCheckboxes);
     }
 
     handleRequest = (e) => {
-        debugger;
-        if (this.approvedCheckboxes.size > 0) {
+       if (this.approvedCheckboxes.size > 0) {
             this.props.approveSignupRequests(this.approvedCheckboxes);
         }
         if (this.rejectedCheckboxes.size > 0)

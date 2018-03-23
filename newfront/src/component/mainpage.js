@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {listBusiness} from '../business/action/index'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table,Badge,Dropdown,ButtonToolbar} from 'react-bootstrap'
 import '../index.css'
-import {NavLink} from 'react-router-dom'
+import {Route, NavLink,Redirect} from 'react-router-dom'
 
 
 class MainPage extends React.Component {
@@ -14,7 +14,8 @@ class MainPage extends React.Component {
             isSearching: false,
             searchdata: [],
             name: "",
-            user: ''
+            user: '',
+            isNull:false
         }
     }
     componentWillMount() {
@@ -31,8 +32,6 @@ class MainPage extends React.Component {
                     user = value;
                     this.setState({
                         user
-                    }, () => {
-                        console.log("user", this.state.user);
                     })
                 }
                 //alert("user",this.state.user)
@@ -46,7 +45,6 @@ class MainPage extends React.Component {
         this.setState({
             name:e.target.value
         });
-        console.log(e.target.value);
         this.setState({
             name:e.target.value,
             isSearching: true,
@@ -63,7 +61,8 @@ class MainPage extends React.Component {
             });
             if (e.target.value === "") {
                 this.setState({
-                    isSearching: false
+                    isSearching: false,
+                    isNull:true
                 })
             }
         })
@@ -125,7 +124,10 @@ class MainPage extends React.Component {
                              </ButtonToolbar>
                     </Nav>
                 </Navbar>
-                {this.state.isSearching ?
+                {this.state.isNull && <Redirect to="/main"/>}
+                {this.state.isSearching &&
+                    <div>
+                    <Redirect to="/search"/>
                 <Table striped bordered>
                     <tbody>
                     <tr>
@@ -154,7 +156,7 @@ class MainPage extends React.Component {
                 }
 
             </tbody>
-                </Table>:""}
+                </Table></div>}
             </div>
         )
     }
