@@ -173,8 +173,9 @@ height: 43%;
 opacity: 0.9;
 }
 .registration-business-class{
-  padding: 5%;
-  background-image: url("./images/Schoolregistration.jpg");
+  bottom:0;
+  background: url("./images/Schoolregistration.jpg")no-repeat top center/cover;
+  height:100vh;
 }
 .reject-bs-class{
   margin: 3%;

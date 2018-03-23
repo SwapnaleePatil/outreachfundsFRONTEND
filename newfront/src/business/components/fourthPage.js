@@ -47,10 +47,8 @@ class FourthPage extends React.Component {
             }
             if (flag === 0) {
 
-                const {businessPage, businessFields} = this.props;
-                businessPage(1);
+                const { businessFields} = this.props;
                 businessFields();
-                //let {ownerData} = this.state;
                 if (ownerData["expireMonth"] < 9) {
                     ownerData["expireMonth"] = "0" + ownerData["expireMonth"];
                 } else {
@@ -144,6 +142,8 @@ class FourthPage extends React.Component {
     }
 
     render() {
+        debugger;
+        (this.props.newBusiness.length>0)?this.props.history.push('/'):'';
         let {error}=this.state;
         const {Fields} = this.props;
         if (Fields !== null)
@@ -156,7 +156,7 @@ class FourthPage extends React.Component {
                     <div style={{"background-color": "white"}}><Modal.Header>
                         <div className="col-sm-10"><label>Business Information</label></div>
                         <div className="closecss col-sm-2" align="right" onClick={() => {
-                            window.location = "/" }}>
+                            this.props.history.push('/') }}>
                             <a href="#" >
                                 <span className="glyphicon glyphicon-remove"/>
                             </a>
@@ -242,7 +242,8 @@ class FourthPage extends React.Component {
 function mapStateToProps(state) {
     return {
         Page: state.businessSignUpRed,
-        Fields: state.businessFieldsRed
+        Fields: state.businessFieldsRed,
+        newBusiness:state.newBusiness
     }
 }
 

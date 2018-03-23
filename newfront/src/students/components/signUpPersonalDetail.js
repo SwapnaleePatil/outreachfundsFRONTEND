@@ -69,10 +69,9 @@ class SignUpPersonal extends React.Component{
         })
     }
     handleClose=()=>{
-        // this.props.history.push('/');
-        window.location="/";
+         this.props.history.push('/');
     }
-    handleSubmit=(e)=>{
+    handleSubmit=()=>{
         const {personalData}=this.state;
         let date=(personalData.month|| 1) + "/" + (personalData.day || 1) + "/" + (personalData.year || new Date().getFullYear()-50);
         personalData['dob']=date;

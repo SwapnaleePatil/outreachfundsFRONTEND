@@ -1,6 +1,5 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Button,ButtonToolbar} from 'react-bootstrap'
 import {signupPageAction,setSignupPageFieldsAction,fetchAllSchoolDetails,registerStudent,registerSchool} from '../action';
@@ -25,7 +24,7 @@ class SignUpSchool extends React.Component{
     componentWillReceiveProps(nextProps){
         console.log("next - ",nextProps.students);
         if(nextProps.students.length>0){
-             this.setState({redirect:true})
+            this.props.history.push('/');
         }
     }
     handleChange=(e)=>{
@@ -185,10 +184,11 @@ class SignUpSchool extends React.Component{
         })
     }
     render(){
+        (this.props.students.length>0)?this.props.history.push('/'):'';
         const {signupPageFields,Schools}=this.props;
         if(signupPageFields!==null)
             this.state.schoolData=signupPageFields;
-        const {schoolData,errors,displayErrors,redirect}=this.state;
+        const {schoolData,errors,displayErrors}=this.state;
         return(
             <div className="registration-school-wrapper-class">
             <div className={'modal-dialog'}>
@@ -196,7 +196,7 @@ class SignUpSchool extends React.Component{
                     <div className={'modal-header'}>
                         <h4>School Information</h4>
                         <button className={'close'} onClick={()=>{
-                            window.location="/"}
+                            this.props.history.push('/')}
                         }
                         >&times;</button>
                     </div>
@@ -266,9 +266,6 @@ class SignUpSchool extends React.Component{
                                     <Button bsStyle="primary" onClick={this.previousPage}>Previous</Button>
                                     <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
                                 </ButtonToolbar>
-                                {
-                                    (this.state.redirect)?<Redirect to={'/'}/>:''
-                                }
                             </div>
                         </form>
                     </div>

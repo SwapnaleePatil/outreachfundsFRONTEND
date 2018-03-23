@@ -367,11 +367,6 @@ class HomePage extends React.Component {
                                 <NavItem eventKey={2} className="navclassa" onClick={this.toggleRole}>
                                     Login
                                 </NavItem>
-                                <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown" className="navclassa">
-                                    <MenuItem eventKey={3.1} ><NavLink to="/aboutus">About Us</NavLink></MenuItem>
-                                    <MenuItem eventKey={3.2}  ><NavLink to="/contactus">Contact Us</NavLink></MenuItem>
-                                    <MenuItem eventKey={3.3} ><NavLink to="/fundideas">Fund Raisinng Ideas</NavLink></MenuItem>
-                                </NavDropdown>
                             </Nav>
                         </Navbar></div>
                     <div className="carosel-class">

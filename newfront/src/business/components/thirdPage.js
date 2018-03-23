@@ -54,7 +54,7 @@ class ThirdPage extends React.Component {
                         <Modal.Header>
                             <div className="col-sm-10"><label>Business Information</label></div>
                             <div className="closecss col-sm-2" align="right" onClick={() => {
-                                window.location = "/" }}>
+                                this.props.history.push('/') }}>
                                 <a href="#" >
                                     <span className="glyphicon glyphicon-remove"/>
                                 </a>
