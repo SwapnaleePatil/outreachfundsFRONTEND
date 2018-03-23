@@ -15,10 +15,10 @@ class BusinessFullPage extends React.Component{
     render(){
         return(
             <div className="registration-business-class">
-                {(this.props.Page===1)?<FirstPage/>:<span></span>}
-                {(this.props.Page===2)?<SecondPage/>:<span></span>}
-                {(this.props.Page===3)?<ThirdPage/>:<span></span>}
-                {(this.props.Page===4)?<FourthPage/>:<span></span>}
+                {(this.props.Page===1)?<FirstPage history={this.props.history}/>:<span></span>}
+                {(this.props.Page===2)?<SecondPage history={this.props.history}/>:<span></span>}
+                {(this.props.Page===3)?<ThirdPage history={this.props.history}/>:<span></span>}
+                {(this.props.Page===4)?<FourthPage history={this.props.history}/>:<span></span>}
             </div>
         )
     }

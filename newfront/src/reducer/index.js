@@ -6,6 +6,7 @@ import signupPageFieldsReducer from '../students/reducers/reducer-signup-fields'
 import requestReducer from '../students/reducers/reducer-request';
 import schoolReducer from '../students/reducers/reducer-schools';
 import businesslist from '../business/reducers/businessReducer'
+import newBusiness from '../business/reducers/businessCrud'
 import businessSignUpPageReducer from '../business/reducers/businessPage';
 import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
 import donationReducer from './../donation/reducers/donationReducer';
@@ -30,7 +31,8 @@ const rootreducer=combineReducers({
     donation:donationReducer,
     events:eventReducer,
     businessInfo:getBusiness,
-    studentLogged:studentLogged
+    studentLogged:studentLogged,
+    newBusiness:newBusiness
 });
 
 export default rootreducer;

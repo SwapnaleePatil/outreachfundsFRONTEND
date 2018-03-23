@@ -22,8 +22,6 @@ export const addBusiness=(obj)=>{
                 type:'BUSINESS_ADD',
                 payload:result.data
             })
-            localStorage.setItem('user',result.data.record.tokens[0].token);
-            window.location = "/home"
         })
     }
 };

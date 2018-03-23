@@ -115,6 +115,12 @@ export const BusinessUpdatePassword = (pswrd, uid) => {
         })
     });
 }
+export const logoutAction=()=>{
+    return({
+        type:'LOG_OUT',
+        payload:{'message':'logout'}
+    })
+}
 /*export const FetchIdByEmail = (email,newPassword) => {
 
     axios.post('http://localhost:2525/findByEmail', {'email':email,'newPassword':newPassword}).then((response) => {
