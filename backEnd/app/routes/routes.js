@@ -23,7 +23,7 @@ module.exports=(app,passport)=>{
         failureRedirect:'/failure'
     }))
     app.get('/success',(req,res)=>{
-        res.send({"message":"login successful","token":studentToken});
+        res.send({"message":"login successful","userType":"S","token":studentToken});
     })
     app.get('/failure',(req,res)=>{
         res.send({"message":"login failed"});
@@ -35,10 +35,10 @@ module.exports=(app,passport)=>{
             failureRedirect:'/loginFailure'
         }));
     app.get('/loginSuccess',(req,res)=>{
-        res.send({"message":"login successful","token":token});
+        res.send({"message":"login successful","userType":"B","token":token});
     });
     app.get('/loginFailure',(req,res)=>{
-        res.send("User Not Found");
+        res.send({"message":"login failed"});
     });
     app.post('/api/business/profile', businesscontroller.addBusinessOwner);
     app.delete('/api/business/profile', businesscontroller.deleteBusinessOwner);

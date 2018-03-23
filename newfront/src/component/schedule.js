@@ -30,7 +30,8 @@ class Schedule extends React.Component {
             searchdata: [],
             businessNameSelect: [],
             student: [],
-            rejectModal:false
+            rejectModal:false,
+            error:{}
         }
     }
 //reject modal
@@ -142,12 +143,13 @@ class Schedule extends React.Component {
         else {
             error.donationOption = "";
         }
+        if(this.state.businessname!==""&&this.state.isEditing===false){
         if (!eventData.schoolOrganisation) {
             error.schoolOrganisation = "Please Select School";
         }
         else {
             error.schoolOrganisation = "";
-        }
+        }}
         this.setState({error});
         for (let key in error) {
             if (error[key] !== "") {
