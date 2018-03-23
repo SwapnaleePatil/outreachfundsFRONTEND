@@ -29,7 +29,6 @@ class DashBoard extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('student', nextProps.requests);
         let {totalDonation, totalEvents, eventsForStudent} = this.state;
         let tempArray = [];
         nextProps.events.forEach((value) => {
@@ -42,8 +41,6 @@ class DashBoard extends Component {
         });
         nextProps.donation.forEach((i) => {
             eventsForStudent.forEach((j)=>{
-                console.log('i',i);
-                console.log('j',j);
                 if(i.eventName === j)
                 {
                     totalDonation = totalDonation + i.amount
@@ -68,27 +65,27 @@ class DashBoard extends Component {
 
     render() {
         return (
-            <div>
-                {/*<div className="col-sm-3">
-                    <center><h2>Schools & Organizations</h2></center>
+            <div className="container">
+                <div className="col-sm-6">
+                    <h2>Schools & Organizations</h2>
                     <div className="blocks">
                         <h2>Total Schools : {this.state.totalSchools}</h2>
                     </div>
-                </div>*/}
-                <div className="col-sm-4">
-                    <center><h1>Events</h1></center>
+                </div>
+                <div className="col-sm-6">
+                    <h1>Events</h1>
                     <div className="blocks">
                         <h2>Total Events: {this.state.totalEvents}</h2>
                     </div>
                 </div>
-                <div className="col-sm-4">
-                    <center><h1>Business</h1></center>
+                <div className="col-sm-6">
+                    <h1>Business</h1>
                     <div className="blocks">
                         <h2>Total Business: {this.state.totalBusiness}</h2>
                     </div>
                 </div>
-                <div className="col-sm-4">
-                    <center><h1>Donation</h1></center>
+                <div className="col-sm-6">
+                    <h1>Donation</h1>
                     <div className="blocks">
                         <h2>total Donation: ${this.state.totalDonation}</h2>
                     </div>

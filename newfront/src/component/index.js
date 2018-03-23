@@ -1,8 +1,7 @@
 import React from 'react'
 import HomePage from "./homepage";
-import AboutUs from '../publicComponents/aboutUs';
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap';
-import Payment from '../publicComponents/payment';
+import Search from '../publicComponents/search';
 import ContactUs from '../publicComponents/contactUs';
 import Availability from '../publicComponents/availability';
 import FundRaisingIdea from '../publicComponents/fundRaisingIdea';
@@ -30,24 +29,20 @@ class Main extends React.Component {
             <BrowserRouter>
                 <Switch>
                     <Public exact path="/" component={HomePage}/>
-                    <Public exact path="/aboutus" component={AboutUs}/>
                     <Public exact path="/contactus" component={ContactUs}/>
                     <Public exact path="/fundideas" component={FundRaisingIdea}/>
                     <Public exact path="/businessSignUp" component={BusinessFullPage}/>
                     <Public exact path="/studentSignUp" component={StudentSignUpPage}/>
-
-
                     <Private exact path="/main" component={BusinessList}/>
                     <Private exact path="/main/schedule" component={Schedule}/>
                     <Private exact path="/main/donation" component={Donation}/>
                     <Private exact path="/main/studentdonation" component={StudentDonation}/>
                     <Private exact path="/dashboard" component={DashBoard}/>
                     <Private exact path="/main/requests" component={AcceptSignupRequest}/>
-
+                    <Private exact path="/search" component={Search}/>
                     <Private exact path="/viewProfile" component={BusinessProfile}/>
                     <Private exact path="/editProfile" component={BusinessProfile}/>
                     <Private exact path="/availability" component={Availability}/>
-                    <Private exact path="/payment" component={Payment}/>
                     <Private exact path="/viewStudentProfile" component={StudentProfile}/>
                     <Private exact path="/editStudentProfile" component={StudentProfile}/>
                     <Private exact path="/logout" component={logout} />
@@ -56,4 +51,4 @@ class Main extends React.Component {
         );
     }
 }
-export default (Main);
+export default(Main)

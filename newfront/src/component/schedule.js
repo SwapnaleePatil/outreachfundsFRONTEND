@@ -69,14 +69,12 @@ class Schedule extends React.Component {
                         eventowner
                     })
                 }
-                console.log(this.state.eventowner)
             });
         });
     }
 
 //event generate and edit time field handle
     onFieldChange = (e) => {
-        //debugger
         let {name, value} = e.target;
         let {eventData, isEditing} = this.state;
         if (isEditing === true) {
@@ -128,7 +126,6 @@ class Schedule extends React.Component {
     };
 //event generate by student and business
     scheduleEvent = () => {
-       // debugger
         let {eventData, error} = this.state;
         let flag=0;
         if (eventData===undefined) {
@@ -208,7 +205,6 @@ class Schedule extends React.Component {
     };
 //edit event by event Sponsor
     editEvent = () => {
-        //debugger
         let {eventData, error} = this.state;
         let flag=0;
         if (eventData===undefined) {
@@ -289,7 +285,6 @@ class Schedule extends React.Component {
     handleChange = (event, index, businessNameSelect) => this.setState({businessNameSelect});
 //Validation
     checkValidation = (e) => {
-        //debugger;
         let {error} = this.state;
         let name = e.target.name;
         if (name === "eventDate") {
@@ -348,8 +343,7 @@ class Schedule extends React.Component {
 // find school name for event modal
         let schoolname = "";
         this.props.organization.map((value, i) => {
-            //debugger;
-            if (value._id === this.state.student.schoolId) {
+             if (value._id === this.state.student.schoolId) {
                 schoolname = value.organisationName
             }
         });

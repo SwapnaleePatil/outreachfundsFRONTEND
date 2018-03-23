@@ -16,7 +16,6 @@ export const  businessLogin=(data)=>{
 export const  studentLogin=(data)=>{
     return (dispatch)=>{
         axiosI({method:'post',url:'api/student/login',data}).then((response)=>{
-            debugger
             if(response){
                 dispatch({
                     type:'STUDENT_LOGIN',
@@ -46,7 +45,6 @@ export const scheduleevents=(data)=>{
 //Action For Accept and Reject Event
 export const actionevents=(data)=>{
     return(dispatch)=>{
-        debugger;
         axiosI({method:'put',url:'api/event',data}).then((response)=>{
             if(response){
                 dispatch({

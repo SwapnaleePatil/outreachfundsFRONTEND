@@ -11,6 +11,7 @@ global.studentToken='';
 global.token='';
 let app=express();
 
+
 app.use(passport.initialize());
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));

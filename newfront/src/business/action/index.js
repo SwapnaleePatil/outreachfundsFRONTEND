@@ -23,7 +23,6 @@ export const addBusiness=(obj)=>{
                 payload:result.data
             })
             localStorage.setItem('user',result.data.record.tokens[0].token);
-            console.log("local",result.data);
             window.location = "/home"
         })
     }

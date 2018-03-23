@@ -34,8 +34,6 @@ class DisplayForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.donationData);
-
         //display
         let {donationData} = this.state;
         donationData=[]
@@ -72,14 +70,12 @@ class DisplayForm extends Component {
         let Udata = {};
         let eventId = "";
         let organizationId="";
-        debugger;
         this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
                 eventId = value._id;
                 organizationId = value.schoolOrganisation;
             }
         });
-        console.log('business Info',this.props.businessInfo);
         let data = {
             'eventDate': this.state.date,
             'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
@@ -152,7 +148,6 @@ class DisplayForm extends Component {
     };
 
     render() {
-        console.log('donation data', this.props.donationData);
         return (
             <div>
                 <h1>Donate Amount</h1>

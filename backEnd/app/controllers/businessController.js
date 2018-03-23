@@ -1,18 +1,22 @@
 let BusinessOwner = require('../models/businessOwner').businessOwner;
 const _=require('lodash')
+let jwt=require('jsonwebtoken');
 
 //Add new Business Owner And Business Detail
 exports.addBusinessOwner = (req, res) => {
     if (!req.files)
         return res.status(400).send('No files were uploaded.');
-    var body=JSON.parse(req.body.obj);
+    let body=JSON.parse(req.body.obj);
     let sample = req.files.photo;
     sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
         if (err) {
             console.log("Error",err);
         }
     });
-    var newBusinessOwner = new BusinessOwner(body);
+    let cardDetail=body.subscription.cardDetail;
+    let newBusinessOwner = new BusinessOwner(body);
+    newBusinessOwner.subscription.cardDetail.securityCode=jwt.sign(cardDetail.securityCode,'outreachfunds');
+    newBusinessOwner.subscription.cardDetail.cardNumber=jwt.sign(cardDetail.cardNumber,'outreachfunds');
     newBusinessOwner.photo=sample.name;
     newBusinessOwner.save()
     .then(()=>{

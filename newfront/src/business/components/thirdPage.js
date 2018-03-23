@@ -17,7 +17,7 @@ class ThirdPage extends React.Component {
     handleChange=(e)=>{
         const {Fields}=this.props;
         const {name,value}=e.target;
-        var {ownerData}=this.state;
+        let {ownerData}=this.state;
         if(ownerData.length<=0)
             ownerData = Fields;
         ownerData[name]=value;
@@ -50,13 +50,16 @@ class ThirdPage extends React.Component {
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header>
-                        <div align="right">
-                            <Button onClick={()=>{
-                                window.location="/"}
-                            }
-                            >Close</Button></div></div>
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                            <div className="closecss col-sm-2" align="right" onClick={() => {
+                                window.location = "/" }}>
+                                <a href="#" >
+                                    <span className="glyphicon glyphicon-remove"/>
+                                </a>
+                            </div>
+                        </Modal.Header></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>
@@ -64,7 +67,7 @@ class ThirdPage extends React.Component {
                                 <td ><label>Subscription Pricing</label></td>
                                 <td>
                                     <tr>
-                                        <td><input name="pricing" type="radio" value="$14.99" onChange={this.handleChange} checked={ownerData.pricing==="$14.99"?true:false}/> {' '}
+                                        <td><input name="pricing" type="radio" value="$14.99"  onChange={this.handleChange} checked={ownerData.pricing==="$14.99"?true:false}/> {' '}
                                             Monthly Subscription: $14.99 Per Month
                                         </td>
                                     </tr>

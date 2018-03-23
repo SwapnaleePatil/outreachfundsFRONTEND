@@ -20,7 +20,7 @@ class FourthPage extends React.Component {
     handleChange = (e) => {
         const {Fields} = this.props;
         const {name, value} = e.target;
-        var {ownerData} = this.state;
+        let {ownerData} = this.state;
         if (ownerData.length <= 0)
             ownerData = Fields;
         ownerData[name] = value;
@@ -32,7 +32,6 @@ class FourthPage extends React.Component {
     //Register New Record
     submitData = (e) => {
         e.preventDefault();
-        debugger;
         const {ownerData,error} = this.state;
         if (!ownerData.country) {
             error.country="Please Select Country"
@@ -42,7 +41,6 @@ class FourthPage extends React.Component {
             error.country="";
             let flag = 0;
             for (let key in error) {
-                console.log(key);
                 if (error[key] !== '') {
                     flag = 1;
                 }
@@ -134,7 +132,7 @@ class FourthPage extends React.Component {
             error
         })
         if (e.target.value === "") {
-            this.setState({error: ""});
+            this.setState({error: {}});
         }
     }
     //Maintain Paging
@@ -155,29 +153,29 @@ class FourthPage extends React.Component {
         return (
             <form onSubmit={this.submitData}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header>
-                        <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    <div style={{"background-color": "white"}}><Modal.Header>
+                        <div className="col-sm-10"><label>Business Information</label></div>
+                        <div className="closecss col-sm-2" align="right" onClick={() => {
+                            window.location = "/" }}>
+                            <a href="#" >
+                                <span className="glyphicon glyphicon-remove"/>
+                            </a>
+                        </div>
+                    </Modal.Header></div>
                     <div>
-                        <div align="right">
-                            <Button onClick={() => {
-                                window.location = "/"
-                            }
-                            }
-                            >Close</Button></div>
                         <Table hover bordered responsive style={{"background-color": "white"}}>
                             <tbody>
                             <tr>
                                 <td><label>Card Type:</label></td>
                                 <td><input value={ownerData.cardType} onChange={this.handleChange} name="cardType"
-                                           className="form-control" type="text" required/></td>
+                                           className="form-control" type="text" placeholder="Enter Card Type" required/></td>
                             </tr>
                             <tr>
                                 <td><label>Card Number:</label></td>
                                 <td><input value={ownerData.cardNumber} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} name="cardNumber" className="form-control" type="number" required/>
+                                }} name="cardNumber" className="form-control" type="number" placeholder="Enter 16 digit's card number" required/>
                                     {error.cardNumber && <span style={{"color": "red"}}>{error.cardNumber}</span>}</td>
                             </tr>
                             <tr>
@@ -187,10 +185,10 @@ class FourthPage extends React.Component {
                                         Month:<input value={ownerData.expireMonth} className="form-control"
                                                      style={{"width": "20%"}}
                                                      onChange={this.handleChange} name="expireMonth" type="number"
-                                                     min="01" max="12" required/>{'  '}
+                                                     min="1" max="12" placeholder="1" required/>{'  '}
                                         Year:<input value={ownerData.expireYear} className="form-control"
                                                     style={{"width": "20%"}}
-                                                    onChange={this.handleChange} name="expireYear" type="number"
+                                                    onChange={this.handleChange} placeholder="2020" name="expireYear" type="number"
                                                     min="2020" max="2040" required/></div>
                                 </td>
                             </tr>
@@ -199,7 +197,7 @@ class FourthPage extends React.Component {
                                 <td><input value={ownerData.securityCode} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} required name="securityCode" className="form-control" type="number"/>
+                                }} required name="securityCode" className="form-control" type="number" placeholder="Enter Security Code"/>
                                     {error.securityCode && <span style={{"color": "red"}}>{error.securityCode}</span>}
                                 </td>
                             </tr>
@@ -208,7 +206,7 @@ class FourthPage extends React.Component {
                                 <td><input value={ownerData.postalCode} onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} name="postalCode" required className="form-control" type="number"/>
+                                }} name="postalCode" required className="form-control" type="number" placeholder="Enter Postal Code"/>
                                     {error.postalCode && <span style={{"color": "red"}}>{error.postalCode}</span>}</td>
                             </tr>
                             <tr>
@@ -218,7 +216,6 @@ class FourthPage extends React.Component {
                                         <option>==Select Country==</option>
                                         <option value="India">India</option>
                                         <option value="London">London</option>
-                                        <option value="UK">India</option>
                                         <option value="USA">USA</option>
                                         <option value="China">China</option>
                                         <option value="Japan">Japan</option>

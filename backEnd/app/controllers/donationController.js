@@ -18,7 +18,6 @@ exports.getDonation=(req,res)=>{
 };
 exports.approveDonation=(req,res)=>{
     Donation.findByIdAndUpdate(req.body._id,{$set:{"status":true}},{new:true}).then((response)=>{
-        console.log('response by approveDonation : ',response);
         res.send(response);
     }).catch((err)=>{
         console.log(err);
@@ -28,7 +27,6 @@ exports.approveDonation=(req,res)=>{
 exports.updateDonation=(req,res)=>{
     "use strict";
     Donation.findByIdAndUpdate(req.body._id,{$set:req.body},{new:true}).then((response)=>{
-        console.log('update response',response);
         res.send(response);
     }).catch((err)=>{
         console.log(err);
