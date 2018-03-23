@@ -17,13 +17,10 @@ let eventSchema = new mongoose.Schema({
     eventTime: {
         type: String
     },
-    businessSponsor:
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: businessOwner,
+    businessSponsor: {
+            type: Array,
             require: true
-
-        },
+    },
     schoolOrganisation: {
         type: mongoose.Schema.ObjectId,
         ref: schoolOrganisation,
@@ -36,8 +33,7 @@ let eventSchema = new mongoose.Schema({
         type: String
     },
     accept: {
-        type: Boolean,
-        default: false
+        type: Array
     },
     status: {
         type: Boolean,

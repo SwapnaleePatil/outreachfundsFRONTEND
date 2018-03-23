@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from 'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {bindActionCreators} from 'redux';
 
 class SecondPage extends React.Component {
@@ -11,63 +11,92 @@ class SecondPage extends React.Component {
         super(props);
         this.state = {
             ownerData: [],
-
+            error:{}
         }
     }
-
+    //Maintain Paging
     handlePreviousPage = (e) => {
         e.preventDefault();
-        const {businessSignup, businessFields, Page} = this.props;
-        businessSignup(Page - 1);
+        const {businessPage, businessFields, Page} = this.props;
+        businessPage(Page - 1);
         businessFields(this.state.ownerData);
     }
+    //Handle change in state
     handleChange = (e) => {
-        console.log("Log", this.props)
         const {Fields} = this.props;
         const {name, value} = e.target;
-        var {ownerData} = this.state;
+        let {ownerData} = this.state;
         if (ownerData.length <= 0)
             ownerData = Fields;
         ownerData[name] = value;
-        this.setState({ownerData}, () => {
-            console.log("OwnerData", ownerData);
-        })
+        this.setState({ownerData})
     }
+    //Validation
     chkValidation = (e) => {
-        // debugger
-        this.setState({msg: ""});
+        let {error } = this.state;
         let name = e.target.name;
-        if (name === "businessName" || name === "businessType") {
-            let rename = /^([a-zA-Z])*$/;
+        if (name === "businessName") {
+            let rename = /^([A-Za-z ])*$/;;
             if (!rename.test(e.target.value)) {
-                this.setState({msg: "Do not Enter Number Please"});
+                error.businessName= "Please Enter Valid Name."
+            }
+            else {
+                error.businessName= "";
+            }
+        }
+        if(name === "businessType")
+        {
+            let rename = /^([A-Za-z ])*$/;;
+            if (!rename.test(e.target.value)) {
+                error.businessType= "Do not Enter Number Please"
+            }
+        else {
+                error.businessType= "";
             }
         }
         if (name === "businessEmail") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                this.setState({msg: "Email is InValid"});
+                error.businessEmail= "Email is InValid"
+            }
+            else {
+                error.businessEmail="";
             }
         }
-        // debugger
-        if (name === "businessPhone") {
+
+       if (name === "businessPhone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
-                this.setState({msg: "Enter Number between 6 to 13 digit"});
+                error.businessPhone= "Enter Number between 6 to 13 digit";
+            }
+            else {
+                error.businessPhone="";
             }
         }
+        this.setState({
+            error
+        })
+        if (e.target.value === "") {
+            this.setState({error: {}});
+        }
     }
+    //Manage Paging
     handlePage = (e) => {
+
         e.preventDefault();
-        if (this.state.msg !== "") {
-            this.setState({
-                msg: "Please Fill Valid Information"
-            })
-        } else {
-            this.props.businessSignup(this.props.Page + 1);
+        const {error} =this.state;
+       let flag = 0;
+        for(let key in error){
+            if(error[key]!==''){
+                flag=1;
+            }
+        }
+        if (flag===0) {
+            this.props.businessPage(this.props.Page + 1);
             this.handleSubmit();
         }
     }
+    //Managing Data In Form
     handleSubmit = () => {
         let {ownerData}=this.state;
         if(ownerData["businessHour"]<9)
@@ -88,18 +117,25 @@ class SecondPage extends React.Component {
     }
 
     render() {
-        debugger
-
-        const {Fields} = this.props;
+        let {error}=this.state;
+       const {Fields} = this.props;
         if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header>
-                    <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                            <div className="closecss col-sm-2" align="right" onClick={() => {
+                                this.props.history.push('/') }}>
+                                <a href="#" >
+                                    <span className="glyphicon glyphicon-remove"/>
+                                </a>
+                            </div>
+                        </Modal.Header>
+                    </div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>
@@ -109,7 +145,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessName" type="text" required/></td>
+                                           }} name="businessName" type="text" placeholder="Enter Business Name" required/>
+                                    {error.businessName && <span style={{"color": "red"}}>{error.businessName}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Business Hours</label></td>
@@ -117,12 +154,12 @@ class SecondPage extends React.Component {
                                     <div className="form-inline">
                                         Hour:<input value={ownerData.businessHour} className="form-control"
                                                     style={{"width": "20%"}}
-                                                    onChange={this.handleChange} name="businessHour" type="number"
-                                                    min="00" max="24" required/>{'  '}
+                                                    onChange={this.handleChange}  name="businessHour" type="number"
+                                                    min="0" max="24" required/>{'  '}
                                         Minute:<input value={ownerData.businessMinute} className="form-control"
                                                       style={{"width": "20%"}}
-                                                      onChange={this.handleChange} name="businessMinute" type="number"
-                                                      min="00" max="59" required/></div>
+                                                      onChange={this.handleChange}  name="businessMinute" type="number"
+                                                      min="0" max="59" required/></div>
                                 </td>
                             </tr>
                             <tr>
@@ -131,7 +168,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} name="businessType" type="text" required/></td>
+                                           }} name="businessType" type="text" placeholder="Enter Business Type" required/>
+                                    {error.businessType && <span style={{"color": "red"}}>{error.businessType}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Phone no</label></td>
@@ -140,7 +178,8 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} required/></td>
+                                           }} placeholder="Enter Phone Number" required/>
+                                    {error.businessPhone && <span style={{"color": "red"}}>{error.businessPhone}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Business Email</label></td>
@@ -148,23 +187,24 @@ class SecondPage extends React.Component {
                                            onChange={(e) => {
                                                this.handleChange(e);
                                                this.chkValidation(e);
-                                           }} type="email" required/></td>
+                                           }} type="email" required placeholder="Enter Email"/>
+                                    {error.businessEmail && <span style={{"color": "red"}}>{error.businessEmail}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Address</label></td>
-                                <td><input className="form-control" value={ownerData.businessAddress}
-                                           onChange={this.handleChange} name="businessAddress" type="text"/></td>
+                                <td><textarea className="form-control" value={ownerData.businessAddress}
+                                           onChange={this.handleChange} name="businessAddress" /></td>
                             </tr>
                             <tr>
                                 <td><label>Tax Payer Id</label></td>
                                 <td><input className="form-control" value={ownerData.taxPayerId}
-                                           onChange={this.handleChange} name="taxPayerId" type="number" required/></td>
+                                           onChange={this.handleChange} name="taxPayerId" placeholder="Enter Tax Payer Id" type="number" required/></td>
                             </tr>
                             <tr>
                                 <td><Button active type="button" bsStyle="info" onClick={this.handlePreviousPage}>
                                     Previous
                                 </Button></td>
-                                <td><Button active type="submit" bsStyle="info">Next</Button>
+                                 <td><Button active type="submit" bsStyle="info">Next</Button>
                                 </td>
                             </tr>
                             </tbody>
@@ -178,7 +218,6 @@ class SecondPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("Fields", state.businessFieldsRed)
     return {
         Page: state.businessSignUpRed,
         Fields: state.businessFieldsRed
@@ -186,7 +225,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields, businessSignup}, dispatch)
+    return bindActionCreators({businessFields, businessPage}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SecondPage)

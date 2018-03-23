@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../index.css'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SignUpPersonal from './signUpPersonalDetail';
@@ -14,11 +15,10 @@ class signUpPage extends React.Component{
         }
 
     render(){
-        console.log("Page : ",this.props.signUpPage);
         return(
-            <div>
-                {(this.props.signUpPage===1)?<SignUpPersonal/>:<span></span>}
-                {(this.props.signUpPage===2)?<SignUpSchool/>:<span></span>}
+            <div className="registration-school-class">
+                {(this.props.signUpPage===1)?<SignUpPersonal history={this.props.history}/>:<span></span>}
+                {(this.props.signUpPage===2)?<SignUpSchool history={this.props.history}/>:<span></span>}
             </div>
         )
     }

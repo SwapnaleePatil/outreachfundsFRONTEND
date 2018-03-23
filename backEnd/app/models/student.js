@@ -57,7 +57,7 @@ let studentSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    officerTitle: {
+    roleTitle: {
         type: String
     },
     roleStatus:{
@@ -72,29 +72,26 @@ let studentSchema = new mongoose.Schema({
 
 });
 
-studentSchema.methods.generateAuthToken=(stud)=>{
-    var access='auth';
-    var token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
+studentSchema.methods.generateAuthToken=function(){
+    let stud=this;
+    let access='auth';
+    let token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
     stud.tokens.push({access,token});
-    stud.save().then(()=>{
+    return stud.save().then(()=>{
         return token;
     })
 }
 
 studentSchema.statics.findByToken= function(token){
-    console.log("in findByToken");
-    var Student =this;
-    var access='auth';
-    var decoded;
+    let Student =this;
+    let access='auth';
+    let decoded;
     try{
-        console.log("in try");
-        decoded=jwt.verify(token,'outreachfunds');
-        console.log(decoded);
-    }catch(err) {
+       decoded=jwt.verify(token,'outreachfunds');
+      }catch(err) {
         console.log("Error : ",err);
-        //return Promise.reject();
+        return Promise.reject();
     }
-    console.log("before return",decoded);
     return Student.findOne({
         _id:decoded._id,
         'tokens.token':token,

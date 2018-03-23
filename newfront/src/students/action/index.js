@@ -1,3 +1,4 @@
+import axiosI from '../../services/axiosInstance'
 export const signupPageAction=(page=1)=>{
     return {
         type:"CHANGE_SIGNUP_PAGE",
@@ -10,16 +11,12 @@ export const setSignupPageFieldsAction=(obj=[])=>{
         payload:obj
     }
 }
-
 export const fetchAllSchoolDetails = () => {
     return (dispatch)=>{
-        fetch("http://localhost:3000/api/school").then((response)=>{
-            return response.json();
-        }).then((schools)=>{
-            console.log("School",schools);
+        axiosI.get(`api/school`).then((schools)=>{
             dispatch({
                 type:'FETCH_SCHOOLS',
-                payload:schools
+                payload:schools.data
             })
         }).catch = (error) =>{
             console.log(error)
@@ -28,22 +25,11 @@ export const fetchAllSchoolDetails = () => {
 }
 
 export const registerStudent = (obj) => {
-    console.log("formdata",obj);
-    var data={
-        mode:'cors',
-        body:obj,
-        method:'post'
-    }
     return (dispatch)=>{
-        return fetch("http://localhost:3000/api/student/profile",data).then((response)=>{
-            debugger;
-            console.log(response);
-            //return response.json();
-        }).then((student)=>{
-            debugger;
+        axiosI.post("api/student/profile",obj).then((student)=>{
             dispatch({
                 type:'REGISTER_STUDENT',
-                payload:student
+                payload:student.data
             })
         }).catch = (error) =>{
             console.log("Error in Registeration of Student..",error)
@@ -52,34 +38,136 @@ export const registerStudent = (obj) => {
 };
 
 export const registerSchool = (schoolObj,personalObj) => {
-    debugger;
-    console.log("in school",schoolObj);
-    var data={
-        mode:'cors',
-        body:JSON.stringify(schoolObj),
-        method:'post',
-        headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-        }
-    }
     return (dispatch)=>{
-        return fetch("http://localhost:3000/api/school",data).then((response)=>{
-            return response.json();
-        }).then((school)=>{
-            personalObj.append('schoolId',school.school._id)
-            //personalObj.schoolId=school.school._id;
-            debugger;
+        axiosI.post("api/school",schoolObj).then((school)=>{
+            personalObj.append('schoolId',school.data.school._id)
             dispatch(registerStudent(personalObj));
-            debugger;
             dispatch({
                 type:'REGISTER_SCHOOL',
-                payload:school
-            })
+                payload:school.data
+            });
         }).catch = (error) =>{
             console.log("Error in Registeration of School..",error)
         }
     }
+}
+export const fetchAdmin=()=>{
+    let data={
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch=>{
+        axiosI.get('api/student',data).then((user)=>{
+            if(user.data.roleTitle==='Admin')
+                dispatch(fetchSignupRequests(user.data.schoolId));
+        }).catch((error)=>{
+            console.log("Error : ",error);
+        })
+    })
+}
+export const fetchStudent=()=>{
+    let data={
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch)=>{
+        axiosI.get(`api/student`,data).then((user)=>{
+            dispatch({
+                type:'FETCH_STUDENT',
+                payload:user.data
+            })
+        }).catch((error)=>{
+            console.log("Error : ",error);
+        })
+    }
+}
+export const fetchSignupRequests = (schoolId) => {
+    return (dispatch)=>{
+        axiosI.get(`api/students/${schoolId}`).then((requests)=>{
+            dispatch({
+                type:'FETCH_REGISTER_REQUEST',
+                payload:requests.data
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
+export const FetchAllStudents = () => {
+    let data={
+        mode:'cors',
+        method:'get',
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
+    }
+    return (dispatch)=>{
+        return axiosI.get(`api/students`,data).then((response)=>{
+            dispatch({
+                type:'FETCH_STUDENT',
+                payload:response.data
+            })
+        }).catch = (error) =>{
+            console.log("Error in Fetching of Requests..",error)
+        }
+    }
+}
+export const approveSignupRequests = (resultSet) => {
+    let arr=[...resultSet];
+    let obj={
+        "arr":arr
+    }
+    let url=`api/student/approve`;
+
+        return (dispatch) => {
+            axiosI.post(url, obj).then(() => {
+                dispatch({
+                    type: 'APPROVE_REQUEST',
+                    payload: arr
+                })
+            }).catch = (error) => {
+                console.log("Error in Fetching of Requests..", error)
+            }
+    }
+}
+export const rejectSignupRequests = (resultSet) => {
+    let arr=[...resultSet];
+    let obj={
+        "arr":arr
+    }
+    let url=`api/student/reject`;
+
+        return (dispatch) => {
+            axiosI.post(url, obj).then(() => {
+                dispatch({
+                    type: 'REJECT_REQUEST',
+                    payload: arr
+                })
+            }).catch = (error) => {
+                console.log("Error in Rejecting Requests..", error)
+            }
+        }
+}
+export const updateStudent=(obj)=>{
+    return (dispatch)=>{
+        axiosI.put('api/student/profile',obj).then((result)=>{
+            dispatch({
+                type:'STUDENT_UPDATE',
+                payload:result.data.record
+            })
+        })
+    }
 };
+export const updateSchool=(obj)=>{
+    return (dispatch)=>{
+        axiosI.put('api/school',obj).then((result)=>{
 
-
+            dispatch({
+                type:'SCHOOL_UPDATE',
+                payload:result.data.record
+            })
+        })
+    }
+};

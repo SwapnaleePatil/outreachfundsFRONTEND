@@ -1,9 +1,9 @@
-const businesslogin=(state=[],action)=>{
+const propsremover=(state=[],action)=>{
     switch (action.type){
-        case 'BUSINESS_LOGIN':
+        case 'REMOVE_PROPS':
             return action.payload;
         default:
             return state
     }
 };
-export default businesslogin;
+export default propsremover;

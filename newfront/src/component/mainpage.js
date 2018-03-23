@@ -1,31 +1,51 @@
 import React from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-
+import {logoutAction} from '../action';
 import {listBusiness} from '../business/action/index'
-import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table} from 'react-bootstrap'
+import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table,Badge,Dropdown,ButtonToolbar} from 'react-bootstrap'
 import '../index.css'
+import {Route, NavLink,Redirect} from 'react-router-dom'
 
 class MainPage extends React.Component {
-    constructor(){
+    constructor() {
         super();
-        this.state={
+        this.state = {
             isSearching: false,
             searchdata: [],
-            name:""
+            name: "",
+            user: '',
+            isNull:false
         }
     }
     componentWillMount() {
         this.props.listBusiness();
     }
-    componentWillReceiveProps(nextProps){
-        this.state.data=nextProps.businessrecord
+
+    componentWillReceiveProps(nextProps) {
+
+        this.state.data = nextProps.businessrecord;
+        let user = this.state;
+        nextProps.businessrecord.map((v) => {
+            v.tokens.map((value) => {
+                if (value.token === localStorage.getItem('user')) {
+                    user = value;
+                    this.setState({
+                        user
+                    })
+                }
+                //alert("user",this.state.user)
+            });
+        });
+    }
+    logout=()=> {
+        localStorage.removeItem('user');
+        this.props.logoutAction();
     }
     searching = (e) => {
         this.setState({
             name:e.target.value
         });
-        console.log(e.target.value);
         this.setState({
             name:e.target.value,
             isSearching: true,
@@ -33,7 +53,7 @@ class MainPage extends React.Component {
         });
         let {searchdata} = this.state;
         searchdata = [];
-        this.state.data.map((value, i) => {
+        this.state.data.map((value) => {
             if (value.businessInfo.businessName.includes(e.target.value)) {
                 searchdata.push(value)
             }
@@ -42,26 +62,19 @@ class MainPage extends React.Component {
             });
             if (e.target.value === "") {
                 this.setState({
-                    isSearching: false
+                    isSearching: false,
+                    isNull:true
                 })
             }
         })
     };
     render() {
-        const logout = () => {
-            window.location = "/logout"
-        };
-        const about = () => (
-          window.location='/profile'
-        );
-
         return (
             <div>
-                <Navbar bsStyle="tabs" fluid={true} staticTop={true} className="navbar-class-main">
+                <Navbar  fluid={true} staticTop={true} className="navbar-class-main">
                     <Navbar.Header className="imgnav">
-
-                        <a href="/home"><img src={require('../images/logo2.png')}
-                                             style={{width: 150, height: 100}} alt=""/></a>
+                        <NavLink to={"/main"}><img src={require('../images/logo2.png')}
+                                             style={{width: 150, height: 100}} alt=""/></NavLink>
                     </Navbar.Header>
                     <Nav bsStyle="tabs">
                         <NavItem className="navclassb" eventKey={1}>
@@ -69,35 +82,58 @@ class MainPage extends React.Component {
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={2} className="navclass-item" href="/main/schedule">
-                            <Button bsSize="large" className="navclass-bs">
-                                Schedule <br/> <Glyphicon glyph="glyphicon glyphicon-calendar"/></Button>
+                        <NavItem eventKey={2} className="navclass-item">
+                            <NavLink to={"/main/schedule"}>
+                            <Button bsSize="large" className="navclass-bs">Schedule <br/> <Glyphicon glyph="glyphicon glyphicon-calendar"/></Button>
+                            </NavLink>
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={3} className="navclass-item" href="/main/donation">
-                            <Button bsSize="large" className="navclass-bs">
-                                Donation<br/> <Glyphicon glyph="glyphicon glyphicon-usd"/></Button>
+                        <NavItem eventKey={3} className="navclass-item">
+                            <NavLink to={"/main/donation"}>
+                            <Button bsSize="large" className="navclass-bs">Donation<br/> <Glyphicon glyph="glyphicon glyphicon-usd"/></Button></NavLink>
                         </NavItem>
                     </Nav>
                     <Nav pullRight className="navclass-dropmenu">
-                        <Button bsSize="large" className="navclass-bs">
-                            <Glyphicon glyph="glyphicon glyphicon-user">
-                                <NavDropdown eventKey={4} id="basic-nav-dropdown" title="" className="navclassa">
-                                    <MenuItem eventKey={4.1}>Edit Profile</MenuItem>
-                                    <MenuItem eventKey={4.2}>Availability</MenuItem>
-                                    <MenuItem eventKey={4.3}>Payments</MenuItem>
-                                    <MenuItem eventKey={4.4} onClick={about}>View Profile</MenuItem>
-                                    <MenuItem eventKey={4.5} onClick={logout}>Logout</MenuItem>
-                                </NavDropdown></Glyphicon></Button>
+                             <ButtonToolbar>
+                                    <Dropdown id="dropdown-custom-1" >
+                                        <Dropdown.Toggle className="navclass-bs">
+                                            <Glyphicon glyph="glyphicon glyphicon-user"/>
+                                        </Dropdown.Toggle>
+                                    <Dropdown.Menu className="super-colors">
+                                        {this.state.user ?
+                                            <MenuItem eventKey={4.1}>
+                                                <NavLink to="/editProfile">Edit Profile</NavLink>
+                                            </MenuItem>
+                                            : <MenuItem eventKey={4.1}>
+                                                <NavLink to="/editStudentProfile">Edit Profile</NavLink>
+                                            </MenuItem>
+                                        }
+
+                                        {this.state.user ?
+                                            <MenuItem eventKey={4.4}><NavLink to="/viewProfile">View
+                                                Profile</NavLink></MenuItem> :
+                                            <MenuItem eventKey={4.4}><NavLink to="/viewStudentProfile">View
+                                                Profile</NavLink></MenuItem>
+                                        }
+                                    {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='S')?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
+                                    <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="" onClick={this.logout}>
+                                        Logout</NavLink></MenuItem>
+                                    </Dropdown.Menu>
+                                    </Dropdown>
+                             </ButtonToolbar>
                     </Nav>
                 </Navbar>
-                {this.state.isSearching ?
+                {this.state.isNull && <div><Redirect to="/main"/> {this.state.isNull=false}</div>}
+
+                {this.state.isSearching &&
+                    <div>
+                    <Redirect to="/search"/>
                 <Table striped bordered>
                     <tbody>
                     <tr>
                         <td colspan={5} align="center">
-                            <h4>   business List</h4>
+                            <h4>business List</h4>
                         </td>
                     </tr>
                 <tr>
@@ -121,15 +157,15 @@ class MainPage extends React.Component {
                 }
 
             </tbody>
-                </Table>:""}
+                </Table></div>}
             </div>
         )
     }
 }
 const mapStateToProps = (state) => {
-    return ({businessrecord: state.businesslist})
+    return ({businessrecord: state.businesslist,loginResponse:state.loginResponse})
 };
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({listBusiness}, dispatch)
+    return bindActionCreators({listBusiness,logoutAction}, dispatch)
 }
 export default connect(mapStateToProps,mapDispatchToProps)(MainPage)

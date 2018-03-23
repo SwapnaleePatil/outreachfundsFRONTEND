@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from 'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {bindActionCreators} from 'redux';
 
 class FirstPage extends React.Component {
@@ -12,9 +12,11 @@ class FirstPage extends React.Component {
         this.state = {
             ownerData: [],
             photo: '',
-            msg: '',
+
+            error: {}
         }
     }
+    //Handle The Change in State
     handleChange = (e) => {
         const {name, value} = e.target;
         const {ownerData} = this.state;
@@ -24,99 +26,133 @@ class FirstPage extends React.Component {
         else {
             ownerData[name] = value;
         }
-        this.setState({ownerData}, () => {
-            console.log("Data", ownerData);
-        })
+        this.setState({ownerData})
 
     }
+    //Validation
     chkValidation = (e) => {
-        this.setState({msg: ""});
+        let {error} = this.state;
         let name = e.target.name;
         if (name === "email") {
             let reemail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             if (!reemail.test(e.target.value)) {
-                this.setState({msg: "Email is InValid"});
+                error.email = "Enter valid Email";
+            }
+            else {
+                error.email="";
             }
         }
         // 
         if (name === "phone") {
             let rephone = /^((?!(0))[0-9]{6,13})$/;
             if (!rephone.test(e.target.value)) {
-                this.setState({msg: "Enter Number between 6 to 13 digit"});
+                error.phone = "Enter Number between 6 to 13 digit";
+            }
+            else {
+                error.phone="";
             }
         }
-        if (name === "firstName" || name === "lastName") {
-            let rename = /^([a-zA-Z])*$/;
+        if (name === "firstName") {
+            let rename = /^([A-Za-z ])*$/;
             if (!rename.test(e.target.value)) {
-                this.setState({msg: "First Name Or Lastname Can't be Number"});
+                error.firstName = "Enter Valid First Name";
+            }
+            else {
+                error.firstName="";
             }
         }
-        if(name==="dob")
-        {
-            let date=new Date();
-            let day=date.getDate();
-            let month=date.getMonth()+1;
-            if(month<=9)
-            {
-                month="0"+month;
+        if (name === "lastName") {
+            let rename = /^([A-Za-z ])*$/;
+            if (!rename.test(e.target.value)) {
+                error.lastName = "Enter Valid Last Name";
             }
-            let year=date.getFullYear()-10;
-            let dobdate=year+'-'+month+'-'+day;
-            if(e.target.value>dobdate)
-            {
-                this.setState({
-                    msg:"Please Select Proper Birth Date"
-                })
+            else {
+                error.lastName="";
             }
         }
+        if (name === "dob") {
+            let date = new Date();
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            if (month <= 9) {
+                month = "0" + month;
+            }
+            let year = date.getFullYear() - 15;
+            let dobdate = year + '-' + month + '-' + day;
+            if (e.target.value > dobdate) {
+                error.dob = "Please Select Proper Birth Date";
+            }
+            else {
+                error.dob="";
+            }
+        }
+        this.setState({
+            error
+        })
         if (e.target.value === "") {
-            this.setState({msg: ""});
+            this.setState({error: {}});
         }
-        console.log("Msg", this.state.msg);
     }
+    //To Redirect On Next Page
     handlePage = (e) => {
-      e.preventDefault();
-        if (this.state.msg !== "") {
-            this.setState({
-                msg: "Please Fill Valid Information"
-            })
-        } else {
-            this.props.businessSignup(this.props.Page + 1);
+        e.preventDefault();
+        const {error} =this.state;
+        //const keys = Object.keys(error);
+        let flag = 0;
+        for(let key in error){
+            console.log(key);
+            if(error[key]!==''){
+                flag=1;
+            }
+        }
+        if (flag === 0) {
+            this.props.businessPage(this.props.Page + 1);
             this.handleSubmit();
         }
     }
+    //Maintain Field Data
     handleSubmit = () => {
         this.props.businessFields(this.state.ownerData);
     }
+
     render() {
         const {Fields} = this.props;
         if (Fields !== null)
             this.state.ownerData = Fields;
         let ownerData = this.state.ownerData;
-        console.log("dob",this.state.ownerData);
-        //let datadob=this.state.ownerData.dob.split("T");
+        let {error}=this.state;
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header>
-                        <span style={{"color": "red"}}>{this.state.msg}</span></div>
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                        <div className="closecss col-sm-2" align="right" onClick={() => {
+                            this.props.history.push('/')}}>
+                            <a href="#" >
+                                <span className="glyphicon glyphicon-remove"/>
+                            </a>
+                        </div>
+                        </Modal.Header>
+                    </div>
+
                     <div>
                         <Table hover bordered condensed responsive style={{"background-color": "white"}}>
                             <tbody>
                             <tr>
                                 <td><label>Select Pic</label></td>
                                 <td><input className="form-control" name="photo" type="file"
-                                           onChange={this.handleChange}  required/></td>
+                                           onChange={this.handleChange} required/></td>
                             </tr>
                             <tr>
                                 <td><label>First Name</label></td>
                                 <td><input className="form-control" name="firstName" type="text"
-                                           value={ownerData.firstName} minLength="3" onChange=
+                                           value={ownerData.firstName} minLength="3"  onChange=
                                                {(e) => {
                                                    this.handleChange(e);
                                                    this.chkValidation(e);
-                                               }} required /></td>
+                                               }} required placeholder="Enter First Name"/>
+                                    {error.firstName && <span style={{"color": "red"}}>{error.firstName}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Last Name</label></td>
@@ -124,7 +160,8 @@ class FirstPage extends React.Component {
                                            value={ownerData.lastName} minLength="3" onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} required /></td>
+                                }} required placeholder="Enter Last Name"/>
+                                    {error.lastName && <span style={{"color": "red"}}>{error.lastName}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Gender</label></td>
@@ -141,8 +178,9 @@ class FirstPage extends React.Component {
                                 <td><input className="form-control" onChange={(e) => {
                                     this.handleChange(e);
                                     this.chkValidation(e);
-                                }} name="dob" type="date"
-                                           required /></td>
+                                }} name="dob" type="date"  value={ownerData.dob && ownerData.dob.split("T")[0]}
+                                           required/>
+                                    {error.dob && <span style={{"color": "red"}}>{error.dob}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Email:</label></td>
@@ -153,7 +191,8 @@ class FirstPage extends React.Component {
                                     }
                                 } value={ownerData.email}
                                            name="email" type="email"
-                                           required /></td>
+                                           required placeholder="Enter Valid Email"/>
+                                    {error.email && <span style={{"color": "red"}}>{error.email}</span>}</td>
                             </tr>
                             <tr>
                                 <td><label>Password:</label></td>
@@ -161,7 +200,7 @@ class FirstPage extends React.Component {
                                            value={ownerData.password}
                                            minLength="8"
                                            maxLength="32"
-                                           name="password" type="password" required
+                                           name="password" type="password" required placeholder="Enter Password"
                                 /></td>
                             </tr>
                             <tr>
@@ -170,8 +209,8 @@ class FirstPage extends React.Component {
                                     this.handleChange(e);
                                     this.chkValidation(e)
                                 }} value={ownerData.phone}
-                                           name="phone" type="number"  required
-                                /></td>
+                                           name="phone" type="number" required placeholder="Enter Phone Number"
+                                />{error.phone && <span style={{"color": "red"}}>{error.phone}</span>}</td>
                             </tr>
                             <tr>
                                 <td colSpan='2'><Button bsStyle="info" type="submit" active
@@ -180,6 +219,7 @@ class FirstPage extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
+
                     </div>
                 </div>
             </form>
@@ -196,7 +236,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields, businessSignup}, dispatch)
+    return bindActionCreators({businessFields, businessPage}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FirstPage)

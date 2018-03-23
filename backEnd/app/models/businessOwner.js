@@ -1,7 +1,8 @@
 let mongoose = require('mongoose');
 let validator = require('validator');
-let bcrypt=require('bcryptjs');
-let jwt=require('jsonwebtoken');
+let bcrypt = require('bcryptjs');
+let jwt = require('jsonwebtoken');
+//Schema For Business Owner With Business Detail
 let businessOwnerSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -26,7 +27,8 @@ let businessOwnerSchema = new mongoose.Schema({
         require: true,
         trim: true,
         validator: validator.isEmail,
-        message: '{value} is not valid'
+        message: '{value} is not valid',
+        unique: true
     },
     phone: {
         type: String,
@@ -95,7 +97,7 @@ let businessOwnerSchema = new mongoose.Schema({
                 require: true
             },
             cardNumber: {
-                type: Number,
+                type: String,
                 require: true
             },
             expiresOn: {
@@ -103,8 +105,8 @@ let businessOwnerSchema = new mongoose.Schema({
                 require: true
             },
             securityCode: {
-                type: Number,
-                minlength: 3
+                type: String,
+                require:true
             },
             postalCode: {
                 type: Number,
@@ -115,24 +117,22 @@ let businessOwnerSchema = new mongoose.Schema({
             }
         }
     },
-    tokens:[{
-        auth:String,
-        token:String
+    tokens: [{
+        access: String,
+        token: String
     }]
 });
-businessOwnerSchema.pre('save',function (next) {
-    let businessOwner=this;
-    if(businessOwner.isModified('password'))
-    {
-        bcrypt.genSalt(10,(err,salt)=>{
-            bcrypt.hash(businessOwner.password,salt,(err,hash)=>{
-                if(err)
-                {
-                    console.log("Error:=",err);
+//Password Hashing
+businessOwnerSchema.pre('save', function (next) {
+    let businessOwner = this;
+    if (businessOwner.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(businessOwner.password, salt, (err, hash) => {
+                if (err) {
+                    console.log("Error:=", err);
                 }
-                if(hash)
-                {
-                    businessOwner.password=hash;
+                if (hash) {
+                    businessOwner.password = hash;
                     next();
                 }
             })
@@ -141,22 +141,38 @@ businessOwnerSchema.pre('save',function (next) {
     else {
         next();
     }
-})
-businessOwnerSchema.methods.generateAuthToken=function(){
-    var businessOwner=this;
-    var access='auth';
-    var token=jwt.sign(
+
+});
+//Generate Token For New BusinessOwner
+businessOwnerSchema.methods.generateAuthToken = function () {
+    let businessOwner = this;
+    let access = 'auth';
+    let token = jwt.sign(
         {
-            _id:businessOwner._id.toHexString(),
+            _id: businessOwner._id.toHexString(),
             access
         },
-        'abc123'
+        'outreachfunds'
     ).toString();
-    businessOwner.tokens.push({access,token});
-    return businessOwner.save().then(()=>{
-        console.log("Token",token)
+    businessOwner.tokens.push({access, token});
+    return businessOwner.save().then(() => {
         return token;
     })
 }
+//Find Business Owner By Token
+businessOwnerSchema.statics.findByToken = function (token) {
+    let businessOwner = this;
+    let decoded = '';
+    try {
+        decoded = jwt.verify(token, 'outreachfunds');
+    } catch (e) {
+        console.log("Error :=", e);
+    }
+    return businessOwner.findOne({
+        _id: decoded._id,
+        'tokens.access': 'auth',
+        'tokens.token': token
+    })
+}
 let businessOwner = mongoose.model('businessOwner', businessOwnerSchema);
-module.exports= {businessOwner};
+module.exports = {businessOwner};

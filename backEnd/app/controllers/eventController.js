@@ -1,4 +1,5 @@
 let eventSchedule = require('../models/eventSchedule').eventSchedule;
+//Add New Event
 exports.addeventSchedule = (req, res) => {
     let body = req.body;
     let neweventSchedule = new eventSchedule(body);
@@ -10,8 +11,8 @@ exports.addeventSchedule = (req, res) => {
             console.log('error in inserting record.',e);
         })
 }
+//Delete Event
 exports.deleteeventSchedule = (req, res) => {
-    console.log("Id",req.body.id);
     eventSchedule.findByIdAndUpdate(req.body.id,{ $set:{status: 'true'}},{new:true}).then((result) => {
         if (result) {
             res.send({"message":'Deleted.', 'record': result});
@@ -23,15 +24,16 @@ exports.deleteeventSchedule = (req, res) => {
         console.log('Error in deletion');
     })
 }
+//Update Event
 exports.updateeventSchedule = (req, res) => {
     let body=req.body;
-    console.log("body",body);
     eventSchedule.findByIdAndUpdate(req.body.id, {$set: body},{new:true}).then((result) => {
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
         console.log('Error in record updation', err);
     })
 }
+//Fetch All Record
 exports.fetch = (req, res) => {
     eventSchedule.find({status:true}).then((data) => {
         res.send({"message":'All Record.', 'record': data});
@@ -39,6 +41,7 @@ exports.fetch = (req, res) => {
         console.log('Error in retrieving data.', err);
     })
 }
+//Fetch REcord By Id
 exports.fetchById = (req, res) => {
     eventSchedule.findById(req.body.id).then((data) => {
         res.send({"message":'Record By Id.', 'record': data});
@@ -46,3 +49,12 @@ exports.fetchById = (req, res) => {
         console.log('Error in retrieving data.');
     })
 };
+//Fetch Record By Sponser
+exports.fetchBySponser = (req, res) => {
+        let id=req.body.id;
+        eventSchedule.find({businessSponsor: id}).then((data) => {
+            res.send(data);
+        }).catch((err) => {
+                console.log("Error", err);
+            })
+}

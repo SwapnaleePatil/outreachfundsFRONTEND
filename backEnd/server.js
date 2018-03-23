@@ -11,6 +11,7 @@ global.studentToken='';
 global.token='';
 let app=express();
 
+
 app.use(passport.initialize());
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -26,12 +27,9 @@ db.once('open',()=>{
     console.log('Successfully connected to database.');
 })
 
-// app.get('/',(req,res)=>{
-//     res.sendFile(__dirname + '/');
-// })
 require('./app/config/passport')(passport);
 require('./app/routes/routes')(app,passport);
 
-app.listen(3000,()=>{
+app.listen(3005,()=>{
     console.log('server is started');
 })

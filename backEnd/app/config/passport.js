@@ -1,6 +1,7 @@
 let Student=require('../models/student').student;
 let businessOwner=require('../models/businessOwner').businessOwner;
 let LocalStrategy=require('passport-local').Strategy;
+
 let bcrypt=require('bcryptjs');
 module.exports=(passport)=>{
 
@@ -24,18 +25,19 @@ module.exports=(passport)=>{
             if(password!==stud.password){
                 return done(null,false);
             }
-                studentToken=stud.tokens[0].token;
-
-                return done(null,stud);
+            if(stud.roleStatus===true) {
+                studentToken = stud.tokens[0].token;
+                return done(null, stud);
+            }
+            return done(null,false);
         }).catch((err)=>{
                 console.log(err);
             })
     })
     )
 
-    //Business
+    //Passport Authentication For Business Owner
     passport.use('businessOwner',new LocalStrategy((username, password, done) => {
-        console.log('UserName and Password is:', username, password);
         businessOwner.findOne({email: username}, (err, user) => {
             if (err) {
                 console.log("Error", err);

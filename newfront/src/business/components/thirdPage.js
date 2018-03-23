@@ -3,7 +3,7 @@ import {Table, Button, Modal} from 'react-bootstrap';
 import './businessCSS.css'
 import {connect} from'react-redux'
 import {businessFields} from '../action/index'
-import {businessSignup} from "../action/index";
+import {businessPage} from "../action/index";
 import {bindActionCreators} from 'redux';
 class ThirdPage extends React.Component {
     constructor(props)
@@ -13,10 +13,11 @@ class ThirdPage extends React.Component {
             ownerData:[]
         }
     }
+    //Handle Change In State
     handleChange=(e)=>{
         const {Fields}=this.props;
         const {name,value}=e.target;
-        var {ownerData}=this.state;
+        let {ownerData}=this.state;
         if(ownerData.length<=0)
             ownerData = Fields;
         ownerData[name]=value;
@@ -24,22 +25,24 @@ class ThirdPage extends React.Component {
             ownerData
         })
     }
+    //handle Paging
     handlePage=(e)=>{
         e.preventDefault();
-        this.props.businessSignup(this.props.Page + 1);
+        this.props.businessPage(this.props.Page + 1);
         this.handleSubmit();
     }
+    //handle Paging
     handlePreviousPage = (e) => {
         e.preventDefault();
-        const {businessSignup, businessFields, Page} = this.props;
-        businessSignup(Page - 1);
+        const {businessPage, businessFields, Page} = this.props;
+        businessPage(Page - 1);
         businessFields(this.state.ownerData);
     }
+    //handle form data
     handleSubmit=()=>{
         this.props.businessFields(this.state.ownerData);
     }
     render() {
-        console.log("Fiels",this.props);
         const {Fields}=this.props;
         if(Fields!==null)
             this.state.ownerData=Fields;
@@ -47,8 +50,16 @@ class ThirdPage extends React.Component {
         return (
             <form onSubmit={this.handlePage}>
                 <div className='tablecss'>
-                    <div style={{"background-color": "white"}}><Modal.Header><label>Business
-                        Information</label></Modal.Header></div>
+                    <div style={{"background-color": "white"}}>
+                        <Modal.Header>
+                            <div className="col-sm-10"><label>Business Information</label></div>
+                            <div className="closecss col-sm-2" align="right" onClick={() => {
+                                this.props.history.push('/') }}>
+                                <a href="#" >
+                                    <span className="glyphicon glyphicon-remove"/>
+                                </a>
+                            </div>
+                        </Modal.Header></div>
                     <div>
                         <Table bordered condensed hover responsive style={{"background-color": "white"}}>
                             <tbody>
@@ -56,7 +67,7 @@ class ThirdPage extends React.Component {
                                 <td ><label>Subscription Pricing</label></td>
                                 <td>
                                     <tr>
-                                        <td><input name="pricing" type="radio" value="$14.99" onChange={this.handleChange} checked={ownerData.pricing==="$14.99"?true:false}/> {' '}
+                                        <td><input name="pricing" type="radio" value="$14.99"  onChange={this.handleChange} checked={ownerData.pricing==="$14.99"?true:false}/> {' '}
                                             Monthly Subscription: $14.99 Per Month
                                         </td>
                                     </tr>
@@ -95,6 +106,6 @@ function mapStateToProps(state) {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({businessFields,businessSignup},dispatch)
+    return bindActionCreators({businessFields,businessPage},dispatch)
 }
 export default connect(mapStateToProps,mapDispatchToProps)(ThirdPage)

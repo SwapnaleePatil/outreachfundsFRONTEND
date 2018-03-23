@@ -3,14 +3,17 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.signupText{
+  cursor: hand;
+}
 .loginp{
   padding-top: .5%;
   padding-bottom: 1%;
-  margin-top: 5%;
+  margin-top:5%;
   /*margin-bottom: 10%;*/
   margin-left: 35%;
   margin-right: 35%;
-  opacity: .9;
+
   background-color: #EDEFF7;
   /*background-image: url("D:/miniProject/outreachFunds/frontend/src/student1.jpg");*/
   /*text-shadow: 4px 4px 8px #000000;*/
@@ -65,7 +68,7 @@ position: fixed;
   background-color: white;
 }
 .navbar-class-main{
-  background-color: #6B6B6B;
+  background-color: gainsboro;
 
 }
 .navclassa{
@@ -128,4 +131,52 @@ height: 43%;
   margin: .5%;
   width:3%;
   height: 5%;
+}
+.approve-class{
+  color:green;
+}
+.confirm-class{
+  color:cornflowerblue;
+}
+.pending-class{
+  color: red;
+}
+
+.blocks{
+  display: inline-block;
+  border:3px solid black;
+  padding:5px 5px;
+  height:200px;
+  width:450px;
+}
+.dv{
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;
+  margin: 10% auto;
+  width: 35%;
+}
+.inputtext {
+  width: 300px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid green;
+  border-radius: 4px;
+}
+.registration-school-class{
+  padding: 1%;
+  background-image: url("./images/Schoolregistration.jpg");
+
+}
+.registration-school-wrapper-class {
+opacity: 0.9;
+}
+.registration-business-class{
+  bottom:0;
+  background: url("./images/Schoolregistration.jpg")no-repeat top center/cover;
+  height:100vh;
+}
+.reject-bs-class{
+  margin: 3%;
 }
