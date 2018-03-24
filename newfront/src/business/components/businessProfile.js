@@ -141,7 +141,7 @@ class BusinessProfile extends React.Component {
         }
         this.setState({error});
         if (e.target.value === "") {
-            this.setState({error: ""});
+            this.setState({error: {}});
         }
     }
     //Get Owner By Token

@@ -25,6 +25,7 @@ class HomePage extends React.Component {
             loginResponse:''
         }
     }
+
     componentWillReceiveProps(nextProps){
         this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
