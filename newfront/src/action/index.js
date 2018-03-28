@@ -2,6 +2,7 @@ import axiosI from '../services/axiosInstance';
 //Action For Business Login
 export const  businessLogin=(data)=>{
     return (dispatch)=>{
+        debugger
         axiosI({method:'post',url:'api/businessOwner/loginPassport',data}).then((response)=>{
             dispatch({
                 type:'BUSINESS_LOGIN',
@@ -29,8 +30,13 @@ export const  studentLogin=(data)=>{
 };
 //Action For Schedule Event
 export const scheduleevents=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return(dispatch)=>{
-        axiosI({method:'post',url:'api/event',data}).then((response)=>{
+        axiosI.post('api/event',header,data).then((response)=>{
             if(response){
                 dispatch({
                     type:'SCHEDULE_EVENT',
@@ -44,8 +50,13 @@ export const scheduleevents=(data)=>{
 };
 //Action For Accept and Reject Event
 export const actionevents=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return(dispatch)=>{
-        axiosI({method:'put',url:'api/event',data}).then((response)=>{
+        axiosI.put('api/event',header,data).then((response)=>{
             if(response){
                 dispatch({
                     type:'ACTION_ON_EVENT',
@@ -59,8 +70,14 @@ export const actionevents=(data)=>{
 };
 //Action For EventList
 export const eventslist=()=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return(dispatch)=>{
-        axiosI({method:'get',url:'api/event'}).then((response)=>{
+        debugger
+        axiosI.get('api/event',header).then((response)=>{
             if(response){
                 dispatch({
                     type:'EVENT_LIST',
@@ -74,8 +91,13 @@ export const eventslist=()=>{
 };
 //Action For Event Sponser By Business Owner
 export const eventslistbysposer=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return(dispatch)=>{
-        axiosI({method:'post',url:'/api/eventBySponser',data}).then((response)=>{
+        axiosI.post('/api/eventBySponser',header,data).then((response)=>{
             if(response){
                 dispatch({
                     type:'EVENTS_SPONSER',
@@ -116,11 +138,13 @@ export const BusinessUpdatePassword = (pswrd, uid) => {
     });
 }
 export const logoutAction=()=>{
-    return({
+    return(dispatch=>{
+        dispatch({
         type:'LOG_OUT',
         payload:{'message':'logout'}
+        });
     })
-}
+};
 /*export const FetchIdByEmail = (email,newPassword) => {
 
     axios.post('http://localhost:2525/findByEmail', {'email':email,'newPassword':newPassword}).then((response) => {

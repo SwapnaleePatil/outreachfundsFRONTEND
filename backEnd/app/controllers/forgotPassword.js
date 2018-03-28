@@ -31,10 +31,7 @@ exports.StudentforgotPassword=(req,res)=>{
 }
 exports.BusinessforgotPassword=(req,res)=>{
     let a =false;
-    emailExistence.check(req.body.email, function(error, response){
-        console.log('resppnse check : '+response);
-        a = true;
-    });
+
     let transporter = nodemailer.createTransport({
         service:'gmail',
         secure:false,
@@ -49,16 +46,13 @@ exports.BusinessforgotPassword=(req,res)=>{
         to: req.body.email, // list of receivers
         subject: 'Hello ✔', // Subject line
         text: 'Hello world?', // plain text body
-        html: `<a href=http://localhost:3000/businessforgotPassword/${req.body.email}>Click Here for New Password!</a>` // html body
+        html: `<a href=http://localhost:3001/businessforgotPassword/${req.body.email}>Click Here for New Password!</a>` // html body
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             res.send('failed');
         }
-        else if(a){
-            console.log('Invalid');
-            res.send('Invalid');
-        }
+
         else
         {
             res.send(info);

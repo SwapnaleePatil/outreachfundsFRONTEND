@@ -5,7 +5,7 @@ import Search from '../publicComponents/search';
 import ContactUs from '../publicComponents/contactUs';
 import Availability from '../publicComponents/availability';
 import FundRaisingIdea from '../publicComponents/fundRaisingIdea';
-import {Switch,BrowserRouter} from 'react-router-dom'
+import {Switch,BrowserRouter,Redirect} from 'react-router-dom'
 import Schedule from './schedule'
 import Donation from "./donation";
 import Private from './Routes/privateRoute';
@@ -22,6 +22,7 @@ import StudentForgotPassword from './forgotPassword'
 import BusinessForgotPassword from './businessforgotPassword'
 
 class Main extends React.Component {
+
     render() {
         const logout=()=>{
                 localStorage.removeItem('user');
@@ -30,6 +31,7 @@ class Main extends React.Component {
         return (
             <BrowserRouter>
                 <Switch>
+
                     <Public exact path="/" component={HomePage}/>
                     <Public exact path="/contactus" component={ContactUs}/>
                     <Public exact path="/fundideas" component={FundRaisingIdea}/>
@@ -49,6 +51,8 @@ class Main extends React.Component {
                     <Private exact path="/editStudentProfile" component={StudentProfile}/>
                     <Public exact path="/studentforgotPassword/:email" component={StudentForgotPassword}/>
                     <Public exact path="/businessforgotPassword/:email" component={BusinessForgotPassword}/>
+                    <Public exact path="*" component={HomePage}/>
+                    <Private exact path="*" component={BusinessList}/>
                 </Switch>
             </BrowserRouter>
         );

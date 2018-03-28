@@ -1,7 +1,7 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap'
 import {Table, FormControl, Button} from 'react-bootstrap'
-import axios from 'axios';
+import axiosI from '../services/axiosInstance';
 import galary from './galary'
 import {businessLogin} from '../action/index'
 import {studentLogin} from '../action/index'
@@ -47,7 +47,7 @@ class HomePage extends React.Component {
                 }
                 this.setState({error});
              }
-        )
+        );
         if(nextProps.loginResponse.hasOwnProperty('data')) {
             debugger;
             if (nextProps.loginResponse.data.message === 'login successful') {
@@ -58,6 +58,7 @@ class HomePage extends React.Component {
     }
     onEmailChange = (e) => {
         let {error}=this.state;
+        error.email="";
         this.setState({
             email: e.target.value
         });
@@ -103,15 +104,11 @@ class HomePage extends React.Component {
         }
         else if(this.state.role==='business')
         {
-            debugger;
-            axios.post('http://localhost:2525/businessforgotPassword',{'email':this.state.email}).then((response)=>{
+            axiosI.post('businessforgotPassword',{'email':this.state.email}).then((response)=>{
                 console.log('response is : ',response.data);
                 if(response.data === "failed"){
                     //alert('Invalid Email...');
                     this.unsuccess("Invalid Email...");
-                }
-                else if(response.data === "Invalid"){
-                    this.unsuccess("Enter Correct Email...");
                 }
                 else
                 {
@@ -125,14 +122,11 @@ class HomePage extends React.Component {
         }
         else
         {
-            axios.post('http://localhost:2525/studentforgotPassword',{'email':this.state.email}).then((response)=>{
+            axiosI.post('studentforgotPassword',{'email':this.state.email}).then((response)=>{
                 console.log('response is : ',response);
                 if(response.data === "failed"){
                     //alert('Invalid Email...');
                     this.unsuccess("Invalid Email...");
-                }
-                else if(response.data === "Invalid"){
-                    this.unsuccess("Enter Correct Email...");
                 }
                 else
                 {
@@ -183,6 +177,7 @@ class HomePage extends React.Component {
     };
     toggleRole = () => {
         this.setState({
+            error:{},
             isRole: !this.state.isRole
         })
     };

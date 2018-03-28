@@ -7,9 +7,9 @@ const login=(state={},action)=>{
         case 'BUSINESS_LOGIN':
             return action.payload;
         case 'LOG_OUT':
-            return action.payload;
+            return state={};
         default:
             return state
     }
-}
+};
 export default login;

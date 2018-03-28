@@ -19,13 +19,17 @@ exports.addBusinessOwner = (req, res) => {
     newBusinessOwner.subscription.cardDetail.cardNumber=jwt.sign(cardDetail.cardNumber,'outreachfunds');
     newBusinessOwner.photo=sample.name;
     newBusinessOwner.save()
-    .then(()=>{
-       return newBusinessOwner.generateAuthToken();
-    })
-    .then((token) => {
-        console.log(newBusinessOwner);
-        res.header('x-auth',token).send({"message":'Inserted.', 'record': newBusinessOwner});
-    })
+    // .then(()=>{
+    //    return newBusinessOwner.generateAuthToken();
+    // })
+    // .then((token) => {
+    //     console.log(newBusinessOwner);
+    //     res.header('x-auth',token).send({"message":'Inserted.', 'record': newBusinessOwner});
+    // })
+        .then(() => {
+                console.log(newBusinessOwner);
+                res.send({"message":'Inserted.', 'record': newBusinessOwner});
+            })
     .catch((e) => {
         console.log('error in inserting record.',e);
     })
@@ -71,6 +75,7 @@ exports.updateBusinessOwner = (req, res) => {
 }
 //Fetch All Record
 exports.fetch = (req, res) => {
+    console.log("Fetch");
     BusinessOwner.find().then((data) => {
         res.send({"message":'All Record.', 'record': data});
     }).catch((err) => {

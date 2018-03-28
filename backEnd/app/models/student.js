@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 let validator = require('validator');
 let schoolOrganisation=require('./schoolOrganisation').schoolOrganisation;
-let jwt=require('jsonwebtoken');
+const jwt=require('jsonwebtoken');
 let studentSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -72,33 +72,35 @@ let studentSchema = new mongoose.Schema({
 
 });
 
-studentSchema.methods.generateAuthToken=function(){
-    let stud=this;
-    let access='auth';
-    let token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
-    stud.tokens.push({access,token});
-    return stud.save().then(()=>{
-        return token;
-    })
-}
-
+// studentSchema.methods.generateAuthToken=function(){
+//     let stud=this;
+//     let access='auth';
+//     let token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
+//     stud.tokens.push({access,token});
+//     return stud.save().then(()=>{
+//         return token;
+//     })
+// }
+//
 studentSchema.statics.findByToken= function(token){
+    console.log("in student",token)
     let Student =this;
-    let access='auth';
+    //let access='auth';
     let decoded;
     try{
        decoded=jwt.verify(token,'outreachfunds');
       }catch(err) {
         console.log("Error : ",err);
-        return Promise.reject();
+        // return Promise.reject();
     }
     return Student.findOne({
         _id:decoded._id,
-        'tokens.token':token,
-        'tokens.access':access
+        email:decoded.email,
+        password:decoded.password
+        // 'tokens.token':token,
+        // 'tokens.access':access
     })
 }
-
 
 let student = mongoose.model('student', studentSchema);
 module.exports = {student};

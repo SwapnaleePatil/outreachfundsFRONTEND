@@ -12,8 +12,13 @@ export const setSignupPageFieldsAction=(obj=[])=>{
     }
 }
 export const fetchAllSchoolDetails = () => {
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return (dispatch)=>{
-        axiosI.get(`api/school`).then((schools)=>{
+        axiosI.get(`api/school`,header).then((schools)=>{
             dispatch({
                 type:'FETCH_SCHOOLS',
                 payload:schools.data
@@ -84,8 +89,13 @@ export const fetchStudent=()=>{
     }
 }
 export const fetchSignupRequests = (schoolId) => {
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return (dispatch)=>{
-        axiosI.get(`api/students/${schoolId}`).then((requests)=>{
+        axiosI.get(`api/students/${schoolId}`,header).then((requests)=>{
             dispatch({
                 type:'FETCH_REGISTER_REQUEST',
                 payload:requests.data
@@ -117,7 +127,10 @@ export const FetchAllStudents = () => {
 export const approveSignupRequests = (resultSet) => {
     let arr=[...resultSet];
     let obj={
-        "arr":arr
+        "arr":arr,
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
     }
     let url=`api/student/approve`;
 
@@ -131,11 +144,14 @@ export const approveSignupRequests = (resultSet) => {
                 console.log("Error in Fetching of Requests..", error)
             }
     }
-}
+};
 export const rejectSignupRequests = (resultSet) => {
     let arr=[...resultSet];
     let obj={
-        "arr":arr
+        "arr":arr,
+        headers:{
+            'x-auth':localStorage.getItem('user')
+        }
     }
     let url=`api/student/reject`;
 
@@ -151,8 +167,13 @@ export const rejectSignupRequests = (resultSet) => {
         }
 }
 export const updateStudent=(obj)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return (dispatch)=>{
-        axiosI.put('api/student/profile',obj).then((result)=>{
+        axiosI.put('api/student/profile',header,obj).then((result)=>{
             dispatch({
                 type:'STUDENT_UPDATE',
                 payload:result.data.record
@@ -161,8 +182,13 @@ export const updateStudent=(obj)=>{
     }
 };
 export const updateSchool=(obj)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return (dispatch)=>{
-        axiosI.put('api/school',obj).then((result)=>{
+        axiosI.put('api/school',header,obj).then((result)=>{
 
             dispatch({
                 type:'SCHOOL_UPDATE',

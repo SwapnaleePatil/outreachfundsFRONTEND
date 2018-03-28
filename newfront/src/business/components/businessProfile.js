@@ -9,7 +9,7 @@ class BusinessProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            owner: [],
+            //owner: [],
             businessOwner: '',
             businessInfo: '',
             isEditing: false,
@@ -19,8 +19,9 @@ class BusinessProfile extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
+        debugger;
         this.setState({
-            owner: nextProps.List,
+            // owner: nextProps.List,
             isEditing: nextProps.location.pathname.includes('edit') ? true : false
         }, () => {
             this.getOwner();
@@ -28,12 +29,12 @@ class BusinessProfile extends React.Component {
     }
     componentWillMount() {
         this.getOwner();
-        if (this.props.List.length !== 0) {
-            this.setState({
-                owner: this.props.List
-            })
-        }
-        else {
+        if (this.props.List.length === 0) {
+        //     this.setState({
+        //         owner: this.props.List
+        //     })
+        // }
+        // else {
             this.props.listBusiness();
         }
         this.setState({
@@ -146,16 +147,19 @@ class BusinessProfile extends React.Component {
     }
     //Get Owner By Token
     getOwner = () => {
+        debugger;
         let {businessOwner} = this.state;
         let {businessInfo} = this.state;
         this.props.List.map((value, index) => {
-            if (value.tokens[0].token === localStorage.getItem('user')) {
+            //if (value.tokens[0].token === localStorage.getItem('user')) {
+
+            if(value._id===this.props.businessuser._id){
                 businessOwner = value;
                 businessInfo = value.businessInfo;
             }
             this.setState({businessOwner, businessInfo})
         })
-    }
+    };
     //Handle Change in State
     handleChange = (e) => {
         let {name, value} = e.target;
@@ -524,7 +528,7 @@ class BusinessProfile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return {List: state.businesslist}
+    return {List: state.businesslist,businessuser:state.loginuser}
 }
 
 function mapDispatchToProps(dispatch) {

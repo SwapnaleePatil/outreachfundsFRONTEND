@@ -215,7 +215,7 @@ class SignUpSchool extends React.Component{
                             <div className={'form-group'}>
                                 <label>School Name :</label>
                                     <select autoFocus className={'form-control'} name={'selectedSchool'} onChange={this.handleChange} value={schoolData.selectedSchool} onBlur={this.validate}>
-                                        <option>{'---Select School---'}</option>
+
                                         {
                                             Schools.map((school)=>{
                                                 return <option key={school._id} id={school._id}>{school.schoolName}</option>

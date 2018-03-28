@@ -42,7 +42,6 @@ class BusinessList extends React.Component {
         this.setState({
             data:nextProps.businessrecord
         });
-      this.getAddress(nextProps.businessrecord[0]);
   }
     pageChange = (e) => {
         this.setState({
@@ -127,7 +126,7 @@ class BusinessList extends React.Component {
                             currentdata.map((v, i) => {
 
                                 return <tr key={i} onClick={()=>{this.getAddress(v)}}>
-                                    <td align="center"><img src={"http://localhost:3000/uploads/" + v.photo}
+                                    <td align="center"><img src={"http://192.168.200.33:3005/uploads/" + v.photo}
                                              height="50px" width="50px" alt="NO img"/></td>
                                     <td>{v.businessInfo.businessName}</td>
                                     <td>{v.businessInfo.businessAddress}</td>
@@ -145,8 +144,10 @@ class BusinessList extends React.Component {
                         </tbody>
                     </Table>
                 </div>
-                <div className="col-sm-4">
-                    <Asd {...asd}/>
+                <div className="col-sm-4">{
+                    this.props.businessrecord.length!==0 &&
+                        <Asd {...asd}/>
+                }
                 </div>
             </div>
         )

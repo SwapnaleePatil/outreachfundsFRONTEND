@@ -3,12 +3,19 @@ import './addDonation.css'
 import {Button,FormControl,FormGroup,HelpBlock,Table} from 'react-bootstrap';
 import _ from 'lodash';
 import {connect} from 'react-redux';
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import 'react-s-alert/dist/s-alert-css-effects/flip.css';
+import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 import {bindActionCreators} from 'redux';
 import {getEventDataAction} from '../actions/index'
 import {fetchAllSchoolDetails} from './../../students/action/index'
-import {addDonationAction, getDonationAction, updateDonationAction} from '../actions/index'
-import {FetchByToken} from '../actions/index'
-import donation from "../../component/donation";
+import {addDonationAction, updateDonationAction} from '../actions/index'
 
 class DisplayForm extends Component {
     constructor() {
@@ -32,9 +39,11 @@ class DisplayForm extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         // this.props.FetchByToken();
-        this.props.getEventDataAction();
+        if(this.props.donationData.length===0){
+            this.props.getEventDataAction();
+        }
         this.props.fetchAllSchoolDetails();
         // this.props.getOrganizationAndSchool();
     }
@@ -58,7 +67,6 @@ class DisplayForm extends Component {
             eventsData,
             donationData
         });
-
         let arr = nextProps.organizationData;
         let newarr;
         let final = [];
@@ -71,7 +79,16 @@ class DisplayForm extends Component {
             organizationNameArr: final
         });
     }
-
+    success=(msg)=>{
+        //e.preventDefault();
+        Alert.success(msg, {
+            position: 'top-right',
+            effect: 'scale',
+            beep: true,
+            timeout: 1500,
+            offset: 100
+        });
+    };
     onChange = (e) => {
 
         this.setState({
@@ -132,9 +149,18 @@ class DisplayForm extends Component {
         if (status) {
             this.props.updateDonationAction(Udata);
             status = false;
+            this.success('Donation Amount Updated.');
+            document.getElementById('SelectEvent').selectedIndex="default";
+            document.getElementById('treventDate').style.visibility = "hidden";
+            document.getElementById('trorganizationName').style.visibility = "hidden";
+            document.getElementById('trlocation').style.visibility = "hidden";
+            document.getElementById('tramount').style.visibility = "hidden";
+            document.getElementById('trbutton').style.visibility = "hidden";
+            document.getElementById('help').style.visibility = "visible";
         }
         else {
             this.props.addDonationAction(data);
+            this.success('Donation Added.')
         }
     };
     displayEvents = () => {
@@ -183,15 +209,15 @@ class DisplayForm extends Component {
         }
         const renderPageNumbers = pageNumbers.map(number => {
             return (
-                <a
+                <Button
                     className=""
                     key={number}
                     id={number}
                     onClick={this.handleClick}
-                    style={{cursor:"pointer",display:"inline-block", padding:"8px"}}
+                    style={{cursor:"pointer",display:"inline-block", marginLeft:"2%",marginRight:"2%"}}
                 >
                     { number }
-                </a>
+                </Button>
 
             );
         });
@@ -199,12 +225,12 @@ class DisplayForm extends Component {
         return (
             <div>
                 <h1>Donate Amount</h1>
-                <Table>
+                <table style={{border:"0px"}}>
                     <tbody>
                     <tr>
                         <th>Event Name :</th>
                         <FormGroup>
-                            <FormControl componentClass="select" default="Select Event" onChange={(e) => {
+                            <FormControl componentClass="select" id="SelectEvent" default="Select Event" onChange={(e) => {
                                 this.onEventChange(e)
                             }}>{this.displayEvents()}</FormControl>
                         </FormGroup>
@@ -213,7 +239,7 @@ class DisplayForm extends Component {
                     <tr id="treventDate" style={{visibility: "hidden"}}>
                         <th>Date :</th>
                         <FormGroup>
-                            <FormControl type="text" value={this.state.date} id="eventDate" readOnly={true}/>
+                            <FormControl type="text" value={this.state.date.slice(0,10)} id="eventDate" readOnly={true}/>
                         </FormGroup>
                     </tr>
                     <tr id="trorganizationName" style={{visibility: "hidden"}}>
@@ -249,10 +275,11 @@ class DisplayForm extends Component {
                         }}>Donate</Button></th>
                     </tr>
                     </tbody>
-                </Table>
+                </table>
                 <center><h2>Donation Requests</h2></center>
 
-                <Table>
+                <Table bordered striped>
+                    <tbody>
                     <tr>
                         <td style={{border:"none"}}><label>No. of Records : </label>
                             <select onChange={(e)=>{
@@ -280,7 +307,7 @@ class DisplayForm extends Component {
                     {
                         currentTodo.map((value, index) => {
                             return <tr>
-                                <td>{value.eventDate}</td>
+                                <td>{value.eventDate && value.eventDate.slice(0,10)}</td>
                                 <td>
                                     {
                                         this.props.eventsData.map((e)=>{
@@ -314,7 +341,9 @@ class DisplayForm extends Component {
                             }
                         </td>
                     </tr>
+                    </tbody>
                 </Table>
+                <Alert stack={{limit: 6}} html={true} />
             </div>
         )
     }
@@ -335,7 +364,6 @@ function matchDispatchToProps(dispatch) {
         fetchAllSchoolDetails,
         addDonationAction,
         updateDonationAction,
-        // FetchByToken
     }, dispatch);
 }
 

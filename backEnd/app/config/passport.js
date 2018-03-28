@@ -1,18 +1,17 @@
 let Student=require('../models/student').student;
 let businessOwner=require('../models/businessOwner').businessOwner;
 let LocalStrategy=require('passport-local').Strategy;
-
+let jwt=require('jsonwebtoken');
 let bcrypt=require('bcryptjs');
 module.exports=(passport)=>{
-
     passport.serializeUser((user,done)=>{
+        //console.log("ser",user);
         return done(null,user);
     })
-
     passport.deserializeUser((user,done)=>{
+       // console.log("des",user);
         return done(null,user);
     })
-
     //Student
     passport.use('student',new LocalStrategy({
         usernameField:'email',
@@ -26,7 +25,12 @@ module.exports=(passport)=>{
                 return done(null,false);
             }
             if(stud.roleStatus===true) {
-                studentToken = stud.tokens[0].token;
+                // studentToken = stud.tokens[0].token;
+                token = jwt.sign({
+                    _id:stud._id,
+                    email:stud.email,
+                    password:stud.password
+                },'outreachfunds', { expiresIn: '1d' })
                 return done(null, stud);
             }
             return done(null,false);
@@ -39,6 +43,7 @@ module.exports=(passport)=>{
     //Passport Authentication For Business Owner
     passport.use('businessOwner',new LocalStrategy((username, password, done) => {
         businessOwner.findOne({email: username}, (err, user) => {
+         //   console.log("Passport",user);
             if (err) {
                 console.log("Error", err);
             }
@@ -52,7 +57,12 @@ module.exports=(passport)=>{
                         console.log("Error Found",err);
                     }
                     if (result) {
-                        token = user.tokens[0].token;
+                        token = jwt.sign({
+                            _id:user._id,
+                            email:user.email,
+                            password:user.password
+                        },'outreachfunds', { expiresIn: '1d' })
+                        console.log("in Passport",token);
                         return done(null, user);
                     }
                     else {

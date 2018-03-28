@@ -7,6 +7,8 @@ import {bindActionCreators} from 'redux'
 import {getDonationAction} from '../actions/index'
 import {approveDonation} from '../actions/index'
 import {FetchStudent} from './../actions/index'
+import {getEventDataAction} from './../actions/index'
+
 import {fetchAllSchoolDetails} from '../../students/action/index'
 import StudentGraph from './studentGraph'
 
@@ -19,19 +21,23 @@ class StudentDonation extends Component {
             currentPage: 1,
             recordsPerPage: 2,
             paginationData: [],
-            isAsc: true
+            isAsc: true,
+            eventArray:[]
         }
     }
     componentDidMount(){
         // this.props.FetchAllStudents();
-        // this.props.getDonationAction();
+        if(this.props.donationData.length===0){
+            this.props.getDonationAction();
+        }
         this.props.FetchStudent();
-        // this.props.getEventDataAction();
-        // this.props.fetchAllSchoolDetails();
+        this.props.getEventDataAction();
+        this.props.fetchAllSchoolDetails();
     };
 
     componentWillReceiveProps(nextProps) {
-        let {donationData, editable} = this.state;
+        let {donationData, editable,eventArray} = this.state;
+        eventArray=nextProps.eventsData
         donationData = [];
         editable = false;
         nextProps.donationData.forEach((rec, index) => {
@@ -45,7 +51,8 @@ class StudentDonation extends Component {
         });
         this.setState({
             donationData,
-            editable
+            editable,
+            eventArray
         })
 
     }
@@ -76,7 +83,7 @@ class StudentDonation extends Component {
     }
 
     render() {
-        const {donationData, currentPage, recordsPerPage} = this.state;
+       const {donationData, currentPage, recordsPerPage} = this.state;
         const indexOfLastTodo = currentPage * recordsPerPage;
         const indexOfFirstTodo = indexOfLastTodo - recordsPerPage;
         const currentTodo = donationData.slice(indexOfFirstTodo, indexOfLastTodo);
@@ -87,15 +94,16 @@ class StudentDonation extends Component {
 
         const renderPageNumbers = pageNumbers.map(number => {
             return (
-                <a
+                <Button
                     className=""
+                    active
                     key={number}
                     id={number}
                     onClick={this.handleClick}
-                    style={{cursor: "pointer", display: "inline-block", padding: "8px"}}
+                    style={{cursor: "pointer", display: "inline-block", margin:"2%"}}
                 >
                     {number}
-                </a>
+                </Button>
 
             );
         });
@@ -116,7 +124,8 @@ class StudentDonation extends Component {
                         <option value="8">8</option>
                         <option value="10">10</option>
                     </select>
-                    <table className="table">
+                    <table className="table" border="1">
+                        <tbody>
                         <tr className="a">
                             <th onClick={(e) => {
                                 this.sort(e)
@@ -134,7 +143,8 @@ class StudentDonation extends Component {
                                 return <tr style={{borderSpacing:"15px"}}>
                                     <td>{value.donationDate}</td>
                                     <td>{
-                                        this.props.eventsData.map((e) => {
+
+                                        this.state.eventArray.map((e) => {
                                             if (value.eventId === e._id) {
                                                 return e.eventName
                                             }
@@ -179,6 +189,7 @@ class StudentDonation extends Component {
                                 }
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div className="col-sm-6">
@@ -191,6 +202,7 @@ class StudentDonation extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log("State",state)
     return {
         donationData: state.donation,
         requests: state.requests,
@@ -203,11 +215,11 @@ function mapStateToProps(state) {
 }
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        // getDonationAction,
+        getDonationAction,
         approveDonation,
         FetchStudent,
-        // getEventDataAction,
-        // fetchAllSchoolDetails,
+         getEventDataAction,
+        fetchAllSchoolDetails,
     }, dispatch);
 }
 export default connect(mapStateToProps,matchDispatchToProps)(StudentDonation)
