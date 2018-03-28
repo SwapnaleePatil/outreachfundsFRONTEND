@@ -42,10 +42,6 @@ let studentSchema = new mongoose.Schema({
         require: true,
         trim: true
     },
-    tokens:[{
-        access: String,
-        token: String
-    }],
     photo: {
         type: String
     },
@@ -72,30 +68,19 @@ let studentSchema = new mongoose.Schema({
 
 });
 
-studentSchema.methods.generateAuthToken=function(){
-    let stud=this;
-    let access='auth';
-    let token=jwt.sign({_id:stud._id.toHexString(),access},'outreachfunds').toString();
-    stud.tokens.push({access,token});
-    return stud.save().then(()=>{
-        return token;
-    })
-}
 
 studentSchema.statics.findByToken= function(token){
     let Student =this;
-    let access='auth';
     let decoded;
     try{
-       decoded=jwt.verify(token,'outreachfunds');
-      }catch(err) {
-        console.log("Error : ",err);
-        return Promise.reject();
+        decoded=jwt.verify(token,'outreachfunds');
+    }catch(err) {
+        return err;
     }
     return Student.findOne({
         _id:decoded._id,
-        'tokens.token':token,
-        'tokens.access':access
+        email:decoded.email,
+        password:decoded.password
     })
 }
 

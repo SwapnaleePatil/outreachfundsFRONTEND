@@ -5,7 +5,6 @@ exports.addDonation=(req,res)=>{
     newDonation.save().then((response)=>{
         res.send(response);
     }).catch((err)=>{
-        console.log(err);
         res.status(400).send(err);
     })
 };
@@ -20,7 +19,6 @@ exports.approveDonation=(req,res)=>{
     Donation.findByIdAndUpdate(req.body._id,{$set:{"status":true}},{new:true}).then((response)=>{
         res.send(response);
     }).catch((err)=>{
-        console.log(err);
         res.status(400).send(err);
     })
 }
@@ -29,7 +27,6 @@ exports.updateDonation=(req,res)=>{
     Donation.findByIdAndUpdate(req.body._id,{$set:req.body},{new:true}).then((response)=>{
         res.send(response);
     }).catch((err)=>{
-        console.log(err);
         res.status(400).send(err);
     });
 };

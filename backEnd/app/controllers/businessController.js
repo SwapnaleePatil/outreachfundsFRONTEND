@@ -10,7 +10,7 @@ exports.addBusinessOwner = (req, res) => {
     let sample = req.files.photo;
     sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
         if (err) {
-            console.log("Error",err);
+            res.send(err);
         }
     });
     let cardDetail=body.subscription.cardDetail;
@@ -19,15 +19,11 @@ exports.addBusinessOwner = (req, res) => {
     newBusinessOwner.subscription.cardDetail.cardNumber=jwt.sign(cardDetail.cardNumber,'outreachfunds');
     newBusinessOwner.photo=sample.name;
     newBusinessOwner.save()
-    .then(()=>{
-       return newBusinessOwner.generateAuthToken();
-    })
-    .then((token) => {
-        console.log(newBusinessOwner);
-        res.header('x-auth',token).send({"message":'Inserted.', 'record': newBusinessOwner});
+    .then(() => {
+        res.send({"message":'Inserted.', 'record': newBusinessOwner});
     })
     .catch((e) => {
-        console.log('error in inserting record.',e);
+        res.send({'error in inserting record.':e});
     })
 }
 //Delete Business Owner And Business Detail
@@ -39,8 +35,8 @@ exports.deleteBusinessOwner = (req, res) => {
         else {
             res.send("User Not Found");
         }
-    }).catch(() => {
-        console.log('Error in deletion');
+    }).catch((e) => {
+        res.send({'Error in deletion':e});
     })
 }
 //Update Business Owner And Business Detail
@@ -52,7 +48,7 @@ exports.updateBusinessOwner = (req, res) => {
         let sample = req.files.photo;
         sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
             if (err) {
-                console.log("Error",err);
+                res.send({"Error":err});
             }
         });
     }
@@ -63,10 +59,9 @@ exports.updateBusinessOwner = (req, res) => {
 
     BusinessOwner.findByIdAndUpdate(body.id,{$set:body},{new:true})
     .then((result) => {
-        console.log("result",result);
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
-        console.log('Error in Update', err);
+        res.send({'Error in Update': err});
     })
 }
 //Fetch All Record
@@ -74,15 +69,15 @@ exports.fetch = (req, res) => {
     BusinessOwner.find().then((data) => {
         res.send({"message":'All Record.', 'record': data});
     }).catch((err) => {
-        console.log('Error in retrieving data.', err);
+        res.send({'Error in retrieving data.': err});
     })
 }
 //Fetch Record By Id
 exports.fetchById = (req, res) => {
     BusinessOwner.findById({_id:req.body.id}).then((data) => {
         res.send(data.businessInfo.businessName);
-    }).catch(() => {
-        console.log('Error in retrieving data.');
+    }).catch((e) => {
+        res.send({'Error in retrieving data.':e});
     })
 };
 //Fetch Record By Token
@@ -99,18 +94,3 @@ exports.fetchByToken=(req,res)=>{
         }
     })
 }
-//Authenticate USer
-exports.authenticatee = (req, res, next) => {
-    let token = req.header('x-auth');
-    console.log("token",token);
-    BusinessOwner.findByToken(token).then((user) => {
-        if (!user) {
-            res.send("Please Login First.");
-        }
-        req.businessOwner = user;
-        req.token = token;
-        next();
-    }).catch((e) => {
-        res.status(401).send({"message":"Please Login First.","error":e});
-    });
-};

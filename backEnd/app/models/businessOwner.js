@@ -129,7 +129,7 @@ businessOwnerSchema.pre('save', function (next) {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(businessOwner.password, salt, (err, hash) => {
                 if (err) {
-                    console.log("Error:=", err);
+                    return err;
                 }
                 if (hash) {
                     businessOwner.password = hash;
@@ -143,22 +143,7 @@ businessOwnerSchema.pre('save', function (next) {
     }
 
 });
-//Generate Token For New BusinessOwner
-businessOwnerSchema.methods.generateAuthToken = function () {
-    let businessOwner = this;
-    let access = 'auth';
-    let token = jwt.sign(
-        {
-            _id: businessOwner._id.toHexString(),
-            access
-        },
-        'outreachfunds'
-    ).toString();
-    businessOwner.tokens.push({access, token});
-    return businessOwner.save().then(() => {
-        return token;
-    })
-}
+
 //Find Business Owner By Token
 businessOwnerSchema.statics.findByToken = function (token) {
     let businessOwner = this;
@@ -166,12 +151,12 @@ businessOwnerSchema.statics.findByToken = function (token) {
     try {
         decoded = jwt.verify(token, 'outreachfunds');
     } catch (e) {
-        console.log("Error :=", e);
+        return e;
     }
     return businessOwner.findOne({
-        _id: decoded._id,
-        'tokens.access': 'auth',
-        'tokens.token': token
+        _id:decoded._id,
+        email:decoded.email,
+        password:decoded.password
     })
 }
 let businessOwner = mongoose.model('businessOwner', businessOwnerSchema);

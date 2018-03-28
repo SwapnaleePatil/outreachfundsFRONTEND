@@ -8,7 +8,7 @@ exports.registerStudent=(req,res)=>{
          let sample = req.files.photo;
         sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
             if (err) {
-                console.log(err);
+                res.send(err);
             }
         });
     let body=JSON.parse(req.body.data);
@@ -18,8 +18,6 @@ exports.registerStudent=(req,res)=>{
         student.schoolId = req.body.schoolId;
     }
     student.save().then(() => {
-            return student.generateAuthToken();
-        }).then(() => {
             res.status(200).send(student);
         }).catch((err) => {
             res.status(401).send({"message": "Error in Registration of Student.", "err": err})
@@ -71,19 +69,6 @@ exports.fetchAllSchools=(req,res)=>{
     })
 
 };
-exports.authenticate=(req,res,next)=>{
-    let token=req.header('x-auth');
-    Student.findByToken(token).then((stud)=>{
-        if(!stud)
-            return Promise.reject();
-        console.log(token);
-        req.stud=stud;
-        req.token=token;
-        next();
-    }).catch((err)=>{
-        res.status(401).send({"message":"Please Login First.","error":err});
-    })
-}
 exports.approveStudent=(req,res)=>{
     let arr=req.body.arr;
     let l=arr.length;
@@ -93,11 +78,9 @@ exports.approveStudent=(req,res)=>{
                 stud.roleStatus=true;
                 stud.save().then(()=>{
                     "use strict";
-                    console.log("updated");
                 })
             }
         }).catch(()=>{
-            console.log('error in Approving.');
             res.status(201).send({"message":"error"});
         })
     }
@@ -112,11 +95,9 @@ exports.rejectStudent=(req,res)=>{
                 stud.status=true;
                 stud.save().then(()=>{
                     "use strict";
-                    console.log("updated");
                 })
             }
         }).catch(()=>{
-            console.log('error in Rejecting');
             res.status(201).send({"message":"error"});
         })
     }
@@ -130,7 +111,7 @@ exports.UpdateStudent=(req,res)=>{
         let sample = req.files.photo;
         sample.mv(__dirname + '../../../uploads/' + sample.name, (err) => {
             if (err) {
-                console.log("Error",err);
+                res.send({"Error":err});
             }
         });
     }
@@ -143,7 +124,7 @@ exports.UpdateStudent=(req,res)=>{
         .then((result) => {
             res.send({"message": 'Updated.', 'record': result});
         }).catch((err) => {
-        console.log('Error in Update', err);
+        res.send({'Error in Update': err});
     })
 }
 exports.updateSchool=(req,res)=>{
@@ -151,6 +132,6 @@ exports.updateSchool=(req,res)=>{
     SchoolOrganisation.findByIdAndUpdate(req.body.id, {$set: body}, {new: true}).then((result) => {
         res.send({"message": 'Updated.', 'record': result});
     }).catch((err) => {
-        console.log('Error in record updation', err);
+        res.send({'Error in record updation': err});
     })
 }
