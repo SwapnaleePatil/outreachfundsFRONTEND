@@ -8,7 +8,7 @@ let dbconfig=require('./app/config/dbconfig');
 mongoose.connect(dbconfig.url);
 let db=mongoose.connection;
 global.studentToken='';
-global.token='';
+global.token=[];
 let app=express();
 
 

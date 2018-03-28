@@ -1,7 +1,7 @@
 let Student=require('../models/student').student;
 let businessOwner=require('../models/businessOwner').businessOwner;
 let LocalStrategy=require('passport-local').Strategy;
-
+let jwt=require('jsonwebtoken');
 let bcrypt=require('bcryptjs');
 module.exports=(passport)=>{
 
@@ -48,11 +48,20 @@ module.exports=(passport)=>{
             }
             else {
                 bcrypt.compare(password, user.password, (err, result) => {
+                    //console.log("Result",user);
                     if (err) {
                         console.log("Error Found",err);
                     }
                     if (result) {
-                        token = user.tokens[0].token;
+                        let access='auth';
+                        let a=jwt.sign( {
+                                _id: user._id.toHexString(),
+                                access
+                            },
+                            'outreachfunds');
+                        token.push(a);
+                        //console.log("Token",a);
+                        // token = user.tokens[0].token;
                         return done(null, user);
                     }
                     else {

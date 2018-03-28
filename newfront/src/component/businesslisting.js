@@ -22,6 +22,7 @@ class BusinessList extends React.Component {
         }
     }
     getAddress=(value)=>{
+        debugger
         axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${value.businessInfo.businessAddress}&key=AIzaSyDnLHO64ZXLw-EjuyENOZrydHpKHGRyfD8`).then((response)=>{
             if(response.data.status === 'ZERO_RESULTS'){
                 console.log('Wrong Address....');
@@ -41,7 +42,8 @@ class BusinessList extends React.Component {
   componentWillReceiveProps(nextProps){
         this.setState({
             data:nextProps.businessrecord
-        })
+        });
+      this.getAddress(nextProps.businessrecord[0]);
   }
     pageChange = (e) => {
         this.setState({

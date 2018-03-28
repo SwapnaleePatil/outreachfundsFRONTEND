@@ -417,7 +417,6 @@ class Schedule extends React.Component {
         }
         let {error} = this.state;
         return (
-
             <div className="schedule-class">
 
                 <div className="col-md-9">
@@ -444,8 +443,7 @@ class Schedule extends React.Component {
                                         <option value={20}>20</option>
                                         <option value={50}>50</option>
                                     </select>
-                                </td>
-                                <td colSpan={8} align="center"><h4>Events</h4></td>
+                                </td> <td colSpan={8} align="center"><h4>Events</h4></td>
                             </tr>
                             <tr>
                                 <th>Dates</th>
@@ -505,6 +503,7 @@ class Schedule extends React.Component {
                                                         });
                                                         this.toggleCalander()
                                                     }}>Edit Schedule</MenuItem>
+
                                                     <Modal isOpen={this.state.rejectModal} style={{
                                                         content: {
                                                         },overlay:{

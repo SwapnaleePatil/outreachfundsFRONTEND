@@ -99,3 +99,18 @@ exports.fetchByToken=(req,res)=>{
         }
     })
 }
+//Authenticate USer
+exports.authenticatee = (req, res, next) => {
+    let token = req.header('x-auth');
+    console.log("token",token);
+    BusinessOwner.findByToken(token).then((user) => {
+        if (!user) {
+            res.send("Please Login First.");
+        }
+        req.businessOwner = user;
+        req.token = token;
+        next();
+    }).catch((e) => {
+        res.status(401).send({"message":"Please Login First.","error":e});
+    });
+};

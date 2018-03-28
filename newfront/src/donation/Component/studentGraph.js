@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './graph.css'
+
 import {BarChart} from 'react-easy-chart'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -22,7 +22,7 @@ class StudentGraph extends Component {
     }
     componentDidMount(){
         this.props.FetchAllStudents();
-        this.props.getDonationAction();
+        // this.props.getDonationAction();
 
     }
     componentWillReceiveProps(nextProps){
@@ -118,7 +118,7 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDonationAction,
+        // getDonationAction,
         FetchAllStudents
     }, dispatch);
 }

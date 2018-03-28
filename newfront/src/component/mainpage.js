@@ -1,11 +1,11 @@
 import React from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {logoutAction} from '../action';
 import {listBusiness} from '../business/action/index'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table,Badge,Dropdown,ButtonToolbar} from 'react-bootstrap'
 import '../index.css'
 import {Route, NavLink,Redirect} from 'react-router-dom'
-
 
 class MainPage extends React.Component {
     constructor() {
@@ -40,6 +40,7 @@ class MainPage extends React.Component {
     }
     logout=()=> {
         localStorage.removeItem('user');
+        this.props.logoutAction();
     }
     searching = (e) => {
         this.setState({
@@ -108,8 +109,7 @@ class MainPage extends React.Component {
                                                 <NavLink to="/editStudentProfile">Edit Profile</NavLink>
                                             </MenuItem>
                                         }
-                                    <MenuItem eventKey={4.2} ><NavLink to="/availability">Availability</NavLink></MenuItem>
-                                    <MenuItem eventKey={4.3}><NavLink to="/payment">Payments</NavLink></MenuItem>
+
                                         {this.state.user ?
                                             <MenuItem eventKey={4.4}><NavLink to="/viewProfile">View
                                                 Profile</NavLink></MenuItem> :
@@ -117,14 +117,15 @@ class MainPage extends React.Component {
                                                 Profile</NavLink></MenuItem>
                                         }
                                     {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='S')?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
-                                    <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="/">
+                                    <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="" onClick={this.logout}>
                                         Logout</NavLink></MenuItem>
                                     </Dropdown.Menu>
                                     </Dropdown>
                              </ButtonToolbar>
                     </Nav>
                 </Navbar>
-                {this.state.isNull && <Redirect to="/main"/>}
+                {this.state.isNull && <div><Redirect to="/main"/> {this.state.isNull=false}</div>}
+
                 {this.state.isSearching &&
                     <div>
                     <Redirect to="/search"/>
@@ -165,6 +166,6 @@ const mapStateToProps = (state) => {
     return ({businessrecord: state.businesslist,loginResponse:state.loginResponse})
 };
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({listBusiness}, dispatch)
+    return bindActionCreators({listBusiness,logoutAction}, dispatch)
 }
 export default connect(mapStateToProps,mapDispatchToProps)(MainPage)

@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import './graph.css'
+import './addDonation.css'
 import {Button,FormControl,FormGroup,HelpBlock,Table} from 'react-bootstrap';
+import _ from 'lodash';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {getEventDataAction} from '../actions/index'
 import {fetchAllSchoolDetails} from './../../students/action/index'
 import {addDonationAction, getDonationAction, updateDonationAction} from '../actions/index'
 import {FetchByToken} from '../actions/index'
+import donation from "../../component/donation";
 
 class DisplayForm extends Component {
     constructor() {
@@ -21,28 +23,39 @@ class DisplayForm extends Component {
             location: "",
             donationData:[],
             organizationName:"",
-            eventId:""
+            eventId:"",
+            currentPage:1,
+            recordsPerPage:2,
+            paginationData:[],
+            isAsc:true,
+            eventsData:[]
         }
     }
 
     componentDidMount() {
-        this.props.FetchByToken();
+        // this.props.FetchByToken();
         this.props.getEventDataAction();
         this.props.fetchAllSchoolDetails();
-        this.props.getDonationAction();
         // this.props.getOrganizationAndSchool();
     }
 
     componentWillReceiveProps(nextProps) {
         //display
-        let {donationData} = this.state;
-        donationData=[]
+        let {eventsData,donationData} = this.state;
+        eventsData=[];
+        donationData=[];
+        nextProps.eventsData.forEach((rec)=>{
+            if(rec.businessSponsor.includes((this.props.businessInfo.User && this.props.businessInfo.User._id)) && rec.accept.includes((this.props.businessInfo.User && this.props.businessInfo.User._id))){
+                eventsData.push(rec);
+            }
+        });
         nextProps.donationData.forEach((rec)=>{
             if(rec.businessId === (this.props.businessInfo.User && this.props.businessInfo.User._id)){
                 donationData.push(rec);
             }
         });
         this.setState({
+            eventsData,
             donationData
         });
 
@@ -64,18 +77,33 @@ class DisplayForm extends Component {
         this.setState({
             [e.target.id]: Math.abs(e.target.value)
         });
-    }
+    };
+    sort=(e)=>{
+        let{donationData} = this.state;
+        if(this.state.isAsc) {
+            donationData = _.orderBy(donationData, [e.target.id], ['asc']);
+        }
+        else {
+            donationData= _.orderBy(donationData, [e.target.id], ['desc']);
+        }
+        this.setState({
+            isAsc:!this.state.isAsc,
+            donationData
+        });
+    };
     onSubmit = () => {
         let status = false;
         let Udata = {};
         let eventId = "";
         let organizationId="";
+        debugger;
         this.props.eventsData.forEach((value)=>{
             if(value.eventName === this.state.eventName){
                 eventId = value._id;
                 organizationId = value.schoolOrganisation;
             }
         });
+        console.log('business Info',this.props.businessInfo);
         let data = {
             'eventDate': this.state.date,
             'donationDate': `${new Date().getDate()}-${('0' + new Date().getMonth()).slice(-2)}-${new Date().getFullYear()}`,
@@ -109,17 +137,21 @@ class DisplayForm extends Component {
             this.props.addDonationAction(data);
         }
     };
-    /*donate = (value, index) => {
-
-        this.setState({
-            date: value.eventDate,
-            eventName: value.eventName,
-            organizationName: this.state.organizationNameArr[index],
-            location: value.location
+    displayEvents = () => {
+        let items = [];
+        items.push(<option value="" selected={true} disabled={true} hidden={true}>Select Event</option>);
+        this.state.eventsData.forEach((value, index) => {
+            items.push(<option value={value._id} key={index}>{value.eventName}</option>)
         });
-    };*/
+        return items;
+    };
+    handleClick=(event)=>{
+        this.setState({
+            currentPage: Number(event.target.id)
+        });
+    };
     onEventChange = (e) => {
-
+        let tempId=0;
         this.setState({
             amount:""
         });
@@ -128,26 +160,42 @@ class DisplayForm extends Component {
         document.getElementById('trlocation').style.visibility = "visible";
         document.getElementById('tramount').style.visibility = "visible";
         document.getElementById('trbutton').style.visibility = "visible";
-
+        document.getElementById('help').style.visibility = "hidden";
+        tempId = (this.props.eventsData.findIndex((events)=>events._id===e.target.value));
+        console.log('tempId',tempId);
         this.setState({
-            date: this.props.eventsData[e.target.value].eventDate,
-            eventName: this.props.eventsData[e.target.value].eventName,
-            organizationId: this.props.eventsData[e.target.value].schoolOrganisation,
-            location: this.props.eventsData[e.target.value].location,
-            organizationName:this.state.organizationNameArr[e.target.value],
-            eventId:this.props.eventsData[e.target.value].eventId
+            date: this.props.eventsData[tempId].eventDate,
+            eventName: this.props.eventsData[tempId].eventName,
+            organizationId: this.props.eventsData[tempId].schoolOrganisation,
+            location: this.props.eventsData[tempId].location,
+            organizationName:this.state.organizationNameArr[tempId],
+            eventId:this.props.eventsData[tempId].eventId
         });
     };
-    displayEvents = () => {
-        let items = [];
-        items.push(<option value="" selected={true} disabled={true} hidden={true}>Select Event</option>);
-        this.props.eventsData.forEach((value, index) => {
-            items.push(<option value={index} key={index}>{value.eventName}</option>)
-        });
-        return items;
-    };
-
     render() {
+        const {donationData,currentPage,recordsPerPage} = this.state;
+        const indexOfLastTodo = currentPage * recordsPerPage;
+        const indexOfFirstTodo = indexOfLastTodo - recordsPerPage;
+        const currentTodo = donationData.slice(indexOfFirstTodo, indexOfLastTodo);
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(donationData.length / recordsPerPage); i++) {
+            pageNumbers.push(i);
+        }
+        const renderPageNumbers = pageNumbers.map(number => {
+            return (
+                <a
+                    className=""
+                    key={number}
+                    id={number}
+                    onClick={this.handleClick}
+                    style={{cursor:"pointer",display:"inline-block", padding:"8px"}}
+                >
+                    { number }
+                </a>
+
+            );
+        });
+
         return (
             <div>
                 <h1>Donate Amount</h1>
@@ -160,7 +208,7 @@ class DisplayForm extends Component {
                                 this.onEventChange(e)
                             }}>{this.displayEvents()}</FormControl>
                         </FormGroup>
-                        <HelpBlock>Please Select the Event for further procession</HelpBlock>
+                        <HelpBlock id="help">Please Select the Event for further procession</HelpBlock>
                     </tr>
                     <tr id="treventDate" style={{visibility: "hidden"}}>
                         <th>Date :</th>
@@ -192,6 +240,7 @@ class DisplayForm extends Component {
                                     this.onChange(e)
                                 }} placeholder=" in $"/>
                             </FormGroup>
+                            <HelpBlock id="helpAmount">Enter Amount in dollar($)</HelpBlock>
                         </td>
                     </tr>
                     <tr id="trbutton" style={{visibility: "hidden"}}>
@@ -202,10 +251,26 @@ class DisplayForm extends Component {
                     </tbody>
                 </Table>
                 <center><h2>Donation Requests</h2></center>
-                <Table bordered striped>
-                    <tbody>
+
+                <Table>
                     <tr>
-                        <th>Event Date</th>
+                        <td style={{border:"none"}}><label>No. of Records : </label>
+                            <select onChange={(e)=>{
+                                this.setState({
+                                    recordsPerPage:e.target.value
+                                });
+                            }}>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th onClick={(e)=>{this.sort(e)}} id="eventDate">Event Date</th>
                         <th>Event Name</th>
                         <th>Organization Name</th>
                         <th>Location</th>
@@ -213,7 +278,7 @@ class DisplayForm extends Component {
                         <th>Status</th>
                     </tr>
                     {
-                        this.state.donationData.map((value, index) => {
+                        currentTodo.map((value, index) => {
                             return <tr>
                                 <td>{value.eventDate}</td>
                                 <td>
@@ -235,14 +300,20 @@ class DisplayForm extends Component {
                                 <td>{`$ ${value.amount}`}</td>
                                 <td>{
                                     value.status ?
-                                        <b>Confirmed</b>
+                                        <b className="text-success">Confirmed</b>
                                         :
-                                        <b>Pending</b>
+                                        <b className="text-danger">Pending</b>
                                 }</td>
                             </tr>
                         })
                     }
-                    </tbody>
+                    <tr>
+                        <td colSpan="6" style={{textAlign:"center"}}>
+                            {
+                                renderPageNumbers
+                            }
+                        </td>
+                    </tr>
                 </Table>
             </div>
         )
@@ -263,9 +334,8 @@ function matchDispatchToProps(dispatch) {
         getEventDataAction,
         fetchAllSchoolDetails,
         addDonationAction,
-        getDonationAction,
         updateDonationAction,
-        FetchByToken
+        // FetchByToken
     }, dispatch);
 }
 

@@ -27,7 +27,8 @@ let businessOwnerSchema = new mongoose.Schema({
         require: true,
         trim: true,
         validator: validator.isEmail,
-        message: '{value} is not valid'
+        message: '{value} is not valid',
+        unique: true
     },
     phone: {
         type: String,

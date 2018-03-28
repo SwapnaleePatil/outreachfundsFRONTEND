@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './graph.css'
+
 import {BarChart} from 'react-easy-chart'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -20,9 +20,7 @@ class Graph extends Component {
         };
     }
     componentDidMount(){
-
         this.props.getDonationAction();
-
     }
     componentWillReceiveProps(nextProps){
 

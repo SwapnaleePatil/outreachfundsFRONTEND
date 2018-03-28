@@ -1,14 +1,25 @@
 import React from 'react'
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, Carousel} from 'react-bootstrap'
 import {Table, FormControl, Button} from 'react-bootstrap'
+import axios from 'axios';
 import galary from './galary'
 import {businessLogin} from '../action/index'
 import {studentLogin} from '../action/index'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import '../index.css'
-import Modal from 'react-modal';
-import {NavLink} from 'react-router-dom';
+import Modal from 'react-modal'
+import {NavLink} from 'react-router-dom'
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import 'react-s-alert/dist/s-alert-css-effects/flip.css';
+import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
+
 class HomePage extends React.Component {
     constructor() {
         super();
@@ -29,7 +40,7 @@ class HomePage extends React.Component {
     componentWillReceiveProps(nextProps){
         this.setState({loginResponse:nextProps.loginResponse},()=> {
             let {error} = this.state;
-                if (this.state.loginResponse.data.message === "login failed") {
+                if (this.state.loginResponse.hasOwnProperty('data')&&this.state.loginResponse.data.message === "login failed") {
                     error.password = "invalid Email Or Password"
                 }
                 else {
@@ -85,12 +96,86 @@ class HomePage extends React.Component {
         };
         this.props.studentLogin(data);
     };
+    //Forgot Password
+    forgotPassword=()=>{
+
+        if(this.state.email.length===0){
+            this.unsuccess("Please enter your Email ID...");
+        }
+        else if(this.state.role==='business')
+        {
+            debugger;
+            axios.post('http://localhost:2525/businessforgotPassword',{'email':this.state.email}).then((response)=>{
+                console.log('response is : ',response.data);
+                if(response.data === "failed"){
+                    //alert('Invalid Email...');
+                    this.unsuccess("Invalid Email...");
+                }
+                else if(response.data === "Invalid"){
+                    this.unsuccess("Enter Correct Email...");
+                }
+                else
+                {
+                    // alert('Message Sent...');
+                    this.success("Email Sent...");
+                }
+                // this.props.history.push(`/businessforgotPassword/${this.state.email}`);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+        else
+        {
+            axios.post('http://localhost:2525/studentforgotPassword',{'email':this.state.email}).then((response)=>{
+                console.log('response is : ',response);
+                if(response.data === "failed"){
+                    //alert('Invalid Email...');
+                    this.unsuccess("Invalid Email...");
+                }
+                else if(response.data === "Invalid"){
+                    this.unsuccess("Enter Correct Email...");
+                }
+                else
+                {
+                    // alert('Message Sent...');
+                    this.success("Email Sent...");
+                }
+                //this.props.history.push(`/studentforgotPassword/${this.state.email}`);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+    };
+    //Forgot Password
+    success=(msg)=>{
+        //e.preventDefault();
+        Alert.success(msg, {
+            position: 'top-right',
+            effect: 'scale',
+            beep: true,
+            timeout: 1500,
+            offset: 100
+        });
+    };
+    //Forgot Password
+    unsuccess=(msg)=>{
+        // e.preventDefault();
+        Alert.error(msg,{
+            position:'top-right',
+            effect:'bouncyflip',
+            beep:true,
+            timeout:1500,
+            offset:100
+        })
+    }
     loginbusiness = () => {
+        let {error}=this.state;
         let data = {
             username: this.state.email,
             password: this.state.password
         };
         this.props.businessLogin(data);
+        
     };
     toggleModal = () => {
         this.setState({
@@ -212,12 +297,19 @@ class HomePage extends React.Component {
                             </tr>
                             <tr>
                                 <td>
+                                    <a onClick={()=>{this.forgotPassword()}}>Forgot Password?</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td align="center" className="lbtn">
+                                    {this.state.role === "student" ?
                                         <Button className="lbtn" bsStyle="info"
-                                                onClick={this.state.role === "student" ?this.loginstudent:this.loginbusiness}>Login</Button>
+                                                onClick={this.loginstudent}>Login</Button> :
+                                        <Button className="lbtn" bsStyle="info"
+                                                onClick={this.loginbusiness}>Login</Button>
+                                    }
+
+
                                 </td>
                             </tr>
                             <tr>
@@ -276,11 +368,6 @@ class HomePage extends React.Component {
                                 <NavItem eventKey={2} className="navclassa" onClick={this.toggleRole}>
                                     Login
                                 </NavItem>
-                                <NavDropdown eventKey={3} title="More" id="basic-nav-dropdown" className="navclassa">
-                                    <MenuItem eventKey={3.1} ><NavLink to="/aboutus">About Us</NavLink></MenuItem>
-                                    <MenuItem eventKey={3.2}  ><NavLink to="/contactus">Contact Us</NavLink></MenuItem>
-                                    <MenuItem eventKey={3.3} ><NavLink to="/fundideas">Fund Raisinng Ideas</NavLink></MenuItem>
-                                </NavDropdown>
                             </Nav>
                         </Navbar></div>
                     <div className="carosel-class">
@@ -318,6 +405,7 @@ class HomePage extends React.Component {
                         </tr>
                         </tbody>
                     </Table>
+                    <Alert stack={{limit: 3}} html={true} />
                     <div className="outer-gallary-class">
                         {galary()}
                     </div>

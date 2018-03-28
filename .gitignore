@@ -3,3 +3,4 @@
 backEnd/node_modules
 backEnd/.idea
 package-lock.json
+/node_modules
