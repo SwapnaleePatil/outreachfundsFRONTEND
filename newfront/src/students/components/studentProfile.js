@@ -35,17 +35,17 @@ class StudentProfile extends React.Component {
         this.setState({
             student: this.props.Student
         });
-        if (this.props.School.length > 0) {
-            this.setState({
-                school: this.props.School
-            }, () => {
-                this.getSchool();
-            })
-        }
-        else {
+        // if (this.props.School.length > 0) {
+        //     this.setState({
+        //         school: this.props.School
+        //     }, () => {
+        //         this.getSchool();
+        //     })
+        // }
+        // else {
             this.props.fetchAllSchoolDetails();
             this.props.fetchStudent();
-        }
+        // }
         this.setState({
             isEditing: this.props.location.pathname.includes('edit') ? true : false
         })

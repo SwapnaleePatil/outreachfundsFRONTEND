@@ -20,7 +20,9 @@ class Donation extends React.Component {
         this.props.FetchByToken();
         // this.props.getEventDataAction();
         // this.props.fetchAllSchoolDetails();
-        this.props.getDonationAction();
+        if(this.props.donationData.length===0){
+            this.props.getDonationAction();
+        }
     }
 
     componentWillReceiveProps(nextProps) {

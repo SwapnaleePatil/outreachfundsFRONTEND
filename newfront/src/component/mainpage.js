@@ -2,7 +2,9 @@ import React from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {logoutAction} from '../action';
-import {listBusiness} from '../business/action/index'
+import {listBusiness,fetchBusiness} from '../business/action/index'
+import {fetchStudent} from '../students/action/index'
+
 import {Navbar, NavItem, NavDropdown, Nav, MenuItem, FormControl, Glyphicon, Button,Table,Badge,Dropdown,ButtonToolbar} from 'react-bootstrap'
 import '../index.css'
 import {Route, NavLink,Redirect} from 'react-router-dom'
@@ -20,28 +22,27 @@ class MainPage extends React.Component {
     }
     componentWillMount() {
         this.props.listBusiness();
+        (this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='s')?this.props.fetchStudent():this.props.fetchBusiness();
+            //this.props.fetchBusiness();
     }
 
     componentWillReceiveProps(nextProps) {
-
         this.state.data = nextProps.businessrecord;
         let user = this.state;
         nextProps.businessrecord.map((v) => {
-            v.tokens.map((value) => {
-                if (value.token === localStorage.getItem('user')) {
-                    user = value;
+                if (v._id===this.props.businessuser._id) {
+                    user = v;
                     this.setState({
                         user
                     })
                 }
                 //alert("user",this.state.user)
             });
-        });
     }
     logout=()=> {
         localStorage.removeItem('user');
         this.props.logoutAction();
-    }
+    };
     searching = (e) => {
         this.setState({
             name:e.target.value
@@ -54,7 +55,7 @@ class MainPage extends React.Component {
         let {searchdata} = this.state;
         searchdata = [];
         this.state.data.map((value) => {
-            if (value.businessInfo.businessName.includes(e.target.value)) {
+            if (value.businessInfo.businessName.toLowerCase().includes(e.target.value.toLowerCase())) {
                 searchdata.push(value)
             }
             this.setState({
@@ -101,7 +102,7 @@ class MainPage extends React.Component {
                                             <Glyphicon glyph="glyphicon glyphicon-user"/>
                                         </Dropdown.Toggle>
                                     <Dropdown.Menu className="super-colors">
-                                        {this.state.user ?
+                                        {this.state.user && (this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='b')?
                                             <MenuItem eventKey={4.1}>
                                                 <NavLink to="/editProfile">Edit Profile</NavLink>
                                             </MenuItem>
@@ -110,13 +111,14 @@ class MainPage extends React.Component {
                                             </MenuItem>
                                         }
 
-                                        {this.state.user ?
+                                        {this.state.user && (this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='b')?
                                             <MenuItem eventKey={4.4}><NavLink to="/viewProfile">View
                                                 Profile</NavLink></MenuItem> :
                                             <MenuItem eventKey={4.4}><NavLink to="/viewStudentProfile">View
                                                 Profile</NavLink></MenuItem>
                                         }
-                                    {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='S')?<MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
+                                    {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='s')?
+                                        <MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
                                     <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="" onClick={this.logout}>
                                         Logout</NavLink></MenuItem>
                                     </Dropdown.Menu>
@@ -163,9 +165,9 @@ class MainPage extends React.Component {
     }
 }
 const mapStateToProps = (state) => {
-    return ({businessrecord: state.businesslist,loginResponse:state.loginResponse})
+    return ({businessrecord: state.businesslist,loginResponse:state.loginResponse,businessuser:state.loginuser,studentuser:state.students})
 };
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({listBusiness,logoutAction}, dispatch)
+    return bindActionCreators({listBusiness,logoutAction,fetchStudent,fetchBusiness}, dispatch)
 }
 export default connect(mapStateToProps,mapDispatchToProps)(MainPage)

@@ -2,8 +2,13 @@
 import axiosI from '../../services/axiosInstance';
 
 export const addDonationAction=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return ((dispatch)=>{
-        axiosI.post('addDonation',data).then((response)=>{
+        axiosI.post('addDonation',header,data).then((response)=>{
             dispatch({
                 type:'ADD_DONATION',
                 payload:response.data
@@ -12,10 +17,15 @@ export const addDonationAction=(data)=>{
     });
 };
 export const getDonationAction=()=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return ((dispatch)=>{
         axiosI({
             method: 'get',
-            url: 'getDonationData'
+            url: 'getDonationData',header
         }).then((response)=>{
             dispatch({
                 type:'GET_DONATION',
@@ -25,8 +35,13 @@ export const getDonationAction=()=>{
     });
 };
 export const approveDonation=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return ((dispatch)=>{
-        axiosI.patch('approveDonation',data).then((response)=>{
+        axiosI.patch('approveDonation',header,data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
                 payload:response.data
@@ -36,8 +51,13 @@ export const approveDonation=(data)=>{
 };
 
 export const updateDonationAction=(data)=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return ((dispatch)=>{
-        axiosI.patch('updateDonation',data).then((response)=>{
+        axiosI.patch('updateDonation',header,data).then((response)=>{
             dispatch({
                 type:'EDIT_DONATION',
                 payload:response.data
@@ -47,8 +67,13 @@ export const updateDonationAction=(data)=>{
 };
 
 export const getEventDataAction=()=>{
+    let header = {
+        headers: {
+            'x-auth': localStorage.getItem('user')
+        }
+    }
     return ((dispatch)=>{
-        axiosI.get('api/event').then((response)=>{
+        axiosI.get('api/event',header).then((response)=>{
             dispatch({
                 type:'GET_EVENTS',
                 payload:response.data.record

@@ -20,10 +20,10 @@ class Graph extends Component {
         };
     }
     componentDidMount(){
-        this.props.getDonationAction();
+            this.props.getDonationAction();
     }
     componentWillReceiveProps(nextProps){
-
+        debugger;
         let {graphData} = this.state;
         graphData=[];
         nextProps.donationData.forEach((rec)=>{

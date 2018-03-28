@@ -15,7 +15,7 @@ import getBusiness from './../donation/reducers/getBusinessId';
 import studentLogged from '../donation/reducers/studentLogged';
 import scheduleEventBySponser from './eventsponser'
 import scheduleEvent from './scheduleevent'
-
+import loginuser from '../business/reducers/loginUser';
 const rootreducer=combineReducers({
     loginResponse:loginReducer,
     businesslist:businesslist,
@@ -32,7 +32,8 @@ const rootreducer=combineReducers({
     events:eventReducer,
     businessInfo:getBusiness,
     studentLogged:studentLogged,
-    newBusiness:newBusiness
+    newBusiness:newBusiness,
+    loginuser:loginuser
 });
 
 export default rootreducer;

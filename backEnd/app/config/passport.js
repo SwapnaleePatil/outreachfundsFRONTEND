@@ -13,7 +13,6 @@ module.exports = (passport) => {
     passport.deserializeUser((user, done) => {
         return done(null, user);
     })
-
     //Student
     passport.use('student', new LocalStrategy({
             usernameField: 'email',

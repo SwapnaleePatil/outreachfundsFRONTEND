@@ -5,6 +5,15 @@ import {bindActionCreators} from 'redux'
 import SelectField from 'material-ui/SelectField';
 import MenuItemMaterial from 'material-ui/MenuItem';
 import {Table, FormControl, Button, FormGroup, ControlLabel, DropdownButton, MenuItem} from 'react-bootstrap'
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import 'react-s-alert/dist/s-alert-css-effects/flip.css';
+import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 import {scheduleevents, eventslist, actionevents} from '../action/index'
 import {fetchAllSchoolDetails, fetchStudent} from '../students/action/index';
 import {eventslistbysposer} from '../action/index'
@@ -53,27 +62,29 @@ class Schedule extends React.Component {
     componentWillMount() {
         this.props.fetchAllSchoolDetails();
         this.props.eventslist();
+       if(this.state.businessname===""){
         this.props.fetchStudent();
+       }
     }
 
     componentWillReceiveProps(nextProps) {
+        debugger
         this.setState({data: nextProps.events});
         this.setState({student: nextProps.Student});
         this.setState({businessOwnerList:nextProps.business});
         let {businessname, eventowner} = this.state;
+        nextProps.businessuser &&
         nextProps.business.map((v, i) => {
-            v.tokens.map((value, i) => {
-                if (value.token === localStorage.getItem('user')) {
+            if (v._id === nextProps.businessuser._id) {
                     businessname = v.businessInfo.businessName;
                     eventowner = v._id;
-
                     this.setState({
                         businessname,
                         eventowner
                     })
                 }
             });
-        });
+
     }
 
 //event generate and edit time field handle
@@ -112,10 +123,18 @@ class Schedule extends React.Component {
             eventData
         });
     };
-
+    success=(msg)=>{
+        //e.preventDefault();
+        Alert.success(msg, {
+            position: 'top-right',
+            effect: 'scale',
+            beep: true,
+            timeout: 1500,
+            offset: 100
+        });
+    };
 //Business Sponsor reject event
     rejectEvent = () => {
-    debugger;
     let {rejectingEvent}=this.state
         let businessno = rejectingEvent.businessSponsor.indexOf(this.state.eventowner);
         rejectingEvent.businessSponsor.splice(businessno, 1);
@@ -172,13 +191,13 @@ class Schedule extends React.Component {
             }
             eventData["eventTime"] = eventData["eventTimeHour"] + ":" + eventData["eventTimeMinute"];
             this.setState({eventData});
-
             if (this.state.businessname !== "") {
                 let data = {
                     businessSponsor: this.state.eventowner,
                     ...this.state.eventData
                 };
                 this.props.scheduleevents(data);
+                this.success('Event Generated Successfully.')
             } else {
                 let data = {
                     schoolOrganisation: this.state.student.schoolId,
@@ -186,6 +205,7 @@ class Schedule extends React.Component {
                     ...this.state.eventData
                 };
                 this.props.scheduleevents(data);
+                this.success('Event Generated Successfully.');
 
             }
             this.clearData();
@@ -313,36 +333,8 @@ class Schedule extends React.Component {
             this.setState({error: ""});
         }
 
-
-    }
-
-//Searching
-    searching = (e) => {
-        this.setState({
-            name: e.target.value
-        });
-
-        this.setState({
-            name: e.target.value,
-            isSearching: true,
-            searchdata: []
-        });
-        let {searchdata} = this.state;
-        searchdata = [];
-        this.state.data.map((value, i) => {
-            if (value.eventName.includes(e.target.value)) {
-                searchdata.push(value)
-            }
-            this.setState({
-                searchdata
-            });
-            if (e.target.value === "") {
-                this.setState({
-                    isSearching: false
-                })
-            }
-        })
     };
+
 
     render() {
 // find school name for event modal
@@ -361,6 +353,8 @@ class Schedule extends React.Component {
         });
 
 //list of event for logged student
+        let cancelEvents = 0;
+        let cancelEventData=[];
         let studentEventLenght = 0;
         let studentevent = [];
         this.state.data.map((v, i) => {
@@ -368,6 +362,10 @@ class Schedule extends React.Component {
                 if (v.businessSponsor.length !== 0) {
                     studentEventLenght++;
                     studentevent.push(v)
+                }
+                else{
+                    cancelEventData.push(v);
+                    cancelEvents++
                 }
             }
         });
@@ -406,15 +404,7 @@ class Schedule extends React.Component {
                 <button className="tbt" id={number} key={number} onClick={this.handleClick}>{number}</button>
             )
         });
-// finding no of event canceled and total event
-        let cancelEvents = 0;
-        {
-            studentevent.map((v, i) => {
-                if (v.businessSponsor.length === 0) {
-                    cancelEvents++
-                }
-            })
-        }
+
         let {error} = this.state;
         return (
             <div className="schedule-class">
@@ -490,6 +480,8 @@ class Schedule extends React.Component {
 
                                     {
                                         v.accept.includes(this.state.eventowner) ?
+
+
                                             <td className="confirm-class">Comfirmed</td> :
                                             <td>
                                                 <DropdownButton title="Action" id="bg-nested-dropdown">
@@ -610,6 +602,7 @@ class Schedule extends React.Component {
                             </tbody>
                         </Table>
                     }
+                    <Alert stack={{limit: 6}} html={true} />
                 </div>
                 {/*modal for event edit and generate*/}
                 <Modal isOpen={this.state.isCalender} ariaHideApp={false} style={{
@@ -721,14 +714,14 @@ class Schedule extends React.Component {
                                         style={{"width": "20%"}}
                                         onChange={this.onFieldChange} name="eventTimeHour"
                                         type="number"
-                                        min="0" max="24" required/>{'  '}
+                                        min="0" max="24" required maxLength="2"/>{'  '}
                                         Minute:<input
                                         value={this.state.eventData.eventTime && this.state.eventData.eventTime.split(":")[1]}
                                         className="form-control"
                                         style={{"width": "20%"}}
-                                        onChange={this.onFieldChange} name="eventTimeMinute"
+                                        onChange={this.onFieldChange}  name="eventTimeMinute"
                                         type="number"
-                                        min="0" max="59" required/></div>
+                                        min="0" max="59" required /></div>
                                 </td>
                             </tr>
 
@@ -820,10 +813,12 @@ class Schedule extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
+
                     </form>
                 </Modal>
                 <div className="col-md-3" align="center">
                     <h2> Raise an Event</h2>
+                    click on calander to generate new Event
                     <a onClick={() => {
                         this.setState({
                             isCalender: true
@@ -843,7 +838,7 @@ const
             organization: state.schools,
             events: state.scheduleevent,
             eventssponser: state.eventsbysponser,
-            Student: state.students
+            Student: state.students,businessuser:state.loginuser,studentuser:state.students
         })
     };
 const

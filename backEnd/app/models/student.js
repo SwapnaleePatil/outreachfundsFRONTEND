@@ -84,6 +84,5 @@ studentSchema.statics.findByToken= function(token){
     })
 }
 
-
 let student = mongoose.model('student', studentSchema);
 module.exports = {student};

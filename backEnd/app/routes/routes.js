@@ -5,7 +5,6 @@ let donationController= require('../controllers/donationController');
 let fetchPassword = require('../controllers/forgotPassword');
 let Student=require('../models/student').student;
 let BusinessOwner = require('../models/businessOwner').businessOwner;
-
 module.exports=(app,passport)=>{
 
     //School Routes
@@ -43,11 +42,11 @@ module.exports=(app,passport)=>{
     app.get('/loginFailure',(req,res)=>{
         res.send({"message":"login failed"});
     });
-    app.post('/api/business/profile', businesscontroller.authenticatee,businesscontroller.addBusinessOwner);
-    app.delete('/api/business/profile',businesscontroller.authenticatee, businesscontroller.deleteBusinessOwner);
-    app.put('/api/business/profile',isLoggedIn,businesscontroller.authenticatee,businesscontroller.updateBusinessOwner);
-    app.get('/api/business/profile',isLoggedIn,businesscontroller.authenticatee,businesscontroller.fetch);
-    app.post('/api/business/profile/fetchById',isLoggedIn,businesscontroller.authenticatee,businesscontroller.fetchById);
+    app.post('/api/business/profile', businesscontroller.addBusinessOwner);
+    app.delete('/api/business/profile', businesscontroller.deleteBusinessOwner);
+    app.put('/api/business/profile',isLoggedIn,businesscontroller.updateBusinessOwner);
+    app.get('/api/business/profile',isLoggedIn,businesscontroller.fetch);
+    app.post('/api/business/profile/fetchById',isLoggedIn,businesscontroller.fetchById);
     app.get('/api/business/profile/fetchByToken',isLoggedIn,businesscontroller.fetchByToken);
 
     //Google Login
@@ -72,9 +71,7 @@ module.exports=(app,passport)=>{
     app.patch('/updateDonation',isLoggedIn,donationController.updateDonation);
 
     //Forgot Password
-    app.post('/studentforgotPassword',fetchPassword.StudentforgotPassword);
     app.post('/businessforgotPassword',fetchPassword.BusinessforgotPassword);
-    app.post('/studentUpdatePassword',fetchPassword.GetStudentIdFromEmail);
     app.post('/businessUpdatePassword',fetchPassword.GetBusinessIdFromEmail);
     // app.post('/updatePassword',fetchPassword.updatePassword);
 }
