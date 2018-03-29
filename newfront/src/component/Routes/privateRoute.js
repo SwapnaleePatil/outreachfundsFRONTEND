@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route,Redirect} from 'react-router-dom'
-import MainPage from '../mainpage';
+import MainPage from '../common/mainpage';
 import jwt_decode from 'jwt-decode'
 
 const Private = ({...props}) => {

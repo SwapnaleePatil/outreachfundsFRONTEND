@@ -50,12 +50,17 @@ module.exports=(app,passport)=>{
     app.get('/api/business/profile/fetchByToken',isLoggedIn,businesscontroller.fetchByToken);
 
     //Google Login
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-    app.get('/auth/google/callback',passport.authenticate('google', {
-            successRedirect : 'http://localhost:3001/home',
-            failureRedirect : '/'
-        }));
-
+    // app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    // app.get('/auth/google/callback',passport.authenticate('google', {
+    //         successRedirect : 'http://localhost:3006/main',
+    //         failureRedirect : '/googleLoginFailure'
+    //     }));
+    // app.get('/googleLoginSuccess',(req,res)=>{
+    //     res.send({"message":"login successful","userType":"B","token":googleToken});
+    // });
+    // app.get('/googleLoginFailure',(req,res)=>{
+    //     res.send({"message":"login failed"});
+    // });
 
     //Event Routes
     app.post('/api/event',isLoggedIn, eventcontroller.addeventSchedule);
@@ -77,6 +82,7 @@ module.exports=(app,passport)=>{
 }
 function isLoggedIn(req, res, next) {
     let token=req.headers['x-auth'];
+    console.log(token);
     Student.findByToken(token).then((response)=>{
         if(response){
             next();

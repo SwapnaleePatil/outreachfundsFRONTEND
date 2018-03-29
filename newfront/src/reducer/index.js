@@ -1,39 +1,58 @@
-import loginReducer from './reducer-login'
 import {combineReducers} from 'redux'
-import studentReducer from '../students/reducers/reducer-student';
-import signupPageReducer from '../students/reducers/reducer-signUpPaging';
-import signupPageFieldsReducer from '../students/reducers/reducer-signup-fields';
-import requestReducer from '../students/reducers/reducer-request';
-import schoolReducer from '../students/reducers/reducer-schools';
-import businesslist from '../business/reducers/businessReducer'
-import newBusiness from '../business/reducers/businessCrud'
-import businessSignUpPageReducer from '../business/reducers/businessPage';
-import businessFieldsReducer from '../business/reducers/businessFieldsReducer';
-import donationReducer from './../donation/reducers/donationReducer';
-import eventReducer from './../donation/reducers/eventReducer';
-import getBusiness from './../donation/reducers/getBusinessId';
-import studentLogged from '../donation/reducers/studentLogged';
-import scheduleEventBySponser from './eventsponser'
-import scheduleEvent from './scheduleevent'
-import loginuser from '../business/reducers/loginUser';
-const rootreducer=combineReducers({
-    loginResponse:loginReducer,
-    businesslist:businesslist,
-    signupPage:signupPageReducer,
-    signupPageFields:signupPageFieldsReducer,
-    scheduleevent:scheduleEvent,
-    eventsbysponser:scheduleEventBySponser,
-    students:studentReducer,
-    requests:requestReducer,
-    schools:schoolReducer,
-    businessSignUpRed:businessSignUpPageReducer,
-    businessFieldsRed:businessFieldsReducer,
-    donation:donationReducer,
-    events:eventReducer,
-    businessInfo:getBusiness,
-    studentLogged:studentLogged,
-    newBusiness:newBusiness,
-    loginuser:loginuser
+
+//Business
+import businesslist from './business/businessReducer'
+import newBusiness from './business/businessCrud'
+import businessSignUpPageReducer from './business/businessPage';
+import businessFieldsReducer from './business/businessFieldsReducer';
+import loginuser from './business/loginUser';
+
+//Student
+import studentReducer from './student/reducer-student';
+import signupPageReducer from './student/reducer-signUpPaging';
+import signupPageFieldsReducer from './student/reducer-signup-fields';
+import requestReducer from './student/reducer-request';
+import schoolReducer from './student/reducer-schools';
+
+//Donation
+import donationReducer from './donation/donationReducer';
+import eventReducer from './donation/eventReducer';
+import getBusiness from './donation/getBusinessId';
+import studentLogged from './donation/studentLogged';
+
+//Common
+import loginReducer from './common/reducer-login'
+import scheduleEventBySponser from './common/eventsponser'
+import scheduleEvent from './common/scheduleevent'
+
+const rootreducer = combineReducers({
+
+    //business
+    businesslist: businesslist,
+    newBusiness: newBusiness,
+    businessSignUpRed: businessSignUpPageReducer,
+    businessFieldsRed: businessFieldsReducer,
+    loginuser: loginuser,
+
+    //student
+    students: studentReducer,
+    signupPage: signupPageReducer,
+    signupPageFields: signupPageFieldsReducer,
+    requests: requestReducer,
+    schools: schoolReducer,
+
+    //donation
+    donation: donationReducer,
+    events: eventReducer,
+    businessInfo: getBusiness,
+    studentLogged: studentLogged,
+
+    //common
+    loginResponse: loginReducer,
+    scheduleevent: scheduleEvent,
+    eventsbysponser: scheduleEventBySponser,
+
+
 });
 
 export default rootreducer;

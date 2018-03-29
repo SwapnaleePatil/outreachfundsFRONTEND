@@ -153,6 +153,7 @@ businessOwnerSchema.statics.findByToken = function (token) {
     } catch (e) {
         return e;
     }
+    console.log("Decode",decoded)
     return businessOwner.findOne({
         _id:decoded._id,
         email:decoded.email,

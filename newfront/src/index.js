@@ -10,7 +10,7 @@ import rootreducer from './reducer/index'
 // import Login from './component/login'
 // import HomePage from './component/homepage'
 import registerServiceWorker from './registerServiceWorker';
-import Main from "./component/index";
+import Main from "./component/common/index";
 let store=createStore(rootreducer,composeWithDevTools(),applyMiddleware(thunk));
 ReactDOM.render(<Provider store={store}><Main /></Provider>, document.getElementById('root'));
 registerServiceWorker();
