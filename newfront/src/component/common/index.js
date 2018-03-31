@@ -20,7 +20,7 @@ import StudentProfile from '../student/studentProfile';
 import AcceptSignupRequest from '../student/AcceptSignupRequest';
 import StudentForgotPassword from './forgotPassword'
 import BusinessForgotPassword from './businessforgotPassword'
-
+import GoogleEditProfile from '../business/googleEditProfile'
 class Main extends React.Component {
 
     render() {
@@ -49,6 +49,7 @@ class Main extends React.Component {
                     <Private exact path="/availability" component={Availability}/>
                     <Private exact path="/viewStudentProfile" component={StudentProfile}/>
                     <Private exact path="/editStudentProfile" component={StudentProfile}/>
+                    <Private exact path="/googleEditProfile" component={GoogleEditProfile}/>
                     <Public exact path="/studentforgotPassword/:email" component={StudentForgotPassword}/>
                     <Public exact path="/businessforgotPassword/:email" component={BusinessForgotPassword}/>
                     <Public exact path="*" component={HomePage}/>

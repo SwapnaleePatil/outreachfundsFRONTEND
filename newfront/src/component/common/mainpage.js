@@ -121,6 +121,7 @@ class MainPage extends React.Component {
                                         }
                                     {(this.props.loginResponse.hasOwnProperty('data'))&&(this.props.loginResponse.data.userType==='S')?
                                         <MenuItem eventKey={4.5} ><NavLink to={'/main/requests'}>Requests</NavLink></MenuItem>:''}
+                                        <MenuItem eventKey={4.4}><NavLink to="/googleEditProfile">Google Profile</NavLink></MenuItem>
                                     <MenuItem eventKey={4.6} onClick={this.logout}><NavLink to="" onClick={this.logout}>
                                         Logout</NavLink></MenuItem>
                                     </Dropdown.Menu>
