@@ -116,11 +116,7 @@ let businessOwnerSchema = new mongoose.Schema({
                 type: String
             }
         }
-    },
-    tokens: [{
-        access: String,
-        token: String
-    }]
+    }
 });
 //Password Hashing
 businessOwnerSchema.pre('save', function (next) {

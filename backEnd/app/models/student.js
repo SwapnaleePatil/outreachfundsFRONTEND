@@ -67,8 +67,6 @@ let studentSchema = new mongoose.Schema({
 
 
 });
-
-
 studentSchema.statics.findByToken= function(token){
     let Student =this;
     let decoded;

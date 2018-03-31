@@ -70,45 +70,44 @@ module.exports = (passport) => {
     }))
 
     //Google Login
-    // passport.use(new GoogleStrategy({
-    //         clientID: configAuth.googleAuth.clientID,
-    //         clientSecret: configAuth.googleAuth.clientSecret,
-    //         callbackURL: configAuth.googleAuth.callbackURL,
-    //     },
-    //     function (token, refreshToken, profile, done) {
-    //     console.log("In Google1")
-    //         process.nextTick(function () {
-    //             console.log("In Google2")
-    //
-    //             businessOwner.findOne({'google.id': profile.id}, function (err, user) {
-    //                 console.log("In Google3")
-    //
-    //                 console.log("Profile",profile);
-    //                 if (err) {
-    //                     console.log("In Google4")
-    //
-    //                     return done(err);
-    //                 }
-    //                 if (user) {
-    //                     return done(null, user);
-    //                 } else {
-    //                     let newUser = new businessOwner({
-    //                         firstName: profile.displayName,
-    //                         gender: profile.gender,
-    //                         photo: profile.photo,
-    //                         email: profile.emails[0].value // pull the first email
-    //                     });
-    //                     googleToken = token;
-    //                     // save the user
-    //                     newUser.save(function (err) {
-    //                         if (err)
-    //                             throw err;
-    //                         return done(null, newUser);
-    //                     });
-    //                 }
-    //             });
-    //         });
-    //
-    //     }));
+    passport.use(new GoogleStrategy({
+            clientID: configAuth.googleAuth.clientID,
+            clientSecret: configAuth.googleAuth.clientSecret,
+            callbackURL: configAuth.googleAuth.callbackURL,
+        },
+        function (token, refreshToken, profile, done) {
+            process.nextTick(function () {
+                businessOwner.findOne({'email': profile.emails[0].value}, function (err, user) {
+                        if (err) {
+                            return done(err);
+                        }
+                        googleToken = jwt.sign({
+                            email: profile.emails[0].value
+                        }, 'outreachfunds', {expiresIn: '1d'});
+                        console.log("Google token",googleToken)
+                        if (user) {
+                            return done(null, user);
+                        } else {
+                            console.log("Profile", profile);
+                            let newUser = new businessOwner({
+                                id: profile.id,
+                                firstName: profile.givenName,
+                                lastName: profile.familyName,
+                                gender: profile.gender,
+                                photo: profile.photos[0].value,
+                                email: profile.emails[0].value // pull the first email
+                            });
+                            newUser.save(function (err) {
+                                if (err)
+                                    throw err;
+                                return done(null, newUser);
+                            });
+                        }
+
+                    }
+                );
+            });
+
+        }));
 
 }
